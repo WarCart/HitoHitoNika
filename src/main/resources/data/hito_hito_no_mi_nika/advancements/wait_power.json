@@ -1,0 +1,24 @@
+{
+  "parent": "mineminenomi:devil_fruits/root",
+  "display": {
+    "icon": {
+      "item": "mineminenomi:gomu_gomu_no_mi"
+    },
+    "title": {
+      "text": "Wait, power!"
+    },
+    "description": {
+      "text": "Stop Gear 4 from ending to hold it more"
+    },
+    "hidden": true,
+    "frame": "challenge"
+  },
+  "criteria": {
+    "use_gear_fourth": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    ["use_gear_fourth"]
+  ]
+}
