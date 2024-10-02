@@ -11,21 +11,20 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.warcar.hito_hito_nika.renderers.layers.TrueGomuSmokeLayer;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
 import xyz.pixelatedw.mineminenomi.renderers.layers.BodyCoatingLayer;
-import xyz.pixelatedw.mineminenomi.renderers.layers.abilities.GomuDawnWhipLayer;
 import xyz.pixelatedw.mineminenomi.renderers.morphs.ZoanMorphRenderer;
 
 public class GomuMorphRenderer<T extends AbstractClientPlayerEntity, M extends MorphModel<?>> extends ZoanMorphRenderer<T, M> {
     private final ResourceLocation[] textures;
+    private Vector3f size = new Vector3f(0, 0, 0);
     public GomuMorphRenderer(EntityRendererManager rendererManager, MorphInfo info, boolean smallHands, ResourceLocation... overlayTextures) {
         super(rendererManager, info, smallHands);
-        this.addLayer(new BipedArmorLayer<>(this, new BipedModel<>(0.5F), new BipedModel<>(1.0F)));
         this.addLayer(new TrueGomuSmokeLayer<>(this));
-        this.addLayer(new GomuDawnWhipLayer<>(this));
         this.addLayer(new BodyCoatingLayer<>(this));
         this.textures = overlayTextures;
     }
@@ -40,6 +39,11 @@ public class GomuMorphRenderer<T extends AbstractClientPlayerEntity, M extends M
         matrixStack.popPose();
     }
 
+    @Override
+    protected void scale(AbstractClientPlayerEntity p_225620_1_, MatrixStack p_225620_2_, float p_225620_3_) {
+        p_225620_2_.scale(this.size.x(), this.size.y(), this.size.z());
+    }
+
     public ResourceLocation getTextureLocation(AbstractClientPlayerEntity entity) {
         return entity.getSkinTextureLocation();
     }
@@ -47,6 +51,7 @@ public class GomuMorphRenderer<T extends AbstractClientPlayerEntity, M extends M
     public static class Factory<T extends PlayerEntity> implements IRenderFactory<T> {
         private MorphInfo info;
         private boolean hasSmallHands;
+        private Vector3f size = new Vector3f(1, 1, 1);
         private ResourceLocation[] overlays = new ResourceLocation[0];
 
         public Factory(MorphInfo info, boolean hasSmallHands) {
@@ -60,7 +65,14 @@ public class GomuMorphRenderer<T extends AbstractClientPlayerEntity, M extends M
         }
 
         public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
-            return new GomuMorphRenderer(manager, this.info, this.hasSmallHands, this.overlays);
+            GomuMorphRenderer gomuMorphRenderer = new GomuMorphRenderer(manager, this.info, this.hasSmallHands, this.overlays);
+            gomuMorphRenderer.size = size;
+            return gomuMorphRenderer;
+        }
+
+        public Factory<T> setSize(Vector3f size) {
+            this.size = size;
+            return this;
         }
     }
 }

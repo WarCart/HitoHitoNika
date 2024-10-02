@@ -27,6 +27,7 @@ public class TrueGomuRocketProjectile extends GomuGomuNoRocketProjectile {
 
 	private void onBlockImpact(BlockPos pos) {
 		this.oldOnImpact.onImpact(pos);
+		Objects.requireNonNull(this.getThrower()).hasImpulse = true;
 		((TrueGomuRocket) this.master).setFlying();
 	}
 

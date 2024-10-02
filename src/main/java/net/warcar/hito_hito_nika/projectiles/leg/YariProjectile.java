@@ -21,7 +21,7 @@ public class YariProjectile extends AbilityProjectileEntity {
         this.setMaxLife(12);
         this.setAffectedByHardening();
         this.setDamage(20F);
-        this.setEntityCollisionSize(2.5d);
+        this.setCollisionSize(2.5d);
         this.setPassThroughEntities();
         this.setCanGetStuckInGround();
         this.setDamageSource(this.getDamageSource().setPhysical());

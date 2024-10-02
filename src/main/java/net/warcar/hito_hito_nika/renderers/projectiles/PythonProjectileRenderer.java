@@ -36,7 +36,7 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
     public void render(E entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
         if (entity.tickCount >= 2) {
             if (entity.getThrower() != null && entity.getThrower().isAlive()) {
-                if (HakiHelper.hasHardeningActive(entity.getThrower(), false, true)) {
+                if (HakiHelper.hasHardeningActive(entity.getThrower(), false)) {
                     this.setTexture(ModResources.BUSOSHOKU_HAKI_ARM);
                     this.setPlayerTexture(false);
                 }
@@ -66,7 +66,7 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
                     }
 
                     IVertexBuilder ivertexbuilder = buffer.getBuffer(type);
-                    this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, (float)this.getColor().getRed() / 255.0F, (float)this.getColor().getGreen() / 255.0F, (float)this.getColor().getBlue() / 255.0F, (float)this.getColor().getAlpha() / 255.0F);
+                    this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, (float)this.getRGB().getRed() / 255.0F, (float)this.getRGB().getGreen() / 255.0F, (float)this.getRGB().getBlue() / 255.0F, (float)this.getRGB().getAlpha() / 255.0F);
                     if (entity.getThrower() != null && entity.isAffectedByHaki()) {
                         if (TrueGomuHelper.hasHakiEmissionActive(AbilityDataCapability.get(entity.getThrower()))){
                             matrixStack.pushPose();
@@ -94,7 +94,7 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
         public EntityRenderer<? super AbilityProjectileEntity> createRenderFor(EntityRendererManager manager) {
             PythonProjectileRenderer renderer = new PythonProjectileRenderer(manager, this.internalStretchingModel);
             renderer.setScale(this.scaleX, this.scaleY, this.scaleZ);
-            renderer.setColor(this.colour);
+            renderer.setColor(this.red, this.green, this.blue, this.alpha);
             renderer.setPlayerTexture(true);
             renderer.setGlowing(this.isGlowing);
             return renderer;

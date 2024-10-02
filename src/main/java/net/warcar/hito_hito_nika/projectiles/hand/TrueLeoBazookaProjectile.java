@@ -23,7 +23,7 @@ public class TrueLeoBazookaProjectile extends AbilityProjectileEntity {
         this.setMaxLife(10);
         this.setAffectedByHardening();
         this.setPassThroughEntities();
-        this.setEntityCollisionSize(2.5D);
+        this.setCollisionSize(2.5D);
         this.setHurtTime(10);
         this.setDamageSource(this.getDamageSource().setSourceElement(SourceElement.RUBBER));
         this.onEntityImpactEvent = this::onEntityImpactEvent;

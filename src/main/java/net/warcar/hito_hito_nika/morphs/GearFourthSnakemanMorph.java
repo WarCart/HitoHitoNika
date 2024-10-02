@@ -16,7 +16,6 @@ import net.warcar.hito_hito_nika.models.SnakemanMorphModel;
 import net.warcar.hito_hito_nika.renderers.morphs.GomuMorphRenderer;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
-import xyz.pixelatedw.mineminenomi.entities.zoan.GomuGiantMorphInfo;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
 import java.util.Map;
@@ -35,11 +34,8 @@ public class GearFourthSnakemanMorph extends MorphInfo {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public IRenderFactory getRendererFactory(LivingEntity entity) {
-        boolean isSlim = false;
-        if (entity instanceof AbstractClientPlayerEntity) {
-            isSlim = ((AbstractClientPlayerEntity)entity).getModelName().equals("slim");
-        }
+    public IRenderFactory getRendererFactory(AbstractClientPlayerEntity entity) {
+        boolean isSlim = entity.getModelName().equals("slim");
 
         return new GomuMorphRenderer.Factory(this, isSlim).setOverlays(new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/models/gear_4_snakeman_overlay.png"));
     }
@@ -58,11 +54,6 @@ public class GearFourthSnakemanMorph extends MorphInfo {
 
     public float getShadowSize() {
         return 1.2f;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public ResourceLocation getTexture(LivingEntity entity) {
-        return entity instanceof AbstractClientPlayerEntity ? ((AbstractClientPlayerEntity)entity).getSkinTextureLocation() : null;
     }
 
     public Map<Pose, EntitySize> getSizes() {

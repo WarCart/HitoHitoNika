@@ -1,0 +1,7 @@
+{
+  "drums_of_liberation": {
+    "category":"player",
+    "subtitle":"mineminenomi.subtitle.drums_of_liberation",
+    "sounds":["mineminenomi:drums_of_liberation"]
+  }
+}

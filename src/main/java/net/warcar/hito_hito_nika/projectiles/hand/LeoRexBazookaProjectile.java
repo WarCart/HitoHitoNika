@@ -22,7 +22,7 @@ public class LeoRexBazookaProjectile extends AbilityProjectileEntity {
         super(NikaProjectiles.GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), world, player, ability);
         this.setDamage(350.0F);
         this.setMaxLife(10);
-        this.setEntityCollisionSize(4d);
+        this.setCollisionSize(4d);
         this.setAffectedByHardening();
         this.setPassThroughEntities();
         this.setHurtTime(10);

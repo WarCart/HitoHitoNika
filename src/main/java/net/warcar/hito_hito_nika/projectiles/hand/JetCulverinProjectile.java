@@ -16,7 +16,7 @@ public class JetCulverinProjectile extends PythonProjectile {
 		super(NikaProjectiles.GOMU_GOMU_NO_JET_CULVERIN.get(), world, player, ability, speed, layer);
 		this.setMaxLife(3);
 		this.setDamage(30F);
-		this.setEntityCollisionSize(2.5d);
+		this.setCollisionSize(2.5d);
 		this.setAffectedByHardening();
 		this.setPassThroughEntities();
 		this.setCanGetStuckInGround();

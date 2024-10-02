@@ -24,11 +24,11 @@ import net.warcar.hito_hito_nika.models.KingBajrangGunModel;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class NikaProjectiles {
-	public static final RegistryObject<EntityType<KingKongGunProjectile>> GOMU_GOMU_NO_KING_KONG_GUN = WyRegistry.registerEntityType("Gomu Gomu no True King Kong Gun", () -> WyRegistry.createEntityType(KingKongGunProjectile::new).sized(8F, 8F).build("mineminenomi:gomu_gomu_no_true_king_kong_gun"));
+	public static final RegistryObject<EntityType<KingKongGunProjectile>> GOMU_GOMU_NO_KING_KONG_GUN = WyRegistry.registerEntityType("Gomu Gomu no King Kong Gun", () -> WyRegistry.createEntityType(KingKongGunProjectile::new).sized(8F, 8F).build("mineminenomi:gomu_gomu_no_king_kong_gun"));
 
 	public static final RegistryObject<EntityType<King3KongGunProjectile>> GOMU_GOMU_NO_KING_3_KONG_GUN = WyRegistry.registerEntityType("Gomu Gomu no King King King Kong Gun", () -> WyRegistry.createEntityType(King3KongGunProjectile::new).sized(12F, 12F).build("mineminenomi:gomu_gomu_no_king_3_kong_gun"));
 
-	public static final RegistryObject<EntityType<BajrangGunProjectile>> GOMU_GOMU_NO_BAJRANG_GUN = WyRegistry.registerEntityType("Gomu Gomu no True Bajrang Gun", () -> WyRegistry.createEntityType(BajrangGunProjectile::new).sized(20F, 20F).build("mineminenomi:gomu_gomu_no_true_bajrang_gun"));
+	public static final RegistryObject<EntityType<BajrangGunProjectile>> GOMU_GOMU_NO_BAJRANG_GUN = WyRegistry.registerEntityType("Gomu Gomu no Bajrang Gun", () -> WyRegistry.createEntityType(BajrangGunProjectile::new).sized(20F, 20F).build("mineminenomi:gomu_gomu_no_bajrang_gun"));
 
 	public static final RegistryObject<EntityType<KingKongStampProjectile>> GOMU_GOMU_NO_KING_KONG_STAMP = WyRegistry.registerEntityType("Gomu Gomu no King Kong Stamp", () -> WyRegistry.createEntityType(KingKongStampProjectile::new).sized(8F, 8F).build("mineminenomi:gomu_gomu_no_king_kong_stamp"));
 
@@ -44,7 +44,7 @@ public class NikaProjectiles {
 
 	public static final RegistryObject<EntityType<TrueGrizzlyMagnumProjectile>> GOMU_GOMU_NO_GRIZZLY_MAGNUM = WyRegistry.registerEntityType("Gomu Gomu no True Grizzly Magnum", () -> WyRegistry.createEntityType(TrueGrizzlyMagnumProjectile::new).sized(5F, 5F).build("mineminenomi:gomu_gomu_no_true_grizzly_magnum"));
 
-	public static final RegistryObject<EntityType<TrueKongGunProjectile>> GOMU_GOMU_NO_KONG_GUN = WyRegistry.registerEntityType("Gomu Gomu no Kong Gun", () -> WyRegistry.createEntityType(TrueKongGunProjectile::new).sized(5F, 5F).build("mineminenomi:gomu_gomu_no_kong_gun"));
+	public static final RegistryObject<EntityType<TrueKongGunProjectile>> GOMU_GOMU_NO_KONG_GUN = WyRegistry.registerEntityType("Gomu Gomu no True Kong Gun", () -> WyRegistry.createEntityType(TrueKongGunProjectile::new).sized(5F, 5F).build("mineminenomi:gomu_gomu_no_true_kong_gun"));
 
 	public static final RegistryObject<EntityType<JetCulverinProjectile>> GOMU_GOMU_NO_JET_CULVERIN = WyRegistry.registerEntityType("Gomu Gomu no Jet Culverin", () -> WyRegistry.createEntityType(JetCulverinProjectile::new).sized(5F, 5F).build("mineminenomi:gomu_gomu_no_jet_culverin"));
 

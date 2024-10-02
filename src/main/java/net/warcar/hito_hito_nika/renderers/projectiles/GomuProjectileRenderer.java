@@ -40,7 +40,7 @@ public class GomuProjectileRenderer<E extends AbilityProjectileEntity, M extends
 
     public void render(E entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight){
         if (entity.getThrower() != null && entity.isAffectedByHaki()) {
-            if (HakiHelper.hasHardeningActive(entity.getThrower(), false, true)) {
+            if (HakiHelper.hasHardeningActive(entity.getThrower(), false)) {
                 this.setTexture(ModResources.BUSOSHOKU_HAKI_ARM);
                 this.setPlayerTexture(false);
             }
@@ -90,7 +90,7 @@ public class GomuProjectileRenderer<E extends AbilityProjectileEntity, M extends
             GomuProjectileRenderer renderer = new GomuProjectileRenderer(manager, this.model, this.internalStretchingModel);
             renderer.setStretchScale(this.stretchScaleX, this.stretchScaleY, this.stretchScaleZ);
             renderer.setScale(this.scaleX, this.scaleY, this.scaleZ);
-            renderer.setColor(this.colour);
+            renderer.setColor(this.red, this.green, this.blue, this.alpha);
             renderer.setPlayerTexture(true);
             renderer.setGlowing(this.isGlowing);
             return renderer;

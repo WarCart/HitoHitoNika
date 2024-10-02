@@ -47,8 +47,8 @@ public class FusenMorph extends MorphInfo {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public ResourceLocation getTexture(LivingEntity entity) {
-        return entity instanceof AbstractClientPlayerEntity ? ((AbstractClientPlayerEntity)entity).getSkinTextureLocation() : null;
+    public ResourceLocation getTexture(AbstractClientPlayerEntity entity) {
+        return entity.getSkinTextureLocation();
     }
 
     public String getForm() {

@@ -19,7 +19,7 @@ public class KingBajrangGunProjectile extends AbilityProjectileEntity {
 		super(NikaProjectiles.GOMU_GOMU_NO_KING_BAJRANG_GUN.get(), world, player, ability);
 		this.setMaxLife(250);
 		this.setDamage(0F);
-		this.setEntityCollisionSize(5);
+		this.setCollisionSize(5);
 		this.setPassThroughEntities();
 		this.setCanGetStuckInGround();
 		this.setDamageSource(this.getDamageSource().getSource());

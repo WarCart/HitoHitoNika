@@ -29,8 +29,7 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
     private final ModelRenderer body;
     private final ModelRenderer leftArm;
     private final ModelRenderer leftLeg;
-    private final boolean gomuAnimations;
-    private boolean isFlying;
+    boolean gomuAnimations = true;
 
     public BoundmanMorphModel(boolean gomuAnimations) {
         super(-0.2F);
@@ -66,7 +65,6 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
     public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         float scale = 1.5F;
         matrixStack.pushPose();
-        if (this.isFlying) matrixStack.mulPose(Vector3f.XP.rotationDegrees(90));
         matrixStack.scale(scale, scale, scale);
         matrixStack.translate(0.0D, -0.8D, 0.0D);
         matrixStack.pushPose();
@@ -87,10 +85,10 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
             float time = 0.2F;
             StrongGomuPistol ability = AbilityDataCapability.get(player).getEquippedAbility(StrongGomuPistol.INSTANCE);
             if (ability != null && ability.isCharging()) {
-                float maxChargeTime = ability.getMaxChargeTime();
+                float maxChargeTime = (float) ability.getMaxChargeTime();
                 if (maxChargeTime == 0)
                     maxChargeTime = ability.getChargeTime();
-                time += (ability.getChargeTime() / maxChargeTime) * 0.8F;
+                time += (1 - (float) ability.getChargeTime() / maxChargeTime) * 0.8F;
             }
             if (Float.isNaN(time))
                 time = 0.2f;
@@ -142,12 +140,13 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
     }
 
     public void setupAnim(LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        boolean isMoving = Math.pow(entity.getDeltaMovement().x, 2) + Math.pow(entity.getDeltaMovement().z, 2) > 0.5;
+        double x = entity.xo - entity.getX();
+        double z = entity.zo - entity.getZ();
+        boolean isMoving = x != 0.0D || z != 0.0D;
         BlockPos pos = entity.blockPosition().below(2);
         boolean isInAir = entity.level.getBlockState(pos).getMaterial() == Material.AIR;
         boolean isFlying = isMoving && isInAir;
         if (this.gomuAnimations) {
-            this.isFlying = isFlying;
             if (isFlying) {
                 this.rightArm.zRot = (float)Math.toRadians(90.0D);
                 this.leftArm.zRot = (float)Math.toRadians(-90.0D);
@@ -195,21 +194,23 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
                 float f1;
                 float f2;
                 float f3;
-                f1 = 1.0F - this.attackTime;
-                f1 *= f1;
-                f1 *= f1;
-                f1 = 1.0F - f1;
-                f2 = MathHelper.sin(f1 * 3.1415927F);
-                f3 = MathHelper.sin(this.attackTime * 3.1415927F) * -(this.head.xRot - 0.7F) * 0.75F;
                 if (isBlackLeg) {
                     var10000 = this.rightLeg;
                     var10000.yRot += this.body.yRot;
                     var10000 = this.leftLeg;
                     var10000.yRot += this.body.yRot;
+                    f1 = 1.0F - this.attackTime;
+                    f1 *= f1;
+                    f1 *= f1;
+                    f1 = 1.0F - f1;
+                    f2 = MathHelper.sin(f1 * 3.1415927F);
+                    f3 = MathHelper.sin(this.attackTime * 3.1415927F) * -(this.head.xRot - 0.7F) * 0.75F;
                     this.rightLeg.xRot = (float)((double)this.rightArm.xRot - ((double)f2 * 1.5D + (double)f3));
                     var10000 = this.rightLeg;
                     var10000.yRot += this.body.yRot * 2.0F;
                 } else {
+                    this.rightArm.z = MathHelper.sin(this.body.yRot) * 12.0F;
+                    this.rightArm.x = -MathHelper.cos(this.body.yRot) * 9.0F;
                     var10000 = this.rightArm;
                     var10000.yRot += this.body.yRot;
                     this.leftArm.z = -MathHelper.sin(this.body.yRot) * 5.0F;
@@ -217,6 +218,12 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
                     var10000.yRot -= this.body.yRot;
                     var10000 = this.leftArm;
                     var10000.xRot -= this.body.yRot;
+                    f1 = 1.0F - this.attackTime;
+                    f1 *= f1;
+                    f1 *= f1;
+                    f1 = 1.0F - f1;
+                    f2 = MathHelper.sin(f1 * 3.1415927F);
+                    f3 = MathHelper.sin(this.attackTime * 3.1415927F) * -(this.head.xRot - 0.7F) * 0.75F;
                     this.rightArm.xRot = (float)((double)this.rightArm.xRot - ((double)f2 * 1.2D + (double)f3));
                     var10000 = this.rightArm;
                     var10000.yRot += this.body.yRot * 2.0F;
@@ -240,8 +247,33 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
     }
 
     public void renderFirstPersonArm(MatrixStack matrixStack, IVertexBuilder vertex, int packedLight, int overlay, float red, float green, float blue, float alpha, HandSide side) {
+        if (side == HandSide.RIGHT) {
+            matrixStack.translate(0.2D, 0.3D, 0.0D);
+            this.rightArm.render(matrixStack, vertex, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 0.7F, 0.0F, 1.0F);
+        } else {
+            matrixStack.translate(-0.2D, 0.3D, 0.0D);
+            this.leftArm.render(matrixStack, vertex, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 0.7F, 0.0F, 1.0F);
+        }
+
     }
 
     public void renderFirstPersonLeg(MatrixStack matrixStack, IVertexBuilder vertex, int packedLight, int overlay, float red, float green, float blue, float alpha, HandSide side) {
+        if (side == HandSide.RIGHT) {
+            matrixStack.translate(0.0D, -1.2D, 0.3D);
+            matrixStack.scale(1.5F, 1.5F, 1.5F);
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(-60.0F));
+            this.rightLeg.render(matrixStack, vertex, packedLight, overlay, red, green, blue, alpha);
+        } else {
+            matrixStack.translate(0.0D, -1.2D, 0.3D);
+            matrixStack.scale(1.5F, 1.5F, 1.5F);
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(60.0F));
+            this.leftLeg.render(matrixStack, vertex, packedLight, overlay, red, green, blue, alpha);
+        }
+
+    }
+
+    public void translateToHand(HandSide side, MatrixStack matrixStack) {
+        super.translateToHand(side, matrixStack);
+        matrixStack.translate(side == HandSide.RIGHT ? -0.6D : 0.6D, -0.5D, -0.2D);
     }
 }

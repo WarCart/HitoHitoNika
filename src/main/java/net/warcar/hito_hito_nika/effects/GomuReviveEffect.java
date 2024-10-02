@@ -13,13 +13,19 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
-import net.warcar.hito_hito_nika.abilities.TrueGearFifthAbility;
+import net.warcar.hito_hito_nika.abilities.FifthGearAbility;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.effects.ModEffect;
+import xyz.pixelatedw.mineminenomi.config.CommonConfig;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAttributes;
-import xyz.pixelatedw.mineminenomi.init.ModSounds;
+import xyz.pixelatedw.mineminenomi.packets.client.ability.CEquipAbilityPacket;
+import xyz.pixelatedw.mineminenomi.packets.server.SSyncAbilityDataPacket;
+import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateEquippedAbilityPacket;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
+import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
 import xyz.pixelatedw.mineminenomi.wypi.WyRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -57,12 +63,12 @@ public class GomuReviveEffect extends ModEffect {
                     WyNetwork.sendToAllTrackingAndSelf(new SUpdateEquippedAbilityPacket((PlayerEntity) entity, ability), entity);
                 }*/
                 ((PlayerEntity) entity).closeContainer();
-                if (props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE)) {
-                    props.getEquippedAbility(TrueGearFifthAbility.INSTANCE).use((PlayerEntity) entity);
+                if (props.hasEquippedAbility(FifthGearAbility.INSTANCE)) {
+                    props.getEquippedAbility(FifthGearAbility.INSTANCE).use((PlayerEntity) entity);
                 } else {
-                    entity.level.playSound(null, entity, ModSounds.DRUMS_OF_LIBERATION_1.get(), SoundCategory.PLAYERS, 0.5F, 1.0F);
+                    entity.level.playSound(null, entity, TrueGomuGomuNoMi.DRUMS_OF_LIBERATION.get(), SoundCategory.PLAYERS, 0.5F, 1.0F);
                 }
-                HitoHitoNoMiNikaMod.LOGGER.info(props.getEquippedAbilitySlot(props.getEquippedAbility(TrueGearFifthAbility.INSTANCE)));
+                HitoHitoNoMiNikaMod.LOGGER.info(props.getEquippedAbilitySlot(props.getEquippedAbility(FifthGearAbility.INSTANCE)));
             }
         }
     }

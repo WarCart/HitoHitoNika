@@ -35,13 +35,10 @@ public class GearFourthBoundmanMorph extends MorphInfo {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public IRenderFactory getRendererFactory(LivingEntity entity) {
-        boolean isSlim = false;
-        if (entity instanceof AbstractClientPlayerEntity) {
-            isSlim = ((AbstractClientPlayerEntity)entity).getModelName().equals("slim");
-        }
+    public IRenderFactory getRendererFactory(AbstractClientPlayerEntity entity) {
+        boolean isSlim = entity.getModelName().equals("slim");
 
-        return new GomuMorphRenderer.Factory(this, isSlim).setOverlays(ModResources.G4_OVERLAY);
+        return new GomuMorphRenderer.Factory<>(this, isSlim).setOverlays(ModResources.G4_OVERLAY);
     }
 
     public String getForm() {

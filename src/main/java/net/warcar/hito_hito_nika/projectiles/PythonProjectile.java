@@ -20,8 +20,8 @@ import java.util.Comparator;
 import java.util.Optional;
 
 public abstract class PythonProjectile extends AbilityProjectileEntity {
-    protected static final DataParameter<Integer> NEXT_ID = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> PREV_ID = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> NEXT_ID = EntityDataManager.defineId(JetCulverinProjectile.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> PREV_ID = EntityDataManager.defineId(JetCulverinProjectile.class, DataSerializers.INT);
     protected Ability master;
     protected float speed = 0f;
     protected int layer = 0;
@@ -76,7 +76,7 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
             }
             PythonProjectile projectile = this.getNew();
             projectile.setDamage(this.getDamage() + 1f);
-            Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getThrower().position(), this.level, 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getThrower())).stream().min(Comparator.comparing(this::distanceTo));
+            Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getThrower().blockPosition(), this.level, 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getThrower())).stream().min(Comparator.comparing(this::distanceTo));
             if (!closest.isPresent() && this.getMaxLife() == 5) {
                 super.tick();
                 return;
@@ -98,7 +98,7 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
             this.setNext(projectile);
             projectile.setPrev(this);
             projectile.setPosAndOldPos(this.getX(), this.getY(), this.getZ());
-            this.setEntityCollisionSize(0);
+            this.setCollisionSize(0);
             this.setDeltaMovement(0, 0, 0);
         } else if (this.getMaxLife() == 1 && (this.getNext() == null || !this.getNext().isAlive())) {
             this.kill();

@@ -1,25 +1,27 @@
 package net.warcar.hito_hito_nika.events;
 
+import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.GomuFusenAbility;
-import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.abilities.IDeathAbility;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
-import xyz.pixelatedw.mineminenomi.api.events.stats.DorikiEvent;
-import xyz.pixelatedw.mineminenomi.api.events.stats.HakiExpEvent;
 import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.ItemsHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
@@ -31,12 +33,14 @@ import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.CannonBallProjecti
 import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.NormalBulletProjectile;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.PopGreenProjectile;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.hitodaibutsu.ImpactBlastProjectile;
-import xyz.pixelatedw.mineminenomi.events.abilities.AbilityValidationEvents;
 import xyz.pixelatedw.mineminenomi.init.ModAttributes;
 import xyz.pixelatedw.mineminenomi.init.ModDamageSource;
+import xyz.pixelatedw.mineminenomi.items.weapons.ClimaTactItem;
+import xyz.pixelatedw.mineminenomi.items.weapons.CoreSwordItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = "hito_hito_no_mi_nika")
 public class TrueGomuPassiveEffects {
@@ -87,7 +91,7 @@ public class TrueGomuPassiveEffects {
 					AbilityProjectileEntity ablProj = (AbilityProjectileEntity) instantSource;
 					if (ablProj.getThrower() != null && ablProj.isAffectedByHaki()) {
 						LivingEntity thrower = ablProj.getThrower();
-						boolean isImbued = ablProj.isAffectedByImbuing() && HakiHelper.hasImbuingActive(thrower);
+						boolean isImbued = ablProj.isAffectedByImbuing() && HakiHelper.hasImbuingActive(thrower, true);
 						if (isImbued) {
 							return;
 						}
@@ -101,25 +105,23 @@ public class TrueGomuPassiveEffects {
 	}
 
 	private static boolean getGomuDamagingItems(Item item) {
-		return item instanceof SwordItem;
+		if ((!(item instanceof SwordItem) || item instanceof CoreSwordItem) && !(item instanceof PickaxeItem) && !(item instanceof AxeItem) && !(item instanceof TridentItem) && !(item instanceof ClimaTactItem)) {
+			return !(item instanceof CoreSwordItem) || ((CoreSwordItem) item).isBlunt();
+		} else {
+			return false;
+		}
 	}
 
 	@SubscribeEvent
 	public static void onDeath(LivingDeathEvent event) {
 		if (!event.isCanceled()) {
-			TrueGearFourthAbility ability = AbilityDataCapability.get(event.getEntityLiving()).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
-			if (ability != null)
-				event.setCanceled(ability.onUserDeath(event.getEntityLiving()));
+			List<Ability> abilities = AbilityDataCapability.get(event.getEntityLiving()).getUnlockedAbilities((ability -> ability instanceof IDeathAbility));
+			boolean out = false;
+			for (Ability ability : abilities) {
+				boolean i = ((IDeathAbility) ability).onUserDeath(event.getEntityLiving(), event.getSource());
+				out = out || i;
+			}
+			event.setCanceled(out);
 		}
-	}
-
-	@SubscribeEvent
-	public static void dorikiGain(DorikiEvent.Post event) {
-		AbilityValidationEvents.checkForPossibleFruitAbilities(event.getEntityLiving());
-	}
-
-	@SubscribeEvent
-	public static void hakiEvent(HakiExpEvent.Post event) {
-		AbilityValidationEvents.checkForPossibleFruitAbilities(event.getEntityLiving());
 	}
 }

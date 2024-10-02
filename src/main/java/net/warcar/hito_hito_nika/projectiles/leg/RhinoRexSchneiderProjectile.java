@@ -23,7 +23,7 @@ public class RhinoRexSchneiderProjectile extends AbilityProjectileEntity {
         this.setDamage(350.0F);
         this.setMaxLife(10);
         this.setAffectedByHardening();
-        this.setEntityCollisionSize(4d);
+        this.setCollisionSize(4d);
         this.setPassThroughEntities();
         this.setHurtTime(10);
         this.setDamageSource(this.getDamageSource().setSourceElement(SourceElement.RUBBER));

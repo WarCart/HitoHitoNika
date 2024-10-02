@@ -13,18 +13,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
-import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGomuHelper;
+import net.warcar.hito_hito_nika.models.GomuSmokeModel;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.models.abilities.GomuSmokeModel;
 
 public class TrueGomuSmokeLayer<T extends LivingEntity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
     private GomuSmokeModel model = new GomuSmokeModel();
 
-    private static final ResourceLocation[] SMOKE_ANIM = new ResourceLocation[] {new ResourceLocation("mineminenomi", "textures/models/zoanmorph/g5/smoke_0.png"),
-            new ResourceLocation("mineminenomi", "textures/models/zoanmorph/g5/smoke_1.png"), new ResourceLocation("mineminenomi", "textures/models/zoanmorph/g5/smoke_2.png"),
-            new ResourceLocation("mineminenomi", "textures/models/zoanmorph/g5/smoke_3.png")};
+    private static final ResourceLocation[] SMOKE_ANIM = new ResourceLocation[] {new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/models/g5/smoke_0.png"),
+            new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/models/g5/smoke_1.png"), new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/models/g5/smoke_2.png"),
+            new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/models/g5/smoke_3.png")};
 
     public TrueGomuSmokeLayer(IEntityRenderer<T, M> renderer) {
         super(renderer);

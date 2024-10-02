@@ -20,7 +20,7 @@ public class King3KongStampProjectile extends AbilityProjectileEntity {
         this.setMaxLife(40);
         this.setPhysical();
         this.setDamage(720F);
-        this.setEntityCollisionSize(7d);
+        this.setCollisionSize(7d);
         this.setPassThroughEntities();
         this.setCanGetStuckInGround();
         this.setDamageSource(this.getDamageSource().setPhysical());

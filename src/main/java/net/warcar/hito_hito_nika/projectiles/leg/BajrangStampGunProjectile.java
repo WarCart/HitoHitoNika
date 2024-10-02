@@ -26,7 +26,7 @@ public class BajrangStampGunProjectile extends AbilityProjectileEntity {
         this.setMaxLife(250);
         this.setDamage(2000F);
         this.setPhysical();
-        this.setEntityCollisionSize(15);
+        this.setCollisionSize(15);
         this.setPassThroughEntities();
         this.setCanGetStuckInGround();
         this.setDamageSource(this.getDamageSource().setPhysical());
