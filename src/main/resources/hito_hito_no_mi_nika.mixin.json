@@ -3,6 +3,7 @@
   "package": "net.warcar.hito_hito_nika.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "DawnWhipMixin",
     "ModAbilitiesMixin",
     "MorphHelperMixin"
   ],
