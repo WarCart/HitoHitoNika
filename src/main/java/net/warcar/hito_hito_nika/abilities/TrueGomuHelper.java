@@ -6,6 +6,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import xyz.pixelatedw.mineminenomi.abilities.gomu.GearFifthAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiEmissionAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiInternalDestructionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
@@ -21,7 +22,7 @@ public class TrueGomuHelper {
 				(gear.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
 				|| (gear.equals(TrueGearThirdAbility.INSTANCE) && (hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon()))
 				|| (gear.equals(TrueGearFourthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props)))
-				|| (gear.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
+				|| (gear.equals(GearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
 	}
 
 	public static boolean hasGearSecondActive(IAbilityData props) {
@@ -60,7 +61,7 @@ public class TrueGomuHelper {
 	}
 
 	public static boolean hasGearFifthActive(IAbilityData props) {
-		Ability ability = props.getEquippedAbility(TrueGearFifthAbility.INSTANCE);
+		Ability ability = props.getEquippedAbility(GearFifthAbility.INSTANCE);
 		return ability != null && ability.isContinuous();
 	}
 
@@ -82,8 +83,6 @@ public class TrueGomuHelper {
 	}
 
 	public static boolean hasFruit(LivingEntity user, ResourceLocation fruit) {
-		HitoHitoNoMiNikaMod.LOGGER.info(DevilFruitCapability.get(user).getDevilFruit());
-		HitoHitoNoMiNikaMod.LOGGER.info(fruit);
 		return DevilFruitCapability.get(user).getDevilFruit().isPresent() && DevilFruitCapability.get(user).getDevilFruit().get().equals(fruit);
 	}
 

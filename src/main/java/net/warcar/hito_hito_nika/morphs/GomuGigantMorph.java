@@ -12,6 +12,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
+import xyz.pixelatedw.mineminenomi.init.ModAbilities;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 import xyz.pixelatedw.mineminenomi.renderers.morphs.MegaRenderer;
 
@@ -22,7 +23,7 @@ public class GomuGigantMorph extends MorphInfo {
     private static final EntitySize CROUCHING_SIZE = EntitySize.scalable(1.7F, 2.39F);
 
     public AkumaNoMiItem getDevilFruit() {
-        return TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA;
+        return ModAbilities.GOMU_GOMU_NO_MI;
     }
 
     @OnlyIn(Dist.CLIENT)

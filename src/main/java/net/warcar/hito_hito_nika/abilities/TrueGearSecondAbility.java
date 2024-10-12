@@ -150,7 +150,7 @@ public class TrueGearSecondAbility extends Ability {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() * .02d >= 20d && TrueGomuHelper.hasFruit(user, new ResourceLocation("mineminenomi", "gomu_gomu_no_mi"));
+		return EntityStatsCapability.get(user).getDoriki() * .02d >= 20d && DevilFruitCapability.get(user).hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI);
 	}
 
 	static {

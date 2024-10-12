@@ -84,7 +84,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 
 	private void onTick(LivingEntity player, TrueGearFourthAbility ability) {
 		if (ability.onTargetedTime) {
-			HitoHitoNoMiNikaMod.LOGGER.info(this.targetedTime);
 			if (ability.targetedTime <= 0) {
 				ability.afterContinuityStopEvent(player);
 				return;
@@ -213,7 +212,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() * .005d >= 25d && HakiDataCapability.get(user).getBusoshokuHakiExp() > HakiHelper.getBusoshokuFullBodyExpNeeded(user) && TrueGomuHelper.hasFruit(user, new ResourceLocation("mineminenomi", "gomu_gomu_no_mi"));
+		return EntityStatsCapability.get(user).getDoriki() * .005d >= 25d && HakiDataCapability.get(user).getBusoshokuHakiExp() > HakiHelper.getBusoshokuFullBodyExpNeeded(user) && DevilFruitCapability.get(user).hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI);
 	}
 
 	public Mode getMode() {

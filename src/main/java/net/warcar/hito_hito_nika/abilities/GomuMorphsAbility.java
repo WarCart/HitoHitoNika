@@ -36,7 +36,6 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 			}
 			MorphInfo morphInfo = this.getTransformation(player);
 			if (morphInfo != null) {
-				HitoHitoNoMiNikaMod.LOGGER.info(morphInfo.getDisplayName());
 				this.morphComponent.startMorph(player, morphInfo);
 			}
 			this.needsUpdate--;
