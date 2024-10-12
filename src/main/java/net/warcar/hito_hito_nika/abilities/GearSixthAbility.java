@@ -14,12 +14,6 @@ import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 public class GearSixthAbility extends Ability {
 	public static final AbilityCore<GearSixthAbility> INSTANCE;
 	private final ContinuousComponent continuousComponent;
-	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
-		@Override
-		public void setupDefaultScreams(IAbility ability) {
-			ability.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(chargeComponent -> chargeComponent.addStartEvent((entity, iAbility) -> this.scream(entity, ability.getDisplayName().getString())));
-		}
-	};
 
 	public GearSixthAbility(AbilityCore<GearSixthAbility> core) {
 		super(core);
@@ -27,7 +21,7 @@ public class GearSixthAbility extends Ability {
 		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 		continuousComponent = new ContinuousComponent(this, true);
 		this.addUseEvent(this::onStartContinuity);
-		this.addComponents(continuousComponent, trueScreamComponent);
+		this.addComponents(continuousComponent);
 	}
 
 	private void onStartContinuity(LivingEntity player, IAbility ability) {
