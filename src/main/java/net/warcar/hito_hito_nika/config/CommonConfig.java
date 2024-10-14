@@ -13,7 +13,7 @@ public class CommonConfig {
 
     public CommonConfig(ForgeConfigSpec.Builder builder) {
         this.blackLegAbilities = builder.comment("Uses leg abilities if you are Black leg user\nDefault: true").define("Black Leg Abilities", true);
-        this.nonCanonAbilities = builder.comment("Abilitiers from video games, films, ect.\nDefault: false").define("Non-Canon Abilities", false);
+        this.nonCanonAbilities = builder.comment("Abilities from video games, films, ect.\nDefault: false").define("Non-Canon Abilities", false);
     }
 
     public boolean isLegAbilities() {

@@ -86,8 +86,6 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 		double time = EntityStatsCapability.get(player).getDoriki() * .01d;
 		if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
-		} else if (!canUnlock(player)) {
-			player.sendMessage(new TranslationTextComponent("text.mineminenomi.too_weak"), Util.NIL_UUID);
 		} else {
 			if (this.isGigant()) {
 				time /= 4;

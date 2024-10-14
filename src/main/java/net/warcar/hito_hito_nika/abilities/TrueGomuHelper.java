@@ -6,6 +6,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import xyz.pixelatedw.mineminenomi.abilities.gomu.GearFifthAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiEmissionAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiInternalDestructionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
@@ -15,13 +16,15 @@ import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
+import java.util.Arrays;
+
 public class TrueGomuHelper {
 	public static <A extends Ability> boolean canActivateGear(IAbilityData props, AbilityCore<A> gear) {
 		return !(
 				(gear.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
 				|| (gear.equals(TrueGearThirdAbility.INSTANCE) && (hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon()))
 				|| (gear.equals(TrueGearFourthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props)))
-				|| (gear.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
+				|| (gear.equals(GearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
 	}
 
 	public static boolean hasGearSecondActive(IAbilityData props) {
@@ -60,7 +63,7 @@ public class TrueGomuHelper {
 	}
 
 	public static boolean hasGearFifthActive(IAbilityData props) {
-		Ability ability = props.getEquippedAbility(TrueGearFifthAbility.INSTANCE);
+		Ability ability = props.getEquippedAbility(GearFifthAbility.INSTANCE);
 		return ability != null && ability.isContinuous();
 	}
 
@@ -81,12 +84,6 @@ public class TrueGomuHelper {
 		return new ResourceLocation(modId.toLowerCase(), "textures/abilities/" + WyHelper.getResourceName(name) + ".png");
 	}
 
-	public static boolean hasFruit(LivingEntity user, ResourceLocation fruit) {
-		HitoHitoNoMiNikaMod.LOGGER.info(DevilFruitCapability.get(user).getDevilFruit());
-		HitoHitoNoMiNikaMod.LOGGER.info(fruit);
-		return DevilFruitCapability.get(user).getDevilFruit().isPresent() && DevilFruitCapability.get(user).getDevilFruit().get().equals(fruit);
-	}
-
 	public static TranslationTextComponent getName(String name) {
 		return getName(HitoHitoNoMiNikaMod.MOD_ID, name);
 	}
@@ -99,7 +96,7 @@ public class TrueGomuHelper {
 		private final String fallback;
 
 		public FallbackTranslationTextComponent(String id, String fallback) {
-			super(id);
+			super(WyHelper.getResourceName(id));
 			this.fallback = fallback;
 		}
 
@@ -111,5 +108,15 @@ public class TrueGomuHelper {
 			}
 			return out;
 		}
-	}
+
+		 @Override
+		 public TranslationTextComponent plainCopy() {
+			 return new FallbackTranslationTextComponent(this.getKey(), this.fallback);
+		 }
+
+		 @Override
+		 public String toString() {
+			 return "FallbackTranslatableComponent{key='" + this.getKey() + '\'' + ", args=" + Arrays.toString(this.getArgs()) + ", siblings=" + this.siblings + ", style=" + this.getStyle() + ", fallback='" + this.fallback +"'}";
+		 }
+	 }
 }

@@ -1,27 +1,12 @@
 {
-  "ability.mineminenomi.gear_fifth": "Gear Fifth",
   "ability.mineminenomi.true_gear_second.description.0": "By speeding up their blood flow, the user gains strength, speed and mobility",
   "ability.mineminenomi.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
-  "ability.mineminenomi.gear_fifth.description.0": "Awakening ability, that makes you insanely powerful",
-  "ability.mineminenomi.true_gear_fourth": "Gear Fourth",
-  "ability.mineminenomi.true_gomu_gomu_no_gatling.description.0": "Rapidly punches enemies using rubber fists",
-  "ability.mineminenomi.true_gomu_gomu_no_bazooka": "Gomu Gomu no Bazooka",
-  "ability.mineminenomi.true_gomu_gomu_no_pistol": "Gomu Gomu no Pistol",
-  "ability.mineminenomi.true_gomu_gomu_no_pistol.description.0": "The user stretches their arm to hit the opponent",
-  "ability.mineminenomi.true_gomu_gomu_no_rocket.description.0": "Stretches towards a block, then launches the user on an arch depending on where they fist landed",
-  "ability.mineminenomi.true_gear_third": "Gear Third",
   "ability.mineminenomi.strong_gomu_gomu_no_pistol.description.0": "Almost same as simple pistol... until You get Haki",
   "ability.mineminenomi.strong_gomu_gomu_no_pistol": "Gomu Gomu no Strong Pistol",
   "text.mineminenomi.too_weak": "You are to weak to use this ability",
   "text.mineminenomi.too_heavy": "You are to heavy to use this ability",
   "ability.mineminenomi.true_gear_fourth.description.0": "The user inflates their muscle structure to tremendously increase the power of their attacks and also allows flight\n\n§2Uses Haki§r",
   "ability.mineminenomi.gear_sixth": "Gomu Gomu no Strange Pistol",
-  "ability.mineminenomi.true_gomu_gomu_no_gatling": "Gomu Gomu no Gatling",
-  "ability.mineminenomi.true_gear_second": "Gear Second",
   "ability.mineminenomi.gomu_gomu_no_fusen.description.0": "By inhaling a lot of air user inflates their chest to gain invulnerability to canon balls",
-  "ability.mineminenomi.true_gear_third.description.0": "By blowing air and inflating their bones, the user\u0027s attacks get bigger and gain incredible strength",
-  "ability.mineminenomi.true_gomu_gomu_no_rocket": "Gomu Gomu no Rocket",
-  "ability.mineminenomi.true_gomu_gomu_no_bazooka.description.0": "Hits the enemy with both hands to launch them away",
-  "item.mineminenomi.hito_hito_no_mi_model_nika": "Hito Hito no Mi, Model: Nika",
-  "mineminenomi.subtitle.drums_of_liberation": "Drums of Liberation"
+  "ability.hito_hito_no_mi_nika.": ""
 }

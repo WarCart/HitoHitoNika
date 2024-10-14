@@ -108,8 +108,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 			time = -1;
 		}if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
-		} else if (!canUnlock(player)) {
-			player.sendMessage(new TranslationTextComponent("text.mineminenomi.too_weak"), Util.NIL_UUID);
 		} else if (TrueGomuHelper.hasGearFifthActive(props) && ability.isSnakeman()) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
 		} else {
