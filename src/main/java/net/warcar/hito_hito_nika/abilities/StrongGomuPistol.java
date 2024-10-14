@@ -307,7 +307,7 @@ public class StrongGomuPistol extends Ability {
 					this.setMaxChargeTime(7.5D);
 					this.cooldown = 20;
 					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Over Over King Kong Stamp"));
-					this.setDisplayIcon(TrueGomuHelper.getIcon("Over Kong Gun"));
+					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gun"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props)) {
 					this.setMaxChargeTime(15D);
 					this.cooldown = 40;
@@ -317,7 +317,7 @@ public class StrongGomuPistol extends Ability {
 					this.setMaxChargeTime(5D);
 					this.cooldown = 15;
 					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Over Kong Stamp"));
-					this.setDisplayIcon(TrueGomuHelper.getIcon("Over Kong Gun"));
+					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gun"));
 				} else if (g4.isBoundman()) {
 					this.setMaxChargeTime(10D);
 					this.cooldown = 30;

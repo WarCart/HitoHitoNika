@@ -5,6 +5,7 @@ import xyz.pixelatedw.mineminenomi.abilities.gomu.BouncyAbility;
 import xyz.pixelatedw.mineminenomi.abilities.gomu.GearFifthAbility;
 import xyz.pixelatedw.mineminenomi.abilities.gomu.GomuGomuNoDawnWhipAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.enums.AbilityCommandGroup;
 import xyz.pixelatedw.mineminenomi.init.ModAbilities;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;

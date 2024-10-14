@@ -72,8 +72,6 @@ public class TrueGearSecondAbility extends Ability {
 		IAbilityData props = AbilityDataCapability.get(player);
 		if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
-		} else if (!canUnlock(player)) {
-			player.sendMessage(new TranslationTextComponent("text.mineminenomi.too_weak"), Util.NIL_UUID);
 		} else {
 			if (TrueGomuHelper.hasGearThirdActive(props)) {
 				props.getEquippedAbility(TrueGearThirdAbility.INSTANCE).setSecondGear(true);
