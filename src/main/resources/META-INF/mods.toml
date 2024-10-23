@@ -61,3 +61,11 @@ description='''
     versionRange="[0.10.0,)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.hito_hito_no_mi_nika]]
+    mandatory = false
+    modId = "extrasnomi"
+    versionRange = "[0, )"
+    ordering = "NONE"
+    side = "BOTH"
+
