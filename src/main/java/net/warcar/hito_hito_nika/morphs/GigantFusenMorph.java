@@ -14,6 +14,7 @@ import net.warcar.hito_hito_nika.models.GomuGigantFusenModel;
 import net.warcar.hito_hito_nika.renderers.morphs.GomuMorphRenderer;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
+import xyz.pixelatedw.mineminenomi.init.ModAbilities;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
 import java.util.Map;
@@ -41,7 +42,7 @@ public class GigantFusenMorph extends MorphInfo {
     }
 
     public AkumaNoMiItem getDevilFruit() {
-        return TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA;
+        return ModAbilities.GOMU_GOMU_NO_MI;
     }
 
     public String getForm() {

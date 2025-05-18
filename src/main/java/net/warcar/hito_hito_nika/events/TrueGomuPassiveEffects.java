@@ -7,36 +7,46 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.GomuFusenAbility;
+import net.warcar.hito_hito_nika.abilities.GomuMorphsAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import xyz.pixelatedw.mineminenomi.abilities.gomu.GearFifthAbility;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusManager;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusOperation;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.events.ability.AbilityUseEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.DorikiEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.HakiExpEvent;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.ItemsHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
+import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.CannonBallProjectile;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.NormalBulletProjectile;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.PopGreenProjectile;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.hitodaibutsu.ImpactBlastProjectile;
 import xyz.pixelatedw.mineminenomi.events.abilities.AbilityValidationEvents;
-import xyz.pixelatedw.mineminenomi.init.ModAttributes;
-import xyz.pixelatedw.mineminenomi.init.ModDamageSource;
+import xyz.pixelatedw.mineminenomi.init.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = "hito_hito_no_mi_nika")
 public class TrueGomuPassiveEffects {
@@ -48,7 +58,7 @@ public class TrueGomuPassiveEffects {
 			Entity trueSource = source.getEntity();
 			PlayerEntity attacked = (PlayerEntity) event.getEntityLiving();
 			IDevilFruit props = DevilFruitCapability.get(attacked);
-			if (props.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA) && !source.isMagic()) {
+			if (props.hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI) && !source.isMagic()) {
 				float reduction = 0.0F;
 				ArrayList<String> instantSources = new ArrayList<>(Arrays.asList("mob", "player"));
 				boolean a = false;
@@ -79,7 +89,7 @@ public class TrueGomuPassiveEffects {
 			PlayerEntity attacked = (PlayerEntity) event.getEntityLiving();
 			IAbilityData props = AbilityDataCapability.get(attacked);
 			IDevilFruit devilFruitProps = DevilFruitCapability.get(attacked);
-			if (devilFruitProps.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA)) {
+			if (devilFruitProps.hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI)) {
 				DamageSource source = event.getSource();
 				Entity instantSource = source.getDirectEntity();
 				if (instantSource instanceof NormalBulletProjectile || (instantSource instanceof CannonBallProjectile && TrueGomuHelper.hasAbilityActive(props, GomuFusenAbility.INSTANCE)) || instantSource instanceof PopGreenProjectile
@@ -121,5 +131,28 @@ public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void hakiEvent(HakiExpEvent.Post event) {
 		AbilityValidationEvents.checkForPossibleFruitAbilities(event.getEntityLiving());
+	}
+
+	@SubscribeEvent
+	public static void usage(AbilityUseEvent.Pre event) {
+		if (Arrays.asList(TrueGomuGomuNoMi.GOMU_GEARS).contains(event.getAbility().getCore())) {
+			GomuMorphsAbility morphs = AbilityDataCapability.get(event.getEntityLiving()).getPassiveAbility(GomuMorphsAbility.INSTANCE);
+			if (morphs != null)
+				morphs.updateModes();
+		}
+		if (event.getAbility().getCore() == GearFifthAbility.INSTANCE) {
+			event.getAbility().getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(abilityComponent -> {
+				//.addBonus(UUID.fromString("39a283b9-e28c-4606-bc24-19b2825a6ff6"), "progression", BonusOperation.MUL, (float) EntityStatsCapability.get(event.getEntityLiving()).getDoriki() * .003f / 60f);
+				abilityComponent.addEndEvent((livingEntity, iAbility) ->
+					iAbility.getComponent(ModAbilityKeys.COOLDOWN).ifPresent(cooldownComponent -> cooldownComponent.startCooldown(livingEntity, abilityComponent.getContinueTime())));
+            });
+			event.getAbility().getComponent(ModAbilityKeys.COOLDOWN).ifPresent(cooldownComponent ->
+					cooldownComponent.addStartEvent((livingEntity, iAbility) -> {
+                	AbilityHelper.disableAbilities(livingEntity, (int) cooldownComponent.getStartCooldown(), ability -> ability != iAbility);
+                	livingEntity.addEffect(new EffectInstance(ModEffects.PARALYSIS.get(), (int) (cooldownComponent.getStartCooldown() / 4), 1, true, true));
+                	GomuMorphsAbility morphs = AbilityDataCapability.get(event.getEntityLiving()).getPassiveAbility(GomuMorphsAbility.INSTANCE);
+                	if (morphs != null) morphs.updateModes();
+            }));
+		}
 	}
 }

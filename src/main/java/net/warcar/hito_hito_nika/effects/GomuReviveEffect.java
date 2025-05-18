@@ -13,7 +13,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
-import net.warcar.hito_hito_nika.abilities.TrueGearFifthAbility;
+import xyz.pixelatedw.mineminenomi.abilities.gomu.GearFifthAbility;
 import xyz.pixelatedw.mineminenomi.api.effects.ModEffect;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
@@ -57,12 +57,11 @@ public class GomuReviveEffect extends ModEffect {
                     WyNetwork.sendToAllTrackingAndSelf(new SUpdateEquippedAbilityPacket((PlayerEntity) entity, ability), entity);
                 }*/
                 ((PlayerEntity) entity).closeContainer();
-                if (props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE)) {
-                    props.getEquippedAbility(TrueGearFifthAbility.INSTANCE).use((PlayerEntity) entity);
+                if (props.hasEquippedAbility(GearFifthAbility.INSTANCE)) {
+                    props.getEquippedAbility(GearFifthAbility.INSTANCE).use((PlayerEntity) entity);
                 } else {
                     entity.level.playSound(null, entity, ModSounds.DRUMS_OF_LIBERATION_1.get(), SoundCategory.PLAYERS, 0.5F, 1.0F);
                 }
-                HitoHitoNoMiNikaMod.LOGGER.info(props.getEquippedAbilitySlot(props.getEquippedAbility(TrueGearFifthAbility.INSTANCE)));
             }
         }
     }
