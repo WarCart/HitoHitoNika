@@ -14,6 +14,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
@@ -211,7 +212,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() * .005d >= 25d && HakiDataCapability.get(user).getBusoshokuHakiExp() > HakiHelper.getBusoshokuFullBodyExpNeeded(user) && TrueGomuHelper.hasFruit(user, new ResourceLocation("mineminenomi", "gomu_gomu_no_mi"));
+		return EntityStatsCapability.get(user).getDoriki() * .005d >= 25d && HakiDataCapability.get(user).getBusoshokuHakiExp() > HakiHelper.getBusoshokuFullBodyExpNeeded(user) && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	public Mode getMode() {

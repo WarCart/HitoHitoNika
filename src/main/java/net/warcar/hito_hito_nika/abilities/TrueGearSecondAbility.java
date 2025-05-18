@@ -3,15 +3,11 @@ package net.warcar.hito_hito_nika.abilities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
@@ -23,7 +19,6 @@ import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.*;
-import xyz.pixelatedw.mineminenomi.particles.effects.ParticleEffect;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import java.util.Objects;
@@ -148,7 +143,7 @@ public class TrueGearSecondAbility extends Ability {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() * .02d >= 20d && TrueGomuHelper.hasFruit(user, new ResourceLocation("mineminenomi", "gomu_gomu_no_mi"));
+		return EntityStatsCapability.get(user).getDoriki() * .02d >= 20d && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	static {

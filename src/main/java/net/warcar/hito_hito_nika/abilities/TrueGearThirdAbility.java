@@ -3,13 +3,10 @@ package net.warcar.hito_hito_nika.abilities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeMod;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.haki.*;
@@ -22,6 +19,7 @@ import xyz.pixelatedw.mineminenomi.api.helpers.AttributeHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.haki.IHakiData;
@@ -164,8 +162,9 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return (EntityStatsCapability.get(user).getDoriki() * .01d >= 20d && TrueGomuHelper.hasFruit(user, new ResourceLocation("mineminenomi", "gomu_gomu_no_mi")))
-				|| (WyHelper.isAprilFirst() && TrueGomuHelper.hasFruit(user, ModAbilities.MOCHI_MOCHI_NO_MI.getRegistryName()));
+		IDevilFruit fruit = DevilFruitCapability.get(user);
+		return (EntityStatsCapability.get(user).getDoriki() * .01d >= 20d && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA))
+				|| (WyHelper.isAprilFirst() && fruit.hasDevilFruit(ModAbilities.MOCHI_MOCHI_NO_MI));
 	}
 
 	public boolean isGigant() {

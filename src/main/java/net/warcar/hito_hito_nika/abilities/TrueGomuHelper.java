@@ -1,19 +1,15 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.config.CommonConfig;
-import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.gomu.GearFifthAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiEmissionAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiInternalDestructionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
-import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import java.util.Arrays;
