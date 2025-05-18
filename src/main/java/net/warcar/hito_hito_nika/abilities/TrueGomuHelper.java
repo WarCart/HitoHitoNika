@@ -85,34 +85,8 @@ public class TrueGomuHelper {
 	}
 
 	public static TranslationTextComponent getName(String modId, String name) {
-		return new FallbackTranslationTextComponent("ability." + modId + "." + name, name);
+		String key = "ability." + modId + "." + WyHelper.getResourceName(name);
+		HitoHitoNoMiNikaMod.getLangMap().put(key, name);
+		return new TranslationTextComponent(key, name);
 	}
-
-	 static class FallbackTranslationTextComponent extends TranslationTextComponent {
-		private final String fallback;
-
-		public FallbackTranslationTextComponent(String id, String fallback) {
-			super(WyHelper.getResourceName(id));
-			this.fallback = fallback;
-		}
-
-		@Override
-		public String getString() {
-			String out = super.getString();
-			if (out.equals(this.getKey())) {
-				return fallback;
-			}
-			return out;
-		}
-
-		 @Override
-		 public TranslationTextComponent plainCopy() {
-			 return new FallbackTranslationTextComponent(this.getKey(), this.fallback);
-		 }
-
-		 @Override
-		 public String toString() {
-			 return "FallbackTranslatableComponent{key='" + this.getKey() + '\'' + ", args=" + Arrays.toString(this.getArgs()) + ", siblings=" + this.siblings + ", style=" + this.getStyle() + ", fallback='" + this.fallback +"'}";
-		 }
-	 }
 }

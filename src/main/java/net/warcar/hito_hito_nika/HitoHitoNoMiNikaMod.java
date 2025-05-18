@@ -17,11 +17,15 @@ import net.warcar.hito_hito_nika.init.TrueMorphs;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mod(HitoHitoNoMiNikaMod.MOD_ID)
 public class HitoHitoNoMiNikaMod
 {
     public static final String MOD_ID = "hito_hito_no_mi_nika";
     public static final Logger LOGGER = LogManager.getLogger();
+    private static final Map<String, String> langMap = new HashMap<>();
 
     public HitoHitoNoMiNikaMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -32,6 +36,7 @@ public class HitoHitoNoMiNikaMod
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         GomuReviveEffect.register(bus);
         TrueMorphs.init();
+        TrueGomuGomuNoMi.register();
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -42,4 +47,8 @@ public class HitoHitoNoMiNikaMod
     private void enqueueIMC(final InterModEnqueueEvent event) {}
 
     private void processIMC(final InterModProcessEvent event) {}
+
+    public static Map<String, String> getLangMap() {
+        return langMap;
+    }
 }

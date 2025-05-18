@@ -5,7 +5,8 @@
   "mixins": [
     "DawnWhipMixin",
     "ModAbilitiesMixin",
-    "MorphHelperMixin"
+    "MorphHelperMixin",
+    "WyHelperMixin"
   ],
   "injectors": {
     "defaultRequire": 1
