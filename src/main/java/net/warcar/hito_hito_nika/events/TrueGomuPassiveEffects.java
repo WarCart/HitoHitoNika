@@ -48,7 +48,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = "hito_hito_no_mi_nika")
+@Mod.EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID)
 public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void onEntityHurt(LivingHurtEvent event) {
@@ -135,24 +135,10 @@ public class TrueGomuPassiveEffects {
 
 	@SubscribeEvent
 	public static void usage(AbilityUseEvent.Pre event) {
-		if (Arrays.asList(TrueGomuGomuNoMi.GOMU_GEARS).contains(event.getAbility().getCore())) {
+		if (Arrays.asList(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.getAbilities()).contains(event.getAbility().getCore())) {
 			GomuMorphsAbility morphs = AbilityDataCapability.get(event.getEntityLiving()).getPassiveAbility(GomuMorphsAbility.INSTANCE);
 			if (morphs != null)
 				morphs.updateModes();
-		}
-		if (event.getAbility().getCore() == GearFifthAbility.INSTANCE) {
-			event.getAbility().getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(abilityComponent -> {
-				//.addBonus(UUID.fromString("39a283b9-e28c-4606-bc24-19b2825a6ff6"), "progression", BonusOperation.MUL, (float) EntityStatsCapability.get(event.getEntityLiving()).getDoriki() * .003f / 60f);
-				abilityComponent.addEndEvent((livingEntity, iAbility) ->
-					iAbility.getComponent(ModAbilityKeys.COOLDOWN).ifPresent(cooldownComponent -> cooldownComponent.startCooldown(livingEntity, abilityComponent.getContinueTime())));
-            });
-			event.getAbility().getComponent(ModAbilityKeys.COOLDOWN).ifPresent(cooldownComponent ->
-					cooldownComponent.addStartEvent((livingEntity, iAbility) -> {
-                	AbilityHelper.disableAbilities(livingEntity, (int) cooldownComponent.getStartCooldown(), ability -> ability != iAbility);
-                	livingEntity.addEffect(new EffectInstance(ModEffects.PARALYSIS.get(), (int) (cooldownComponent.getStartCooldown() / 4), 1, true, true));
-                	GomuMorphsAbility morphs = AbilityDataCapability.get(event.getEntityLiving()).getPassiveAbility(GomuMorphsAbility.INSTANCE);
-                	if (morphs != null) morphs.updateModes();
-            }));
 		}
 	}
 }
