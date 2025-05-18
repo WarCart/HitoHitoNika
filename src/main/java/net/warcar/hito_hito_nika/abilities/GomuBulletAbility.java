@@ -30,8 +30,8 @@ import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
-public class StrongGomuPistol extends Ability {
-	public static final AbilityCore<StrongGomuPistol> INSTANCE;
+public class GomuBulletAbility extends Ability {
+	public static final AbilityCore<GomuBulletAbility> INSTANCE;
 	private final ChargeComponent chargeComponent;
 	private final ProjectileComponent projectileComponent;
 	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
@@ -48,7 +48,7 @@ public class StrongGomuPistol extends Ability {
 	private float speed = 2.5f;
 	protected boolean leg = false;
 
-	public StrongGomuPistol(AbilityCore<StrongGomuPistol> core) {
+	public GomuBulletAbility(AbilityCore<GomuBulletAbility> core) {
 		super(core);
 		this.setDisplayIcon(TrueGomuPistol.INSTANCE);
 		this.projectileComponent = new ProjectileComponent(this, this::createProjectile);
@@ -67,7 +67,11 @@ public class StrongGomuPistol extends Ability {
 
 
 	private void start(LivingEntity entity, IAbility ability) {
-		this.chargeComponent.startCharging(entity, this.chargeTime * 20);
+		if (this.chargeTime == 0) {
+			this.beforeContinuityStopEvent(entity, ability);
+		} else {
+            this.chargeComponent.startCharging(entity, this.chargeTime * 20);
+        }
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -203,7 +207,7 @@ public class StrongGomuPistol extends Ability {
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.cooldown = 4;
 				this.setMaxChargeTime(0.0);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Strong Jet Gigant Pistol"));
+				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Gigant Bullet"));
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.cooldown = 4;
@@ -246,22 +250,22 @@ public class StrongGomuPistol extends Ability {
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 				this.cooldown = 9;
 				this.setMaxChargeTime(0.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Strong Gigant Pistol"));
+				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Bullet"));
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				this.cooldown = 1.5f;
 				this.setMaxChargeTime(0.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Strong Jet Pistol"));
+				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Bullet"));
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.cooldown = 2;
 				this.setMaxChargeTime(0.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Strong Hawk Pistol"));
+				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Hawk Bullet"));
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Pistol"));
 			} else {
 				this.cooldown = 2;
 				this.setMaxChargeTime(0.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Strong Pistol"));
+				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Bullet"));
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			}
 		} else {
@@ -360,6 +364,6 @@ public class StrongGomuPistol extends Ability {
 	}
 
 	static {
-		INSTANCE = (new AbilityCore.Builder<>("Strong Gomu Gomu no Pistol", AbilityCategory.DEVIL_FRUITS, StrongGomuPistol::new)).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
+		INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Bullet", AbilityCategory.DEVIL_FRUITS, GomuBulletAbility::new)).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
 	}
 }

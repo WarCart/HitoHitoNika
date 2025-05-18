@@ -5,10 +5,12 @@ import xyz.pixelatedw.mineminenomi.abilities.gomu.BouncyAbility;
 import xyz.pixelatedw.mineminenomi.abilities.gomu.GomuGomuNoDawnWhipAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.enums.FruitType;
+import xyz.pixelatedw.mineminenomi.init.ModAbilities;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 import xyz.pixelatedw.mineminenomi.wypi.WyRegistry;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 

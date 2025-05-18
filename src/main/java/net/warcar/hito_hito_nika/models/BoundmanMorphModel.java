@@ -6,18 +6,15 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
-import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
-import net.warcar.hito_hito_nika.abilities.StrongGomuPistol;
+import net.warcar.hito_hito_nika.abilities.GomuBulletAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGomuHelper;
 import net.warcar.hito_hito_nika.config.CommonConfig;
-import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
@@ -85,7 +82,7 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
         PlayerEntity player = Minecraft.getInstance().player;
         if (this.gomuAnimations && !(EntityStatsCapability.get(player).isBlackLeg() && CommonConfig.INSTANCE.isLegAbilities())) {
             float time = 0.2F;
-            StrongGomuPistol ability = AbilityDataCapability.get(player).getEquippedAbility(StrongGomuPistol.INSTANCE);
+            GomuBulletAbility ability = AbilityDataCapability.get(player).getEquippedAbility(GomuBulletAbility.INSTANCE);
             if (ability != null && ability.isCharging()) {
                 float maxChargeTime = ability.getMaxChargeTime();
                 if (maxChargeTime == 0)
@@ -116,7 +113,7 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
         matrixStack.pushPose();
         if (this.gomuAnimations && EntityStatsCapability.get(player).isBlackLeg() && CommonConfig.INSTANCE.isLegAbilities()) {
             float time = 0.2F;
-            StrongGomuPistol ability = AbilityDataCapability.get(player).getEquippedAbility(StrongGomuPistol.INSTANCE);
+            GomuBulletAbility ability = AbilityDataCapability.get(player).getEquippedAbility(GomuBulletAbility.INSTANCE);
             if (ability != null && ability.isCharging()) {
                 float maxChargeTime = (float) ability.getMaxChargeTime();
                 if (maxChargeTime == 0)
