@@ -122,7 +122,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
 
-    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:5762433")
+    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:6049537")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
