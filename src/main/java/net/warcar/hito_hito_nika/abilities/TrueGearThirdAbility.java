@@ -24,7 +24,6 @@ import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability
 import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.haki.IHakiData;
 import xyz.pixelatedw.mineminenomi.init.*;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 	public static final AbilityCore<TrueGearThirdAbility> INSTANCE;
@@ -85,7 +84,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 		if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
 		} else {
-			if (this.isGigant()) {
+			if (this.isGiant()) {
 				time /= 4;
 				this.statsComponent.addAttributeModifier(Attributes.MOVEMENT_SPEED, SPEED_MODIFIER);
 				this.statsComponent.addAttributeModifier(ModAttributes.JUMP_HEIGHT, JUMP_MODIFIER);
@@ -130,14 +129,14 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 		if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
 			haki.alterHakiOveruse(15);
 		}
-		if (TrueGomuHelper.hasAbilityActive(props, BusoshokuHakiFullBodyHardeningAbility.INSTANCE) && this.isGigant()) {
+		if (TrueGomuHelper.hasAbilityActive(props, BusoshokuHakiFullBodyHardeningAbility.INSTANCE) && this.isGiant()) {
 			haki.alterHakiOveruse(2);
 		}
 	}
 
 	protected void afterContinuityStopEvent(LivingEntity player, IAbility abl) {
 		IAbilityData props = AbilityDataCapability.get(player);
-		if (this.isGigant()) {
+		if (this.isGiant()) {
 			this.modeComponent.revertToDefault(player);
 			this.statsComponent.removeModifiers(player);
 			this.statsComponent.clearAttributeModifiers();
@@ -166,7 +165,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 		return EntityStatsCapability.get(user).getDoriki() * .01d >= 20d && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
-	public boolean isGigant() {
+	public boolean isGiant() {
 		return this.modeComponent.isMode(Mode.Gigant);
 	}
 
@@ -207,7 +206,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 		else if (this.smallFormCooldown < 0) this.smallFormCooldown = 0;
 	}
 
-	enum Mode {
+	public enum Mode {
 		Normal,
 		Gigant
 	}

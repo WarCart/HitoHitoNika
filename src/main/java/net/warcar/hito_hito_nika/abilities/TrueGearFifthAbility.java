@@ -85,9 +85,6 @@ public class TrueGearFifthAbility extends Ability {
 		if (!TrueGomuHelper.canActivateGear(AbilityDataCapability.get(player), INSTANCE)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
 			return;
-		} else if (!canUnlock(player)) {
-			player.sendMessage(new TranslationTextComponent("text.mineminenomi.too_weak"), Util.NIL_UUID);
-			return;
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);

@@ -13,6 +13,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.SkinOverlayComponent;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
@@ -21,6 +22,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability
 import xyz.pixelatedw.mineminenomi.init.*;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
+import java.awt.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,6 +33,7 @@ public class TrueGearSecondAbility extends Ability {
 	private static final AbilityAttributeModifier STEP_HEIGHT;
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
+	private final SkinOverlayComponent overlayComponent = new SkinOverlayComponent(this, new AbilityOverlay.Builder().setColor(new Color(232, 54, 54, 74)).build());
 	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
 		@Override
 		public void setupDefaultScreams(IAbility ability) {
@@ -40,10 +43,8 @@ public class TrueGearSecondAbility extends Ability {
 	private boolean thirdGearWas = false;
 	private boolean prevSprintValue = false;
 
-	public TrueGearSecondAbility(AbilityCore core) {
+	public TrueGearSecondAbility(AbilityCore<TrueGearSecondAbility> core) {
 		super(core);
-		this.setCustomIcon("Gear Second");
-		this.setDisplayName("Gear Second");
 		this.isNew = true;
 		this.continuousComponent = new ContinuousComponent(this, true);
 		this.statsComponent = new ChangeStatsComponent(this);
@@ -55,7 +56,7 @@ public class TrueGearSecondAbility extends Ability {
 		this.addUseEvent(this::onStartContinuity);
 		this.continuousComponent.addTickEvent(this::duringContinuity);
 		this.continuousComponent.addEndEvent(this::afterContinuityStopEvent);
-		this.addComponents(this.continuousComponent, this.statsComponent, this.trueScreamComponent);
+		this.addComponents(this.continuousComponent, this.statsComponent, this.trueScreamComponent, this.overlayComponent);
 	}
 
 	private void onStartContinuity(LivingEntity player, IAbility abl) {
@@ -72,6 +73,7 @@ public class TrueGearSecondAbility extends Ability {
 				props.getEquippedAbility(TrueGearThirdAbility.INSTANCE).setSecondGear(true);
 				this.thirdGearWas = true;
 			}
+			this.overlayComponent.showAll(player);
 			if (time >= 500) {
 				this.continuousComponent.startContinuity(player, -1);
 			} else {
@@ -118,6 +120,7 @@ public class TrueGearSecondAbility extends Ability {
 
 	private void afterContinuityStopEvent(LivingEntity player, IAbility abl) {
 		int cooldown = (int) Math.round(Math.sqrt(this.continuousComponent.getContinueTime()));
+		this.overlayComponent.hideAll(player);
 		this.cooldownComponent.startCooldown(player, 20 * (cooldown + 1));
 		if (this.thirdGearWas && EntityStatsCapability.get(player).getDoriki() < 3500.0D) {
 			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 300, 1, true, true));
@@ -148,7 +151,6 @@ public class TrueGearSecondAbility extends Ability {
 
 	static {
 		INSTANCE = (new AbilityCore.Builder<>("Gear Second", AbilityCategory.DEVIL_FRUITS, TrueGearSecondAbility::new)).addDescriptionLine("By speeding up their blood flow, the user gains strength, speed and mobility").setUnlockCheck(TrueGearSecondAbility::canUnlock).build();
-		//OVERLAY = (new AbilityOverlay.Builder()).setColor(new Color(232, 54, 54, 74)).build();
 		JUMP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("a44a9644-369a-4e18-88d9-323727d3d85b"), INSTANCE, "Gear Second Jump Modifier", 5.0D, Operation.ADDITION);
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("a2337b58-7e6d-4361-a8ca-943feee4f906"), INSTANCE, "Gear Second Attack Damage Modifier", 4.0D, Operation.ADDITION);
 		STEP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("eab680cd-a6dc-438a-99d8-46f9eb53a950"), INSTANCE, "Gear Second Step Height Modifier", 1.0D, Operation.ADDITION);

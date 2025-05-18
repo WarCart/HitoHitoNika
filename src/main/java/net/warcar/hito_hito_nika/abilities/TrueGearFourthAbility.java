@@ -192,7 +192,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 			player.addEffect(new EffectInstance(Effects.WEAKNESS, duration, 3, true, true));
 		}
 		if (this.isBonusTime) {
-			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), duration + 100 + (int) (EntityStatsCapability.get(player).getDoriki() / 200), 1, true, true));
+			//player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), duration + 100 + (int) (EntityStatsCapability.get(player).getDoriki() / 200), 1, true, true));
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
@@ -256,7 +256,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 			entity.setHealth(5);
 			entity.addEffect(new EffectInstance(GomuReviveEffect.INSTANCE.get(), 600, 1, true, false));
 			entity.addEffect(new EffectInstance(Effects.REGENERATION, 600, 4, true, true));
-			entity.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
+			//entity.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
 			if (entity instanceof PlayerEntity) {
 				AbilityHelper.disableAbilities(entity, 600, (ability -> true));
 				WyNetwork.sendTo(new SSyncAbilityDataPacket(entity.getId(), AbilityDataCapability.get(entity)), (PlayerEntity) entity);

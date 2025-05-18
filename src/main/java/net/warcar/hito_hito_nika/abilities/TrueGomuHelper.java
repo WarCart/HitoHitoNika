@@ -33,7 +33,7 @@ public class TrueGomuHelper {
 
 	public static boolean hasGigantActive(IAbilityData props) {
 		TrueGearThirdAbility ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE);
-		return ability != null && ability.isContinuous() && ability.isGigant();
+		return ability != null && ability.isContinuous() && ability.isGiant();
 	}
 
 	public static boolean isSmall(IAbilityData props) {
@@ -57,7 +57,7 @@ public class TrueGomuHelper {
 	}
 
 	public static boolean hasGearFifthActive(IAbilityData props) {
-		Ability ability = props.getEquippedAbility(GearFifthAbility.INSTANCE);
+		Ability ability = props.getEquippedAbility(TrueGearFifthAbility.INSTANCE);
 		return ability != null && ability.isContinuous();
 	}
 
