@@ -3,13 +3,10 @@ package net.warcar.hito_hito_nika.abilities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.warcar.hito_hito_nika.config.CommonConfig;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import xyz.pixelatedw.mineminenomi.ModMain;
-import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiEmissionAbility;
-import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiHardeningAbility;
-import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimationComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
@@ -27,6 +24,38 @@ import xyz.pixelatedw.mineminenomi.init.ModAnimations;
 
 public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	public static final AbilityCore<TrueGomuGatling> INSTANCE;
+	public static final TranslationTextComponent ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Roc Gatling");
+	public static final TranslationTextComponent JET_ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gatling");
+	public static final TranslationTextComponent JET_GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Gatling");
+	public static final TranslationTextComponent GIANT_DAWN_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Gatling");
+	public static final TranslationTextComponent HYDRA = TrueGomuHelper.getName("Gomu Gomu no Hydra");
+	public static final TranslationTextComponent BLACK_MAMBA = TrueGomuHelper.getName("Gomu Gomu no Black Mamba");
+	public static final TranslationTextComponent OVER_KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Over Kong Gatling");
+	public static final TranslationTextComponent KING_KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no King Kong Gatling");
+	public static final TranslationTextComponent KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Kong Gatling");
+	public static final TranslationTextComponent DAWN_GATLING = TrueGomuHelper.getName("Gomu Gomu no Dawn Gatling");
+	public static final TranslationTextComponent BAJRANG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Bajrang Gatling");
+	public static final TranslationTextComponent JET_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Gatling");
+	public static final TranslationTextComponent ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Elephant Gatling");
+	public static final TranslationTextComponent GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Gatling");
+	public static final TranslationTextComponent HAWK_GATLING = TrueGomuHelper.getName("Gomu Gomu no Hawk Gatling");
+	public static final TranslationTextComponent GATLING = TrueGomuHelper.getName("Gomu Gomu no Gatling");
+	public static final TranslationTextComponent STAMP_ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Stamp Roc Gatling");
+	public static final TranslationTextComponent JET_ELEPHANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Stamp Gatling");
+	public static final TranslationTextComponent JET_GIANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Stamp Gatling");
+	public static final TranslationTextComponent GIANT_DAWN_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Stamp Gatling");
+	public static final TranslationTextComponent STAMP_HYDRA = TrueGomuHelper.getName("Gomu Gomu no Stamp Hydra");
+	public static final TranslationTextComponent RHINO_STAMPEDE_GATLING = TrueGomuHelper.getName("Gomu Gomu no Rhino Stampede Gatling");
+	public static final TranslationTextComponent OVER_KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Over Kong Stamp Gatling");
+	public static final TranslationTextComponent KING_KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no King Kong Stamp Gatling");
+	public static final TranslationTextComponent KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Kong Stamp Gatling");
+	public static final TranslationTextComponent JET_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Stamp Gatling");
+	public static final TranslationTextComponent ELEPHANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Elephant Stamp Gatling");
+	public static final TranslationTextComponent GIANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Stamp Gatling");
+	public static final TranslationTextComponent DAWN_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Dawn Stamp Gatling");
+	public static final TranslationTextComponent BAJRANG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Bajrang Stamp Gatling");
+	public static final TranslationTextComponent TAKO_STAMP = TrueGomuHelper.getName("Gomu Gomu no Tako Stamp");
+	public static final TranslationTextComponent STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Stamp Gatling");
 	private final ContinuousComponent continuousComponent;
 	private final ProjectileComponent projectileComponent;
 	private final AnimationComponent animationComponent;
@@ -215,116 +244,116 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 		IAbilityData props = AbilityDataCapability.get(entity);
 		if (!EntityStatsCapability.get(entity).isBlackLeg()) {
 			if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasHakiEmissionActive(props) && HakiHelper.hasInfusionActive(entity)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Roc Gatling"));
+				this.setDisplayName(ROC_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gatling"));
+				this.setDisplayName(JET_ELEPHANT_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Gigant Gatling"));
+				this.setDisplayName(JET_GIANT_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Dawn Gatling"));
+				this.setDisplayName(GIANT_DAWN_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
 				TrueGearFourthAbility g4 = AbilityDataCapability.get(entity).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 				if (g4.isSnakeman()) {
 					if (HakiHelper.hasInfusionActive(entity)) {
-						this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Hydra"));
+						this.setDisplayName(HYDRA);
 					} else {
-						this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Black Mamba"));
+						this.setDisplayName(BLACK_MAMBA);
 					}
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Black Mamba"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasInfusionActive(entity)) {
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Over Kong Gatling"));
+					this.setDisplayName(OVER_KONG_GATLING);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props)) {
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no King Kong Gatling"));
+					this.setDisplayName(KING_KONG_GATLING);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
 				} else {
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Kong Gatling"));
+					this.setDisplayName(KONG_GATLING);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 				}
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Dawn Gatling"));
+				this.setDisplayName(DAWN_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Bajrang Gatling"));
+				this.setDisplayName(BAJRANG_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Gatling"));
+				this.setDisplayName(JET_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Elephant Gatling"));
+				this.setDisplayName(ELEPHANT_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Gatling"));
+				this.setDisplayName(GIANT_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Hawk Gatling"));
+				this.setDisplayName(HAWK_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			} else {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gatling"));
+				this.setDisplayName(GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			}
-			if (this.getIcon(null).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			}
 		} else {
 			if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasHakiEmissionActive(props) && HakiHelper.hasInfusionActive(entity)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Stamp Roc Gatling"));
+				this.setDisplayName(STAMP_ROC_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Stamp Gatling"));
+				this.setDisplayName(JET_ELEPHANT_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Gigant Stamp Gatling"));
+				this.setDisplayName(JET_GIANT_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Dawn Stamp Gatling"));
+				this.setDisplayName(GIANT_DAWN_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
 				TrueGearFourthAbility g4 = AbilityDataCapability.get(entity).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 				if (g4.isSnakeman()) {
 					if (HakiHelper.hasInfusionActive(entity)) {
-						this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Hydra"));
+						this.setDisplayName(STAMP_HYDRA);
 					} else {
-						this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Rhino Stampede Gatling"));
+						this.setDisplayName(RHINO_STAMPEDE_GATLING);
 					}
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Black Mamba"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasInfusionActive(entity)) {
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Over Kong Stamp Gatling"));
+					this.setDisplayName(OVER_KONG_STAMP_GATLING);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props)) {
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no King Kong Stamp Gatling"));
+					this.setDisplayName(KING_KONG_STAMP_GATLING);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
 				} else {
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Kong Gatling"));
+					this.setDisplayName(KONG_STAMP_GATLING);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 				}
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Stamp Gatling"));
+				this.setDisplayName(JET_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Elephant Stamp Gatling"));
+				this.setDisplayName(ELEPHANT_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Stamp Gatling"));
+				this.setDisplayName(GIANT_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Dawn Gatling"));
+				this.setDisplayName(DAWN_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Bajrang Stamp Gatling"));
+				this.setDisplayName(BAJRANG_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
 			} else if (HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Tako Stamp"));
+				this.setDisplayName(TAKO_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			} else {
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Stamp Gatling"));
+				this.setDisplayName(STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			}
-			if (this.getIcon(null).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			}
 		}

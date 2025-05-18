@@ -99,6 +99,7 @@ public class GomuBulletAbility extends Ability {
 
 	private void start(LivingEntity entity, IAbility ability) {
 		if (this.chargeTime == 0) {
+			this.trueScreamComponent.scream(entity);
 			this.beforeContinuityStopEvent(entity, ability);
 		} else {
             this.chargeComponent.startCharging(entity, this.chargeTime * 20);
