@@ -2,7 +2,6 @@ package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.ModMain;
-import xyz.pixelatedw.mineminenomi.abilities.gomu.GomuHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
