@@ -37,6 +37,8 @@ public class HitoHitoNoMiNikaMod
         GomuReviveEffect.register(bus);
         TrueMorphs.init();
         TrueGomuGomuNoMi.register();
+        langMap.put("text.mineminenomi.too_weak", "You are to weak to use this ability");
+        langMap.put("text.mineminenomi.too_heavy", "You are to heavy to use this ability");
         MinecraftForge.EVENT_BUS.register(this);
     }
 

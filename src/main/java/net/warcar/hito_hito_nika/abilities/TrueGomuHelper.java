@@ -12,8 +12,6 @@ import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
-import java.util.Arrays;
-
 public class TrueGomuHelper {
 	public static <A extends Ability> boolean canActivateGear(IAbilityData props, AbilityCore<A> gear) {
 		return !(
@@ -80,12 +78,16 @@ public class TrueGomuHelper {
 		return new ResourceLocation(modId.toLowerCase(), "textures/abilities/" + WyHelper.getResourceName(name) + ".png");
 	}
 
-	public static TranslationTextComponent getName(String name) {
-		return getName(HitoHitoNoMiNikaMod.MOD_ID, name);
+	public static TranslationTextComponent getName(String name, String resourceName) {
+		return getName(HitoHitoNoMiNikaMod.MOD_ID, name, resourceName);
 	}
 
-	public static TranslationTextComponent getName(String modId, String name) {
-		String key = "ability." + modId + "." + WyHelper.getResourceName(name);
+	public static TranslationTextComponent getName(String name) {
+		return getName(HitoHitoNoMiNikaMod.MOD_ID, name, WyHelper.getResourceName(name));
+	}
+
+	public static TranslationTextComponent getName(String modId, String name, String resourceName) {
+		String key = "ability." + modId + "." + resourceName;
 		HitoHitoNoMiNikaMod.getLangMap().put(key, name);
 		return new TranslationTextComponent(key, name);
 	}

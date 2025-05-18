@@ -3,6 +3,8 @@ package net.warcar.hito_hito_nika.abilities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.util.text.TranslationTextComponent;
+import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
@@ -18,6 +20,7 @@ import java.util.UUID;
 
 public class GomuFusenAbility extends Ability {
 	public static final AbilityCore<GomuFusenAbility> INSTANCE;
+	public static final TranslationTextComponent NAME = TrueGomuHelper.getName(ModMain.PROJECT_ID, "Gomu Gomu no Fusen", "gomu_gomu_no_fusen");
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
 	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {

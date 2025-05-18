@@ -242,7 +242,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	static {
-		INSTANCE = (new AbilityCore.Builder<>("True Gear Fourth", AbilityCategory.DEVIL_FRUITS, TrueGearFourthAbility::new))
+		INSTANCE = (new AbilityCore.Builder<>("Gear Fourth", AbilityCategory.DEVIL_FRUITS, TrueGearFourthAbility::new))
 				.addDescriptionLine("The user inflates their muscle structure to tremendously increase the power of their attacks and also allows flight\n\n§2Uses Haki§r").setUnlockCheck(TrueGearFourthAbility::canUnlock).build();
 		ARMOR_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_ARMOR_UUID, INSTANCE, "Gear Fourth Armor Modifier", 10.0D, Operation.ADDITION);
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_STRENGTH_UUID, INSTANCE, "Gear Fourth Attack Damage Modifier", 15.0D, Operation.ADDITION);

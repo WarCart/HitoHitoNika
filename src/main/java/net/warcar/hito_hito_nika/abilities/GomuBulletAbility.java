@@ -50,15 +50,15 @@ public class GomuBulletAbility extends Ability {
 	public static final TranslationTextComponent BULLET = TrueGomuHelper.getName("Gomu Gomu no Bullet");
 	public static final TranslationTextComponent KING_BAJRANG_STAMP = TrueGomuHelper.getName("Gomu Gomu no King Bajrang Stamp");
 	public static final TranslationTextComponent BAJRANG_STAMP = TrueGomuHelper.getName("Gomu Gomu no Bajrang Stamp");
-	public static final TranslationTextComponent RedRocStamp = TrueGomuHelper.getName("Gomu Gomu no Red Roc Stamp");
-	public static final TranslationTextComponent JetGiantAxe = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Axe");
-	public static final TranslationTextComponent RedHawkStamp = TrueGomuHelper.getName("Gomu Gomu no Red Hawk Stamp");
-	public static final TranslationTextComponent KingCobraStamp = TrueGomuHelper.getName("Gomu Gomu no King Cobra Stamp");
-	public static final TranslationTextComponent OverKing2Stamp = TrueGomuHelper.getName("Gomu Gomu no Over King King Kong Stamp");
-	public static final TranslationTextComponent King3KongStamp = TrueGomuHelper.getName("Gomu Gomu no King King King Kong Stamp");
-	public static final TranslationTextComponent OverKongStamp = TrueGomuHelper.getName("Gomu Gomu no Over Kong Stamp");
-	public static final TranslationTextComponent KingKongStamp = TrueGomuHelper.getName("Gomu Gomu no King Kong Stamp");
-	public static final TranslationTextComponent ThorGiantAxe = TrueGomuHelper.getName("Gomu Gomu no Thor Giant Axe");
+	public static final TranslationTextComponent RED_ROC_STAMP = TrueGomuHelper.getName("Gomu Gomu no Red Roc Stamp");
+	public static final TranslationTextComponent JET_GIANT_AXE = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Axe");
+	public static final TranslationTextComponent RED_HAWK_STAMP = TrueGomuHelper.getName("Gomu Gomu no Red Hawk Stamp");
+	public static final TranslationTextComponent KING_COBRA_STAMP = TrueGomuHelper.getName("Gomu Gomu no King Cobra Stamp");
+	public static final TranslationTextComponent OVER_KING_2_STAMP = TrueGomuHelper.getName("Gomu Gomu no Over King King Kong Stamp");
+	public static final TranslationTextComponent KING_3_KONG_STAMP = TrueGomuHelper.getName("Gomu Gomu no King King King Kong Stamp");
+	public static final TranslationTextComponent OVER_KONG_STAMP = TrueGomuHelper.getName("Gomu Gomu no Over Kong Stamp");
+	public static final TranslationTextComponent KING_KONG_STAMP = TrueGomuHelper.getName("Gomu Gomu no King Kong Stamp");
+	public static final TranslationTextComponent THOR_GIANT_AXE = TrueGomuHelper.getName("Gomu Gomu no Thor Giant Axe");
 	public static final TranslationTextComponent GIANT_AXE = TrueGomuHelper.getName("Gomu Gomu no Giant Axe");
 	public static final TranslationTextComponent JET_AXE = TrueGomuHelper.getName("Gomu Gomu no Jet Axe");
 	public static final TranslationTextComponent HAWK_AXE = TrueGomuHelper.getName("Gomu Gomu no Hawk Axe");
@@ -313,50 +313,50 @@ public class GomuBulletAbility extends Ability {
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasHakiEmissionActive(props)) {
 				this.cooldown = 8;
 				this.setMaxChargeTime(0.0D);
-				this.setDisplayName(RedRocStamp);
+				this.setDisplayName(RED_ROC_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Fire Stamp"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.cooldown = 4;
 				this.setMaxChargeTime(0.0D);
-				this.setDisplayName(JetGiantAxe);
+				this.setDisplayName(JET_GIANT_AXE);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.cooldown = 4;
 				this.setMaxChargeTime(0.0D);
-				this.setDisplayName(RedHawkStamp);
+				this.setDisplayName(RED_HAWK_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Fire Stamp"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
 				TrueGearFourthAbility g4 = AbilityDataCapability.get(entity).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 				if (g4.isSnakeman()) {
 					this.setMaxChargeTime(3D);
 					this.cooldown = 10;
-					this.setDisplayName(KingCobraStamp);
+					this.setDisplayName(KING_COBRA_STAMP);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Cobra"));
 				} else if (g4.isBoundman() && HakiHelper.hasInfusionActive(entity) && TrueGomuHelper.hasGearThirdActive(props)) {
 					this.setMaxChargeTime(7.5D);
 					this.cooldown = 20;
-					this.setDisplayName(OverKing2Stamp);
+					this.setDisplayName(OVER_KING_2_STAMP);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gun"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props)) {
 					this.setMaxChargeTime(15D);
 					this.cooldown = 40;
-					this.setDisplayName(King3KongStamp);
+					this.setDisplayName(KING_3_KONG_STAMP);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gun"));
 				} else if (g4.isBoundman() && HakiHelper.hasInfusionActive(entity)) {
 					this.setMaxChargeTime(5D);
 					this.cooldown = 15;
-					this.setDisplayName(OverKongStamp);
+					this.setDisplayName(OVER_KONG_STAMP);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gun"));
 				} else if (g4.isBoundman()) {
 					this.setMaxChargeTime(10D);
 					this.cooldown = 30;
-					this.setDisplayName(KingKongStamp);
+					this.setDisplayName(KING_KONG_STAMP);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gun"));
 				}
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.cooldown = 9;
 				this.setMaxChargeTime(0.0D);
-				this.setDisplayName(ThorGiantAxe);
+				this.setDisplayName(THOR_GIANT_AXE);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Stamp"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 				this.cooldown = 9;
