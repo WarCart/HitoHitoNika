@@ -163,8 +163,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 
 	protected static boolean canUnlock(LivingEntity user) {
 		IDevilFruit fruit = DevilFruitCapability.get(user);
-		return (EntityStatsCapability.get(user).getDoriki() * .01d >= 20d && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA))
-				|| (WyHelper.isAprilFirst() && fruit.hasDevilFruit(ModAbilities.MOCHI_MOCHI_NO_MI));
+		return EntityStatsCapability.get(user).getDoriki() * .01d >= 20d && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	public boolean isGigant() {

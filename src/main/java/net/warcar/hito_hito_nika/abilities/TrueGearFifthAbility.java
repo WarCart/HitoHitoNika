@@ -115,7 +115,7 @@ public class TrueGearFifthAbility extends Ability {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() * .003d >= 25d && DevilFruitCapability.get(user).hasAwakenedFruit() && TrueGomuHelper.hasFruit(user, new ResourceLocation("mineminenomi", "gomu_gomu_no_mi"));
+		return EntityStatsCapability.get(user).getDoriki() * .003d >= 25d && DevilFruitCapability.get(user).hasAwakenedFruit() && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	@OnlyIn(Dist.CLIENT)

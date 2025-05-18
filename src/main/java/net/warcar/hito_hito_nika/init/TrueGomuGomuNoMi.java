@@ -33,10 +33,10 @@ public class TrueGomuGomuNoMi {
 	}
 
 	static {
-		AbilityCore<?>[] cores = new AbilityCore[]{TrueGomuPistol.INSTANCE, StrongGomuPistol.INSTANCE, TrueGomuGatling.INSTANCE, TrueGomuBazooka.INSTANCE, GomuFusenAbility.INSTANCE, TrueGomuRocket.INSTANCE, TrueGearSecondAbility.INSTANCE, TrueGearThirdAbility.INSTANCE, TrueGearFourthAbility.INSTANCE,
+		AbilityCore<?>[] cores = new AbilityCore[]{TrueGomuPistol.INSTANCE, GomuBulletAbility.INSTANCE, TrueGomuGatling.INSTANCE, TrueGomuBazooka.INSTANCE, GomuFusenAbility.INSTANCE, TrueGomuRocket.INSTANCE, TrueGearSecondAbility.INSTANCE, TrueGearThirdAbility.INSTANCE, TrueGearFourthAbility.INSTANCE,
 				TrueGearFifthAbility.INSTANCE, GomuGomuNoDawnWhipAbility.INSTANCE, BouncyAbility.INSTANCE, GomuMorphsAbility.INSTANCE};
 		if (WyHelper.isAprilFirst())
-			cores = new AbilityCore[]{TrueGomuPistol.INSTANCE, StrongGomuPistol.INSTANCE, TrueGomuGatling.INSTANCE, TrueGomuBazooka.INSTANCE, GomuFusenAbility.INSTANCE, TrueGomuRocket.INSTANCE, TrueGearSecondAbility.INSTANCE, TrueGearThirdAbility.INSTANCE, TrueGearFourthAbility.INSTANCE,
+			cores = new AbilityCore[]{TrueGomuPistol.INSTANCE, GomuBulletAbility.INSTANCE, TrueGomuGatling.INSTANCE, TrueGomuBazooka.INSTANCE, GomuFusenAbility.INSTANCE, TrueGomuRocket.INSTANCE, TrueGearSecondAbility.INSTANCE, TrueGearThirdAbility.INSTANCE, TrueGearFourthAbility.INSTANCE,
 					TrueGearFifthAbility.INSTANCE, GomuGomuNoDawnWhipAbility.INSTANCE, GearSixthAbility.INSTANCE, BouncyAbility.INSTANCE, GomuMorphsAbility.INSTANCE};
 		HITO_HITO_NO_MI_NIKA = registerFruit(new AkumaNoMiItem("Gomu Gomu no Mi", 2, FruitType.PARAMECIA, cores));
 	}
