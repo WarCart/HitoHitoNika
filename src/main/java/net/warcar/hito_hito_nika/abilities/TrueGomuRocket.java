@@ -57,9 +57,10 @@ public class TrueGomuRocket extends Ability {
 	private void onStartContinuityEvent(LivingEntity player, IAbility abl) {
 		if (this.continuousComponent.isContinuous()) {
 			this.continuousComponent.stopContinuity(player);
+			return;
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
-		if (TrueGomuHelper.hasGigantActive(props) || TrueGomuHelper.hasGearFourthActive(props)) {
+		if (TrueGomuHelper.hasGigantActive(props) || (TrueGomuHelper.hasGearFourthActive(props) && !TrueGomuHelper.hasPartialGearFourthActive(props))) {
 			player.sendMessage(new TranslationTextComponent("text.mineminenomi.too_heavy"), Util.NIL_UUID);
 			return;
 		}

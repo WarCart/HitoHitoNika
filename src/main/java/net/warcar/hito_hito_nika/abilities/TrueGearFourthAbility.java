@@ -1,5 +1,6 @@
 package net.warcar.hito_hito_nika.abilities;
 
+import com.google.common.base.Predicates;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -16,6 +17,7 @@ import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
+import xyz.pixelatedw.mineminenomi.api.INextEnum;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
@@ -37,12 +39,14 @@ import xyz.pixelatedw.mineminenomi.packets.server.SSyncAbilityDataPacket;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
 
+import java.util.function.Predicate;
+
 public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	public static final AbilityCore<TrueGearFourthAbility> INSTANCE;
 	private static final AbilityAttributeModifier ARMOR_MODIFIER;
 	private static final AbilityAttributeModifier STRENGTH_MODIFIER;
 	private static final AbilityAttributeModifier DAMAGE_REDUCTION_MODIFIER;
-	private final AltModeComponent<Mode> mode;
+	private final AltModeComponent<Mode> modeComponent;
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
 	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
@@ -61,9 +65,10 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		this.setCustomIcon("Gear Fourth");
 		this.setDisplayName(new TranslationTextComponent("ability.mineminenomi.gear_fourth"));
 		statsComponent = new ChangeStatsComponent(this);
-		mode = new AltModeComponent<>(this, Mode.class, Mode.BOUNDMAN);
+		modeComponent = new AltModeComponent<>(this, Mode.class, Mode.BOUNDMAN);
+		modeComponent.addChangeModeEvent(this::changeMode);
 		continuousComponent = new ContinuousComponent(this, true);
-		this.addComponents(continuousComponent, statsComponent, mode, trueScreamComponent);
+		this.addComponents(continuousComponent, statsComponent, modeComponent, trueScreamComponent);
 		this.statsComponent.addAttributeModifier(Attributes.ARMOR, ARMOR_MODIFIER);
 		this.statsComponent.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ARMOR_MODIFIER);
 		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
@@ -128,7 +133,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 
 	public void duringContinuity(LivingEntity player, IAbility ability) {
 		float passiveTimer = this.continuousComponent.getContinueTime();
-		if (passiveTimer % 2 == 0 && !this.isSnakeman()) {
+		if (passiveTimer % 2 == 0 && this.isBoundman()) {
 			WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), player, player.getX(), player.getY() + 1.0D, player.getZ());
 		}
 		if (HakiHelper.checkForHakiOveruse(player, 2)) {
@@ -140,7 +145,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		if (!TrueGomuHelper.hasGearFifthActive(AbilityDataCapability.get(player))) {
 			HakiDataCapability.get(player).alterHakiOveruse(5);
 		}
-		if (player.isOnGround() && !(TrueGomuHelper.hasGearFifthActive(AbilityDataCapability.get(player)) || this.isSnakeman())) {
+		if (player.isOnGround() && !TrueGomuHelper.hasGearFifthActive(AbilityDataCapability.get(player)) && this.isBoundman()) {
 			player.push(0, 1, 0);
 			player.level.playSound(null, player.blockPosition(), ModSounds.BOUNCE_2.get(), SoundCategory.PLAYERS, 1, 0.5f);
 		}
@@ -192,7 +197,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 			player.addEffect(new EffectInstance(Effects.WEAKNESS, duration, 3, true, true));
 		}
 		if (this.isBonusTime) {
-			//player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), duration + 100 + (int) (EntityStatsCapability.get(player).getDoriki() / 200), 1, true, true));
+			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), duration + 100 + (int) (EntityStatsCapability.get(player).getDoriki() / 200), 1, true, true));
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
@@ -215,8 +220,8 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		return EntityStatsCapability.get(user).getDoriki() * .005d >= 25d && HakiDataCapability.get(user).getBusoshokuHakiExp() > HakiHelper.getBusoshokuFullBodyExpNeeded(user) && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
-	public Mode getMode() {
-		return this.mode.getCurrentMode();
+	public Mode getModeComponent() {
+		return this.modeComponent.getCurrentMode();
 	}
 
 	public void setExtraData(CompoundNBT tag) {
@@ -234,11 +239,15 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	public boolean isSnakeman() {
-		return this.getMode() == Mode.SNAKEMAN;
+		return this.getModeComponent() == Mode.SNAKEMAN;
 	}
 
 	public boolean isBoundman() {
-		return this.getMode() == Mode.BOUNDMAN;
+		return this.getModeComponent() == Mode.BOUNDMAN;
+	}
+
+	public boolean isPartial() {
+		return this.getModeComponent() == Mode.PARTIAL;
 	}
 
 	static {
@@ -251,12 +260,12 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 
 	public boolean onUserDeath(LivingEntity entity) {
 		IDevilFruit awakeningProps = DevilFruitCapability.get(entity);
-		if (this.isBonusTime && !awakeningProps.hasAwakenedFruit() && CommonConfig.INSTANCE.hasAwakeningsEnabled() && EntityStatsCapability.get(entity).getDoriki() >= 8334) {
+		if (this.isBonusTime && !awakeningProps.hasAwakenedFruit() && CommonConfig.INSTANCE.hasAwakeningsEnabled() && EntityStatsCapability.get(entity).getDoriki() >= 8300) {
 			awakeningProps.setAwakenedFruit(true);
 			entity.setHealth(5);
 			entity.addEffect(new EffectInstance(GomuReviveEffect.INSTANCE.get(), 600, 1, true, false));
 			entity.addEffect(new EffectInstance(Effects.REGENERATION, 600, 4, true, true));
-			//entity.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
+			entity.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
 			if (entity instanceof PlayerEntity) {
 				AbilityHelper.disableAbilities(entity, 600, (ability -> true));
 				WyNetwork.sendTo(new SSyncAbilityDataPacket(entity.getId(), AbilityDataCapability.get(entity)), (PlayerEntity) entity);
@@ -266,8 +275,31 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		return false;
 	}
 
+	private void changeMode(LivingEntity livingEntity, IAbility iAbility, Mode mode) {
+		if (mode != this.modeComponent.getCurrentMode() && !mode.canUnlock.test(livingEntity)) {
+			this.modeComponent.setMode(livingEntity, mode.next());
+			throw new IllegalStateException("I Hate THIS");
+		}
+	}
+
 	public enum Mode {
 		BOUNDMAN,
-		SNAKEMAN;
+		SNAKEMAN,
+		TANKMAN(Predicates.alwaysFalse()),
+		PARTIAL(e -> DevilFruitCapability.get(e).hasAwakenedFruit());
+
+        private final Predicate<LivingEntity> canUnlock;
+
+        Mode() {
+			this(Predicates.alwaysTrue());
+		}
+
+		Mode(Predicate<LivingEntity> canUnlock) {
+            this.canUnlock = canUnlock;
+        }
+
+		public Mode next() {
+			return values()[(this.ordinal() + 1) % values().length];
+		}
 	}
 }

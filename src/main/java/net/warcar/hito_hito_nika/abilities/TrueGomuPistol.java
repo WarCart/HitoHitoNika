@@ -125,7 +125,7 @@ public class TrueGomuPistol extends Ability {
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				projectile = new KingKongStampProjectile(player.level, player, this);
 				speed = 3;
-			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
+			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
 				projectile = new KongStampProjectile(player.level, player, this);
 				speed = 1.8F;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
@@ -166,7 +166,7 @@ public class TrueGomuPistol extends Ability {
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				projectile = new KingKongGunProjectile(player.level, player, this);
 				speed = 3;
-			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
+			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
 				projectile = new TrueKongGunProjectile(player.level, player, this);
 				speed = 1.8F;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {

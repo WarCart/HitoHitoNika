@@ -105,7 +105,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 				speed = 4;
 				projectileSpace = 6;
 				projDamageReduction = 0.6F;
-			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
+			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
 				projectile = new KongStampProjectile(entity.level, entity, this);
 				speed = 2.2F;
 				projectileSpace = 6;
@@ -146,7 +146,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 				speed = 4;
 				projectileSpace = 6;
 				projDamageReduction = 0.6F;
-			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
+			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
 				projectile = new TrueKongGunProjectile(entity.level, entity, this);
 				speed = 2.2F;
 				projectileSpace = 6;

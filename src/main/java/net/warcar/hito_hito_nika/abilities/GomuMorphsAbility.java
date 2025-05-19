@@ -11,6 +11,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.components.MorphComponent;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModMorphs;
 
 import javax.annotation.Nullable;
@@ -25,6 +26,7 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 	public GomuMorphsAbility(AbilityCore<GomuMorphsAbility> core) {
 		super(core);
 		this.morphComponent = new MorphComponent(this);
+		this.getComponents().remove(ModAbilityKeys.DISABLE);
 		this.addComponents(morphComponent);
 		this.addDuringPassiveEvent(this::update);
 	}

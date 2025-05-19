@@ -56,6 +56,11 @@ public class TrueGomuHelper {
 		return ability != null && ability.isContinuous() && ability.isSnakeman();
 	}
 
+	public static boolean hasPartialGearFourthActive(IAbilityData props) {
+		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		return ability != null && ability.isContinuous() && ability.isPartial();
+	}
+
 	public static boolean hasGearFifthActive(IAbilityData props) {
 		Ability ability = props.getEquippedAbility(TrueGearFifthAbility.INSTANCE);
 		return ability != null && ability.isContinuous();

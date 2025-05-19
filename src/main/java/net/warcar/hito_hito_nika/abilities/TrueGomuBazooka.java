@@ -108,7 +108,7 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 				projectile = new RhinoRexSchneiderProjectile(player.level, player, this);
 				speed = 3.0F;
 				spacingMod = 4F;
-			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
+			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
 				projectile = new RhinoSchneiderProjectile(player.level, player, this);
 				speed = 3.0F;
 				spacingMod = 2.5F;
@@ -149,6 +149,10 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				projectile = new LeoRexBazookaProjectile(player.level, player, this);
 				speed = 5.0F;
+				spacingMod = 2.5F;
+			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
+				projectile = new TrueLeoBazookaProjectile(player.level, player, this);
+				speed = 3.0F;
 				spacingMod = 2.5F;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
 				projectile = new JetCulverinProjectile(player.level, player, this, 7f, 100);
