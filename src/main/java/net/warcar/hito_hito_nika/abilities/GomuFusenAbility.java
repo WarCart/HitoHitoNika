@@ -41,7 +41,6 @@ public class GomuFusenAbility extends Ability {
 		this.statsComponent.addAttributeModifier(Attributes.MOVEMENT_SPEED, new AbilityAttributeModifier(UUID.fromString("0b034de2-6e61-4c55-b259-050dae546a48"), INSTANCE, "Fusen Speed Modifier", -0.5d, Operation.MULTIPLY_TOTAL));
 		this.statsComponent.addAttributeModifier(ModAttributes.JUMP_HEIGHT, new AbilityAttributeModifier(UUID.fromString("2a0bf1c6-0873-11ef-91ae-325096b39f47"), INSTANCE, "Fusen Jump Modifier", -0.5d, Operation.MULTIPLY_TOTAL));
 		this.statsComponent.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, new AbilityAttributeModifier(UUID.fromString("2a0bf504-0873-11ef-8291-325096b39f47"), INSTANCE, "Fusen Knockback Resistance Modifier", 1, Operation.ADDITION));
-		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, new AbilityAttributeModifier(UUID.fromString("2a0bf464-0873-11ef-b635-325096b39f47"), INSTANCE, "Fusen Resistance Damage Modifier", /*this.gigant ? 20d : */10d, Operation.ADDITION));
 		this.addComponents(continuousComponent, statsComponent, trueScreamComponent);
 		this.addUseEvent(this::start);
 	}
@@ -64,6 +63,7 @@ public class GomuFusenAbility extends Ability {
 	private void onStartContinuityEvent(LivingEntity player, IAbility ability) {
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
+		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, new AbilityAttributeModifier(UUID.fromString("2a0bf464-0873-11ef-b635-325096b39f47"), INSTANCE, "Fusen Resistance Damage Modifier", TrueGomuHelper.hasGearThirdActive(props) ? 0.5 : 0.25, Operation.ADDITION));
 		if (morphs != null)
 			morphs.updateModes();
 	}

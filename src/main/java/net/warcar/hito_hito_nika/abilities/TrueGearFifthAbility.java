@@ -98,9 +98,7 @@ public class TrueGearFifthAbility extends Ability {
 	}
 
 	private void afterContinuityStop(LivingEntity player, IAbility abl) {
-		AbilityHelper.disableAbilities(player, (int) this.continuousComponent.getContinueTime(), ability -> ability != this);
-		player.addEffect(new EffectInstance(ModEffects.PARALYSIS.get(), (int) (this.continuousComponent.getContinueTime() / 4), 1, true, true));
-		this.cooldownComponent.startCooldown(player, this.continuousComponent.getContinueTime());
+		player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), (int) (this.continuousComponent.getContinueTime()), 1, true, true));
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
@@ -130,7 +128,7 @@ public class TrueGearFifthAbility extends Ability {
 		INSTANCE = new AbilityCore.Builder<>("Gear Fifth", AbilityCategory.DEVIL_FRUITS, TrueGearFifthAbility::new).setUnlockCheck(TrueGearFifthAbility::canUnlock)
 				.addDescriptionLine("Awakening ability, that makes you insanely powerful").build();
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("5fc1a28f-7e59-44bf-9d7a-36953e9c700d"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Attack Damage Modifier", 20.0, AttributeModifier.Operation.ADDITION);
-		DAMAGE_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-4fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Resistance Damage Modifier", 40, AttributeModifier.Operation.ADDITION);
+		DAMAGE_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-4fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Resistance Damage Modifier", 0.5, AttributeModifier.Operation.ADDITION);
 		REGEN = new AbilityAttributeModifier(UUID.fromString("e6a409f2-5c6a-409e-a9f3-5b74899d8129"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Regen Modifier", 5, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		GRAVITY_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-7fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Gravity Damage Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	}

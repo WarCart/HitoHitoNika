@@ -79,7 +79,6 @@ public class TrueGomuPassiveEffects {
 				}
 				event.setAmount(event.getAmount() * (1.0F - reduction));
 			}
-			event.setAmount(event.getAmount() / ((float) attacked.getAttributeValue(ModAttributes.DAMAGE_REDUCTION.get()) + 1f));
 		}
 	}
 
