@@ -19,7 +19,6 @@ public class JetRhinoSchneiderProjectile extends PythonProjectile {
         this.setEntityCollisionSize(2.5d);
         this.setAffectedByHardening();
         this.setPassThroughEntities();
-        this.setCanGetStuckInGround();
         this.setDamageSource(this.getDamageSource().setPhysical());
     }
     public PythonProjectile getNew() {

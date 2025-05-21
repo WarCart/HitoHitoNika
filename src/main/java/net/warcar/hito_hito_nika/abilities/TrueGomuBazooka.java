@@ -2,6 +2,7 @@ package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -26,9 +27,10 @@ import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModAnimations;
+import xyz.pixelatedw.mineminenomi.init.ModEffects;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
-public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
+public class TrueGomuBazooka extends Ability {
 	public static final AbilityCore<TrueGomuBazooka> INSTANCE;
 	public static final TranslationTextComponent JET_GRIZZLY_MAGNUM = TrueGomuHelper.getName("Gomu Gomu no Jet Grizzly Magnum");
 	public static final TranslationTextComponent JET_GIANT_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Bazooka");
@@ -68,7 +70,6 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 	private int chargeTime;
 	private float speed = 2;
 	private float spacingMod = 1;
-	protected boolean leg = false;
 
 	public TrueGomuBazooka(AbilityCore<TrueGomuBazooka> core) {
 		super(core);
@@ -86,12 +87,13 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 	private void onUse(LivingEntity entity, IAbility abl) {
 		this.chargeComponent.startCharging(entity, this.chargeTime);
 		this.animationComponent.start(entity, ModAnimations.GOMU_BAZOOKA);
+		entity.addEffect(new EffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), this.chargeTime, 0));
 	}
 
 	private AbilityProjectileEntity createProjectile(LivingEntity player) {
 		AbilityProjectileEntity projectile;
 		IAbilityData props = AbilityDataCapability.get(player);
-		if (this.leg) {
+		if (EntityStatsCapability.get(player).isBlackLeg()) {
 			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				projectile = new BajrangStampGunProjectile(player.level, player, this);
 				spacingMod = 25F;
@@ -183,12 +185,9 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 		this.animationComponent.stop(player);
 		AbilityProjectileEntity projectile1 = this.projectileComponent.getNewProjectile(player);
 		AbilityProjectileEntity projectile2 = this.projectileComponent.getNewProjectile(player);
-		Vector3d dirVec = Vector3d.ZERO;
-		Direction dir = Direction.fromYRot(player.yRot);
-		dirVec = dirVec.add(Math.abs(dir.getNormal().getX()), Math.abs(dir.getNormal().getY()), Math.abs(dir.getNormal().getZ()));
-		dirVec = dirVec.multiply(this.spacingMod, 1.0D, this.spacingMod);
-		projectile1.moveTo(player.getX() + dirVec.z, player.getEyeY(), player.getZ() + dirVec.x, 0.0F, 0.0F);
-		projectile2.moveTo(player.getX() - dirVec.z, player.getEyeY(), player.getZ() - dirVec.x, 0.0F, 0.0F);
+		Vector3d dirVec = player.getLookAngle().cross(new Vector3d(0, 1, 0)).scale(this.spacingMod);
+		projectile1.moveTo(player.getX() + dirVec.x, player.getEyeY(), player.getZ() + dirVec.z, 0.0F, 0.0F);
+		projectile2.moveTo(player.getX() - dirVec.x, player.getEyeY(), player.getZ() - dirVec.z, 0.0F, 0.0F);
 		this.projectileComponent.shoot(projectile1, player, this.speed, 0.0F);
 		this.projectileComponent.shoot(projectile2, player, this.speed, 0.0F);
 		player.swing(Hand.MAIN_HAND, true);
@@ -338,22 +337,6 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Yari"));
 			}
 		}
-	}
-
-	public ResourceLocation getIcon(LivingEntity player) {
-		if (player != null)
-			this.leg = EntityStatsCapability.get(player).isBlackLeg() && CommonConfig.INSTANCE.isLegAbilities();
-		return super.getIcon(player);
-	}
-
-	public void setExtraData(CompoundNBT tag) {
-		this.leg = tag.getBoolean("leg") && CommonConfig.INSTANCE.isLegAbilities();
-	}
-
-	public CompoundNBT getExtraData() {
-		CompoundNBT out = new CompoundNBT();
-		out.putBoolean("leg", this.leg);
-		return out;
 	}
 
 	static {

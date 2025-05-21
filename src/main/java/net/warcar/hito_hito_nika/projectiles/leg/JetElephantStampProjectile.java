@@ -13,6 +13,7 @@ public class JetElephantStampProjectile extends ElephantStampProjectile {
         super(world, player, ability);
         this.setMaxLife(9);
         this.setDamage(28f);
+        this.setBlocksAffectedLimit(50);
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onBlockImpactEvent = this::onBlockImpactEvent;
         this.onTickEvent = this::onTickEvent;

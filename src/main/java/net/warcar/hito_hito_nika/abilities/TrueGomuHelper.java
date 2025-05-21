@@ -16,7 +16,7 @@ public class TrueGomuHelper {
 	public static <A extends Ability> boolean canActivateGear(IAbilityData props, AbilityCore<A> gear) {
 		return !(
 				(gear.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
-				|| (gear.equals(TrueGearThirdAbility.INSTANCE) && (hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon()))
+				|| (gear.equals(TrueGearThirdAbility.INSTANCE) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
 				|| (gear.equals(TrueGearFourthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props)))
 				|| (gear.equals(GearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
 	}

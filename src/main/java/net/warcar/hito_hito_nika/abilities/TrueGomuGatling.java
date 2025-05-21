@@ -2,6 +2,8 @@ package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
@@ -21,6 +23,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModAnimations;
+import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
 public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	public static final AbilityCore<TrueGomuGatling> INSTANCE;
@@ -183,16 +186,16 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 		IAbilityData props = AbilityDataCapability.get(player);
 		double dif;
 		if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
-			this.leap = 2;
+			this.leap = 1;
 			dif = 5;
 		} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearSecondActive(props) && HakiHelper.hasInfusionActive(player) && TrueGomuHelper.hasHakiEmissionActive(props)) {
 			this.leap = 1;
 			dif = 50;
 		} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
-			this.leap = 3;
+			this.leap = 1;
 			dif = 40;
 		} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-			this.leap = 1;
+			this.leap = 0.25;
 			dif = 2;
 		} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasInfusionActive(player)) {
 			this.leap = 20;
@@ -201,7 +204,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			this.leap = 40;
 			dif = 70;
 		} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
-			this.leap = 3;
+			this.leap = 1;
 			dif = 20;
 		} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props) && HakiHelper.hasInfusionActive(player)) {
 			this.leap = 1;
@@ -210,14 +213,14 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			this.leap = 1;
 			dif = 20;
 		} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-			this.leap = 5;
+			this.leap = 2;
 			dif = 30;
 		} else if (TrueGomuHelper.hasGearSecondActive(props)) {
-			this.leap = 2;
+			this.leap = 0.2d;
 			dif = 10;
 		} else {
 			dif = 5;
-			this.leap = 3;
+			this.leap = 0.5;
 		}
 		time /= dif;
 		time = 3 * (1 + Math.sqrt(time));
@@ -230,6 +233,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	}
 
 	private void duringContinuityEvent(LivingEntity player, IAbility abl) {
+		player.addEffect(new EffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), 5, 1, false, false));
 		if (leap >= 1) {
 			if (this.continuousComponent.getContinueTime() % (int) leap == 0)
 				this.projectileComponent.shootWithSpread(player, this.speed, 0, this.projectileSpace / 3);

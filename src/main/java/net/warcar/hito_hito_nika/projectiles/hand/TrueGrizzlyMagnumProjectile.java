@@ -23,6 +23,7 @@ public class TrueGrizzlyMagnumProjectile extends AbilityProjectileEntity {
         this.setMaxLife(10);
         this.setAffectedByHardening();
         this.setPassThroughEntities();
+        this.setPassThroughBlocks();
         this.setHurtTime(10);
         this.setEntityCollisionSize(2.5D);
         this.setDamageSource(this.getDamageSource().setSourceElement(SourceElement.RUBBER));

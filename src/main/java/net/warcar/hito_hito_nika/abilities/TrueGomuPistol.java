@@ -170,7 +170,7 @@ public class TrueGomuPistol extends Ability {
 				projectile = new TrueKongGunProjectile(player.level, player, this);
 				speed = 1.8F;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
-				projectile = new JetCulverinProjectile(player.level, player, this, 7f, 10);
+				projectile = new JetCulverinProjectile(player.level, player, this, 7f, 100);
 				speed = 7f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasInfusionActive(player) && TrueGomuHelper.hasHakiEmissionActive(props)) {
 				projectile = new TrueElephantGunProjectile(player.level, player, this);

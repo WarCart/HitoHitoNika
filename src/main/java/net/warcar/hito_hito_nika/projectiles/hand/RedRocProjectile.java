@@ -16,6 +16,7 @@ public class RedRocProjectile extends TrueElephantGunProjectile {
         this.setMaxLife(9);
         this.setDamage(56f);
         this.setDamageSource(this.getDamageSource().setPhysical());
+        this.setBlocksAffectedLimit(250);
         this.onBlockImpactEvent = this::onBlockImpactEvent;
         this.onTickEvent = this::onTickEvent;
     }

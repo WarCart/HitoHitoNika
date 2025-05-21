@@ -112,7 +112,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		float time = (float) (EntityStatsCapability.get(player).getDoriki()) * .005f;
 		if (time >= 500) {
 			time = -1;
-		}if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
+		} if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
 		} else if (TrueGomuHelper.hasGearFifthActive(props) && ability.isSnakeman()) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
@@ -181,7 +181,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 			((PlayerEntity) player).abilities.mayfly = false;
 		}
 		this.statsComponent.removeModifiers(player);
-		if (this.targetedTime > 0 && this.continuousComponent.getContinueTime() >= this.continuousComponent.getThresholdTime() && !this.continuousComponent.isInfinite() && !this.isBonusTime && props.hasUnlockedAbility(HaoshokuHakiInfusionAbility.INSTANCE)) {
+		if (this.targetedTime > 0 && this.continuousComponent.getContinueTime() >= this.continuousComponent.getThresholdTime() && !this.continuousComponent.isInfinite() && !this.isBonusTime && props.hasUnlockedAbility(HaoshokuHakiInfusionAbility.INSTANCE) && this.isBoundman()) {
 			this.onTargetedTime = true;
 			return;
 		}

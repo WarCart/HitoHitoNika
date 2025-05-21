@@ -23,7 +23,7 @@ public class TrueBazookaProjectile extends AbilityProjectileEntity {
         this.setDamage(20F);
         this.setEntityCollisionSize(2.5d);
         this.setPassThroughEntities();
-        this.setCanGetStuckInGround();
+        this.setPassThroughBlocks();
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onEntityImpactEvent = this::onEntityImpactEvent;
     }

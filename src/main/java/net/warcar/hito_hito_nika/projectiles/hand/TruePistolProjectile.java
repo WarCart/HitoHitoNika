@@ -18,7 +18,6 @@ public class TruePistolProjectile extends AbilityProjectileEntity {
         this.setAffectedByHardening();
         this.setDamage(3F);
         this.setPassThroughEntities();
-        this.setCanGetStuckInGround();
         this.setDamageSource(this.getDamageSource().setPhysical());
     }
 }

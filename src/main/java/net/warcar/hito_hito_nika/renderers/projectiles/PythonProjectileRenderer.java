@@ -34,54 +34,52 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
     @Override
     @ParametersAreNonnullByDefault
     public void render(E entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
-        if (entity.tickCount >= 2) {
-            if (entity.getThrower() != null && entity.getThrower().isAlive()) {
-                if (HakiHelper.hasHardeningActive(entity.getThrower(), false, true)) {
-                    this.setTexture(ModResources.BUSOSHOKU_HAKI_ARM);
-                    this.setPlayerTexture(false);
-                }
-                Vector3d originPos = entity.getThrower().position();
-                if (entity.getPrev() != null) {
-                    originPos = entity.getPrev().position();
-                }
-                Vector3d entityPos = new Vector3d(MathHelper.lerp(partialTicks, entity.xo, entity.getX()), MathHelper.lerp(partialTicks, entity.yo, entity.getY()), MathHelper.lerp(partialTicks, entity.zo, entity.getZ()));
-                Vector3d stretchVec = entityPos.subtract(originPos);
-                if (this.internalStretchingModel != null) {
-                    matrixStack.pushPose();
-                    matrixStack.mulPose(Vector3f.YP.rotationDegrees(entity.yRotO + (entity.yRot - entity.yRotO) * partialTicks - 180.0F));
-                    matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.xRotO + (entity.xRot - entity.xRotO) * partialTicks));
-                    matrixStack.mulPose(new Quaternion(Vector3f.ZP, 180.0F, true));
-                    float modelLength = (float) this.getScale().z / 16.0F;
-                    float modelOffset = 0.25F;
-                    float stretchLength = (float)stretchVec.length();
-                    matrixStack.translate(0.0D, 0.0D, -modelOffset);
-                    matrixStack.scale((float) this.getScale().x, (float) this.getScale().y, (stretchLength - 2.0F * modelOffset) / modelLength);
-                    matrixStack.translate(0.0D, 0.0D, modelOffset);
-                    ResourceLocation finalTexture = this.getTextureLocation(entity);
-                    RenderType type;
-                    if (finalTexture == null) {
-                        type = this.isGlowing() ? ModRenderTypes.getEnergyRenderType() : ModRenderTypes.TRANSPARENT_COLOR;
-                    } else {
-                        type = RenderType.entityTranslucent(finalTexture);
-                    }
-
-                    IVertexBuilder ivertexbuilder = buffer.getBuffer(type);
-                    this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, (float)this.getColor().getRed() / 255.0F, (float)this.getColor().getGreen() / 255.0F, (float)this.getColor().getBlue() / 255.0F, (float)this.getColor().getAlpha() / 255.0F);
-                    if (entity.getThrower() != null && entity.isAffectedByHaki()) {
-                        if (TrueGomuHelper.hasHakiEmissionActive(AbilityDataCapability.get(entity.getThrower()))){
-                            matrixStack.pushPose();
-                            matrixStack.scale(1.2f, 1.2f, 1.02f);
-                            ivertexbuilder = buffer.getBuffer(ModRenderTypes.TRANSPARENT_COLOR);
-                            this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 0.886f, 0.5f, 0.1f, 0.4f);
-                            matrixStack.popPose();
-                        }
-                    }
-                    this.setPlayerTexture(true);
-                    matrixStack.popPose();
-                }
-            } else {
-                entity.remove();
+        if (entity.getThrower() != null && entity.getThrower().isAlive()) {
+            if (HakiHelper.hasHardeningActive(entity.getThrower(), false, true)) {
+                this.setTexture(ModResources.BUSOSHOKU_HAKI_ARM);
+                this.setPlayerTexture(false);
             }
+            Vector3d originPos = entity.getThrower().position();
+            if (entity.getPrev() != null) {
+                originPos = entity.getPrev().position();
+            }
+            Vector3d entityPos = new Vector3d(MathHelper.lerp(partialTicks, entity.xo, entity.getX()), MathHelper.lerp(partialTicks, entity.yo, entity.getY()), MathHelper.lerp(partialTicks, entity.zo, entity.getZ()));
+            Vector3d stretchVec = entityPos.subtract(originPos);
+            if (this.internalStretchingModel != null) {
+                matrixStack.pushPose();
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(entity.yRotO + (entity.yRot - entity.yRotO) * partialTicks - 180.0F));
+                matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.xRotO + (entity.xRot - entity.xRotO) * partialTicks));
+                matrixStack.mulPose(new Quaternion(Vector3f.ZP, 180.0F, true));
+                float modelLength = (float) this.getScale().z / 16.0F;
+                float modelOffset = 0.25F;
+                float stretchLength = (float) stretchVec.length();
+                matrixStack.translate(0.0D, 0.0D, -modelOffset);
+                matrixStack.scale((float) this.getScale().x, (float) this.getScale().y, (stretchLength - 2.0F * modelOffset) / modelLength);
+                matrixStack.translate(0.0D, 0.0D, modelOffset);
+                ResourceLocation finalTexture = this.getTextureLocation(entity);
+                RenderType type;
+                if (finalTexture == null) {
+                    type = this.isGlowing() ? ModRenderTypes.getEnergyRenderType() : ModRenderTypes.TRANSPARENT_COLOR;
+                } else {
+                    type = RenderType.entityTranslucent(finalTexture);
+                }
+
+                IVertexBuilder ivertexbuilder = buffer.getBuffer(type);
+                this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, (float) this.getColor().getRed() / 255.0F, (float) this.getColor().getGreen() / 255.0F, (float) this.getColor().getBlue() / 255.0F, (float) this.getColor().getAlpha() / 255.0F);
+                if (entity.getThrower() != null && entity.isAffectedByHaki()) {
+                    if (TrueGomuHelper.hasHakiEmissionActive(AbilityDataCapability.get(entity.getThrower()))) {
+                        matrixStack.pushPose();
+                        matrixStack.scale(1.2f, 1.2f, 1.02f);
+                        ivertexbuilder = buffer.getBuffer(ModRenderTypes.TRANSPARENT_COLOR);
+                        this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 0.886f, 0.5f, 0.1f, 0.4f);
+                        matrixStack.popPose();
+                    }
+                }
+                this.setPlayerTexture(true);
+                matrixStack.popPose();
+            }
+        } else {
+            entity.remove();
         }
     }
 

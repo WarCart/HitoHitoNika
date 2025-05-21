@@ -36,6 +36,7 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
         master = ability;
         this.layer = layer;
         this.speed = speed;
+        this.setPassThroughBlocks();
     }
 
     public void defineSynchedData() {
@@ -87,7 +88,7 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
                 return;
             }
             else {
-                this.setMaxLife(1);
+                this.setMaxLife(2);
             }
             LivingEntity entity = closest.get();
             Vector3d vec = this.position().vectorTo(entity.position());
@@ -100,13 +101,13 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
             projectile.setPosAndOldPos(this.getX(), this.getY(), this.getZ());
             this.setEntityCollisionSize(0);
             this.setDeltaMovement(0, 0, 0);
-        } else if (this.getMaxLife() == 1 && (this.getNext() == null || !this.getNext().isAlive())) {
+        } else if (this.getMaxLife() == 2 && (this.getNext() == null || !this.getNext().isAlive())) {
             this.kill();
-        } else if (this.getMaxLife() == 1) {
+        } else if (this.getMaxLife() == 2) {
             this.setLife(1);
         }
         super.tick();
-        if (this.getMaxLife() == 1 && this.getNext() != null && this.getNext().isAlive()) {
+        if (this.getMaxLife() == 2 && this.getNext() != null && this.getNext().isAlive()) {
             Entity prev = this.getPrev();
             if (prev == null) {
                 prev = this.getThrower();

@@ -14,6 +14,7 @@ public class StarCannonProjectile extends TrueKongGunProjectile {
         this.setMaxLife(300);
         this.setDamage(100F);
         this.setDamageSource(this.getDamageSource().setPhysical());
+        this.setBlocksAffectedLimit(250);
         this.onBlockImpactEvent = this::onBlockImpactEvent;
         this.onTickEvent = this::onTickEvent;
     }

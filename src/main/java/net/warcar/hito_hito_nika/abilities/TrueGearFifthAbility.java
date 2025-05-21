@@ -133,6 +133,7 @@ public class TrueGearFifthAbility extends Ability {
 		GRAVITY_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-7fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Gravity Damage Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	static class DrumsOfLiberation extends TickableSound {
 		protected ClientPlayerEntity player;
 		protected TrueGearFifthAbility ability;
@@ -155,7 +156,7 @@ public class TrueGearFifthAbility extends Ability {
 					this.volume = MathHelper.clamp(continueTime / 120.0F, 0.0F, 0.5F);
 				}
 			} else {
-				HitoHitoNoMiNikaMod.LOGGER.info("T");
+				HitoHitoNoMiNikaMod.LOGGER.info("stopping drums of liberation");
 				this.stop();
 			}
 		}

@@ -15,6 +15,7 @@ public class DawnYariProjectile extends YariProjectile {
         this.setDamage(120.0F);
         this.setMaxLife(5);
         this.setPassThroughEntities();
+        this.setBlocksAffectedLimit(25);
         this.setHurtTime(10);
         this.onTickEvent = this::onTickEvent;
         this.onEntityImpactEvent = this::onEntityImpactEvent;

@@ -25,6 +25,7 @@ public class LeoRexBazookaProjectile extends AbilityProjectileEntity {
         this.setEntityCollisionSize(4d);
         this.setAffectedByHardening();
         this.setPassThroughEntities();
+        this.setBlocksAffectedLimit(200);
         this.setHurtTime(10);
         this.setDamageSource(this.getDamageSource().setSourceElement(SourceElement.RUBBER));
         this.onEntityImpactEvent = this::onEntityImpactEvent;

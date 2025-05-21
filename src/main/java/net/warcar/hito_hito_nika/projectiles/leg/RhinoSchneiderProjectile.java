@@ -24,6 +24,7 @@ public class RhinoSchneiderProjectile extends AbilityProjectileEntity {
         this.setAffectedByHardening();
         this.setPassThroughEntities();
         this.setHurtTime(10);
+        this.setPassThroughBlocks();
         this.setDamageSource(this.getDamageSource().setSourceElement(SourceElement.RUBBER));
         this.onEntityImpactEvent = this::onEntityImpactEvent;
     }

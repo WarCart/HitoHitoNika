@@ -19,7 +19,7 @@ public class JetCulverinProjectile extends PythonProjectile {
 		this.setEntityCollisionSize(2.5d);
 		this.setAffectedByHardening();
 		this.setPassThroughEntities();
-		this.setCanGetStuckInGround();
+		this.setBlocksAffectedLimit(100000);
 		this.setDamageSource(this.getDamageSource().setPhysical());
 	}
 	public PythonProjectile getNew() {

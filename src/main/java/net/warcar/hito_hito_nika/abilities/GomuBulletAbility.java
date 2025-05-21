@@ -85,7 +85,7 @@ public class GomuBulletAbility extends Ability {
 		super(core);
 		this.setDisplayIcon(TrueGomuPistol.INSTANCE);
 		this.projectileComponent = new ProjectileComponent(this, this::createProjectile);
-		this.chargeComponent = new ChargeComponent(this, true);
+		this.chargeComponent = new ChargeComponent(this, false);
 		this.addComponents(chargeComponent, projectileComponent, trueScreamComponent);
 		this.addTickEvent(this::updateModes);
 		this.chargeComponent.addTickEvent(this::duringContinuityEvent);

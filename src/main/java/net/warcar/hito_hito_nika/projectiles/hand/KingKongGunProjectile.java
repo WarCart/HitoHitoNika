@@ -22,7 +22,7 @@ public class KingKongGunProjectile extends AbilityProjectileEntity {
 		this.setDamage(120F);
 		this.setEntityCollisionSize(4d);
 		this.setPassThroughEntities();
-		this.setCanGetStuckInGround();
+		this.setBlocksAffectedLimit(100000);
 		this.setDamageSource(this.getDamageSource().setPhysical());
 		this.onBlockImpactEvent = this::onBlockImpactEvent;
 	}

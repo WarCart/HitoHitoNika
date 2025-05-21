@@ -31,7 +31,7 @@ public class BajrangGunProjectile extends AbilityProjectileEntity {
 		this.setPhysical();
 		this.setEntityCollisionSize(15);
 		this.setPassThroughEntities();
-		this.setCanGetStuckInGround();
+		this.setBlocksAffectedLimit(100000);
 		this.setDamageSource(this.getDamageSource().setPhysical());
 		this.onBlockImpactEvent = this::onBlockImpactEvent;
 		//this.onEntityImpactEvent = this::onEntityImpactEvent;

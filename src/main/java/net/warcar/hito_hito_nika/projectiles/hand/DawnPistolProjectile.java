@@ -15,6 +15,7 @@ public class DawnPistolProjectile extends TruePistolProjectile {
 		super(world, player, ability);
 		this.setMaxLife(6);
 		this.setDamage(100F);
+		this.setBlocksAffectedLimit(25);
 		this.setDamageSource(this.getDamageSource().setPhysical());
 		this.onBlockImpactEvent = this::onBlockImpactEvent;
 		this.onTickEvent = this::onTickEvent;
