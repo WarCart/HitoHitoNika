@@ -7,7 +7,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -20,21 +19,16 @@ import net.warcar.hito_hito_nika.abilities.GomuMorphsAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
-import xyz.pixelatedw.mineminenomi.abilities.gomu.GearFifthAbility;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusManager;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusOperation;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.events.ability.AbilityUseEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.DorikiEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.HakiExpEvent;
-import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.ItemsHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.CannonBallProjectile;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.NormalBulletProjectile;
@@ -45,8 +39,6 @@ import xyz.pixelatedw.mineminenomi.init.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID)
 public class TrueGomuPassiveEffects {
