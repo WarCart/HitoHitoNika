@@ -15,9 +15,9 @@ public class TrueMorphs {
 
     public static final RegistryObject<MorphInfo> SMALL = WyRegistry.registerMorph("small", SmallMorph::new);
 
-    public static final RegistryObject<MorphInfo> GIGANT_FUSEN = WyRegistry.registerMorph("gigant_fusen", GigantFusenMorph::new);
+    public static final RegistryObject<MorphInfo> GIANT_FUSEN = WyRegistry.registerMorph("giant_fusen", GigantFusenMorph::new);
 
-    public static final RegistryObject<MorphInfo> GIGANT = WyRegistry.registerMorph("gigant", GomuGigantMorph::new);
+    public static final RegistryObject<MorphInfo> GIANT = WyRegistry.registerMorph("giant", GomuGigantMorph::new);
 
     public static void init() {
     }

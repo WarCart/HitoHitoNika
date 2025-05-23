@@ -23,7 +23,9 @@ public class GomuMorphRenderer<T extends AbstractClientPlayerEntity, M extends M
     private final ResourceLocation[] textures;
     public GomuMorphRenderer(EntityRendererManager rendererManager, MorphInfo info, boolean smallHands, ResourceLocation... overlayTextures) {
         super(rendererManager, info, smallHands);
-        this.addLayer(new BipedArmorLayer<>(this, new BipedModel<>(0.5F), new BipedModel<>(1.0F)));
+        if (info.getModel() == null) {
+            this.addLayer(new BipedArmorLayer<>(this, new BipedModel<>(0.5F), new BipedModel<>(1.0F)));
+        }
         this.addLayer(new TrueGomuSmokeLayer<>(this));
         this.addLayer(new GomuDawnWhipLayer<>(this));
         this.addLayer(new BodyCoatingLayer<>(this));
