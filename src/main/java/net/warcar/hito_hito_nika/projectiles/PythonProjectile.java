@@ -9,7 +9,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.warcar.hito_hito_nika.projectiles.hand.JetCulverinProjectile;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModEntityPredicates;
@@ -22,9 +21,10 @@ import java.util.Optional;
 public abstract class PythonProjectile extends AbilityProjectileEntity {
     protected static final DataParameter<Integer> NEXT_ID = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
     protected static final DataParameter<Integer> PREV_ID = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
+    protected static final DataParameter<Boolean> IS_STATIC = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Integer> LAYER = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
     protected Ability master;
     protected float speed = 0f;
-    protected int layer = 0;
 
     public PythonProjectile(EntityType type, World world) {
         super(type, world);
@@ -34,15 +34,21 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
         super(type, world, player, ability);
         this.onEntityImpactEvent = this::onEntityImpactEvent;
         master = ability;
-        this.layer = layer;
+        this.setLayer(layer);
         this.speed = speed;
         this.setPassThroughBlocks();
+    }
+
+    private void setLayer(int layer) {
+        this.entityData.set(LAYER, layer);
     }
 
     public void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(NEXT_ID, -1);
         this.entityData.define(PREV_ID, -1);
+        this.entityData.define(IS_STATIC, false);
+        this.entityData.define(LAYER, 0);
     }
 
     private void onEntityImpactEvent(LivingEntity hitEntity) {
@@ -70,25 +76,24 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
     public abstract PythonProjectile getNew();
 
     public void tick() {
-        if (this.getLife() <= 0 && this.getMaxLife() != 1) {
-            if (this.getThrower() == null || this.layer == 0) {
-                this.kill();
+        if (this.getLife() <= 0 && !this.isStatic()) {
+            if (this.getThrower() == null || this.getLayer() == 0) {
+                this.remove();
                 return;
             }
             PythonProjectile projectile = this.getNew();
-            projectile.setDamage(this.getDamage() + 1f);
+            projectile.setDamage(this.getDamage());
             Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getThrower().position(), this.level, 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getThrower())).stream().min(Comparator.comparing(this::distanceTo));
             if (!closest.isPresent() && this.getMaxLife() == 5) {
                 super.tick();
                 return;
             } else if (!closest.isPresent()) {
                 this.setMaxLife(5);
-                this.setLife(5);
                 super.tick();
                 return;
-            }
-            else {
-                this.setMaxLife(2);
+            } else {
+                this.setStatic(true);
+                this.setMaxLife(100000000);
             }
             LivingEntity entity = closest.get();
             Vector3d vec = this.position().vectorTo(entity.position());
@@ -99,15 +104,12 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
             this.setNext(projectile);
             projectile.setPrev(this);
             projectile.setPosAndOldPos(this.getX(), this.getY(), this.getZ());
-            this.setEntityCollisionSize(0);
             this.setDeltaMovement(0, 0, 0);
-        } else if (this.getMaxLife() == 2 && (this.getNext() == null || !this.getNext().isAlive())) {
-            this.kill();
-        } else if (this.getMaxLife() == 2) {
-            this.setLife(1);
+        } else if (this.isStatic() && (this.getNext() == null || !this.getNext().isAlive())) {
+            this.remove();
         }
         super.tick();
-        if (this.getMaxLife() == 2 && this.getNext() != null && this.getNext().isAlive()) {
+        if (this.isStatic() && this.getNext() != null && this.getNext().isAlive()) {
             Entity prev = this.getPrev();
             if (prev == null) {
                 prev = this.getThrower();
@@ -115,8 +117,29 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
             assert prev != null;
             Vector3d vec = prev.position().vectorTo(this.position());
             float f = MathHelper.sqrt(getHorizontalDistanceSqr(vec));
-            this.xRot = lerpRotation(this.xRotO, (float)(MathHelper.atan2(vec.y, f) * (double)(180F / (float)Math.PI)));
-            this.yRot = lerpRotation(this.yRotO, (float)(MathHelper.atan2(vec.x, vec.z) * (double)(180F / (float)Math.PI)));
+            this.xRot = (float)(MathHelper.atan2(vec.y, f) * (double)(180F / (float)Math.PI));
+            this.xRotO = xRot;
+            this.yRot = (float)(MathHelper.atan2(vec.x, vec.z) * (double)(180F / (float)Math.PI));
+            this.yRotO = yRot;
+        }
+    }
+
+    protected void setStatic(boolean b) {
+        this.entityData.set(IS_STATIC, b);
+    }
+
+    protected boolean isStatic() {
+        return this.entityData.get(IS_STATIC);
+    }
+
+    protected int getLayer() {
+        return this.entityData.get(LAYER);
+    }
+
+    @Override
+    public void remove() {
+        if (!this.isStatic() || this.getLayer() == 0 || this.getNext() == null) {
+            super.remove();
         }
     }
 }

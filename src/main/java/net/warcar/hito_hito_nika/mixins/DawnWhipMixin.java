@@ -13,7 +13,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 
 @Mixin(GomuGomuNoDawnWhipAbility.class)
-public class DawnWhipMixin {
+public abstract class DawnWhipMixin {
     @Inject(method = "canUse", at = @At("HEAD"), remap = false, cancellable = true)
     private void newUse(LivingEntity entity, IAbility ability, CallbackInfoReturnable<AbilityUseResult> cir) {
         IAbilityData props = AbilityDataCapability.get(entity);

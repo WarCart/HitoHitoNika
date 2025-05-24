@@ -6,7 +6,6 @@
     "DawnWhipMixin",
     "GomuHelperMixin",
     "ModAbilitiesMixin",
-    "MorphHelperMixin",
     "WyHelperMixin"
   ],
   "injectors": {

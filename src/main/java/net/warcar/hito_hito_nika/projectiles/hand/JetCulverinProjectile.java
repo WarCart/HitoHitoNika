@@ -23,6 +23,6 @@ public class JetCulverinProjectile extends PythonProjectile {
 		this.setDamageSource(this.getDamageSource().setPhysical());
 	}
 	public PythonProjectile getNew() {
-		return new JetCulverinProjectile(this.level, this.getThrower(), this.master, this.speed, this.layer - 1);
+		return new JetCulverinProjectile(this.level, this.getThrower(), this.master, this.speed, this.getLayer() - 1);
 	}
 }

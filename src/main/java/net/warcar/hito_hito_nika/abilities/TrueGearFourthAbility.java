@@ -13,11 +13,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
-import xyz.pixelatedw.mineminenomi.api.INextEnum;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
@@ -90,7 +88,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 
 	private void onTick(LivingEntity player, TrueGearFourthAbility ability) {
 		if (ability.onTargetedTime) {
-			HitoHitoNoMiNikaMod.LOGGER.info(this.targetedTime);
 			if (ability.targetedTime <= 0) {
 				ability.afterContinuityStopEvent(player);
 				return;

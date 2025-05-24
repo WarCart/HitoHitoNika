@@ -22,6 +22,6 @@ public class JetRhinoSchneiderProjectile extends PythonProjectile {
         this.setDamageSource(this.getDamageSource().setPhysical());
     }
     public PythonProjectile getNew() {
-        return new JetRhinoSchneiderProjectile(this.level, this.getThrower(), this.master, this.speed, this.layer - 1);
+        return new JetRhinoSchneiderProjectile(this.level, this.getThrower(), this.master, this.speed, this.getLayer() - 1);
     }
 }

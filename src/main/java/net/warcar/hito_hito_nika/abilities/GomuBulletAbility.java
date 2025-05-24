@@ -186,7 +186,7 @@ public class GomuBulletAbility extends Ability {
 				projectile = new KingKongGunProjectile(player.level, player, this);
 				speed = 3f;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
-				projectile = new JetCulverinProjectile(player.level, player, this, 30f, 15);
+				projectile = new JetCulverinProjectile(player.level, player, this, 30f, 75);
 				projectile.setDamage(140f);
 				speed = 30f;
 			} else if (TrueGomuHelper.hasPartialGearFourthActive(props)) {

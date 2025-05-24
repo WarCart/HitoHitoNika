@@ -22,8 +22,6 @@ import xyz.pixelatedw.mineminenomi.init.ModRenderTypes;
 import xyz.pixelatedw.mineminenomi.init.ModResources;
 import xyz.pixelatedw.mineminenomi.renderers.abilities.AbilityProjectileRenderer;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 public class PythonProjectileRenderer<E extends PythonProjectile, M extends EntityModel<E>> extends AbilityProjectileRenderer<E, M> {
     protected M internalStretchingModel;
     public PythonProjectileRenderer(EntityRendererManager renderManager, M stretchModel) {
@@ -32,7 +30,6 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
     }
 
     @Override
-    @ParametersAreNonnullByDefault
     public void render(E entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
         if (entity.getThrower() != null && entity.getThrower().isAlive()) {
             if (HakiHelper.hasHardeningActive(entity.getThrower(), false, true)) {
@@ -51,10 +48,10 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
                 matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.xRotO + (entity.xRot - entity.xRotO) * partialTicks));
                 matrixStack.mulPose(new Quaternion(Vector3f.ZP, 180.0F, true));
                 float modelLength = (float) this.getScale().z / 16.0F;
-                float modelOffset = 0.25F;
+                float modelOffset = -0.1F;
                 float stretchLength = (float) stretchVec.length();
                 matrixStack.translate(0.0D, 0.0D, -modelOffset);
-                matrixStack.scale((float) this.getScale().x, (float) this.getScale().y, (stretchLength - 2.0F * modelOffset) / modelLength);
+                matrixStack.scale((float) this.getScale().x, (float) this.getScale().y, (stretchLength + 2.0F * modelOffset) / modelLength);
                 matrixStack.translate(0.0D, 0.0D, modelOffset);
                 ResourceLocation finalTexture = this.getTextureLocation(entity);
                 RenderType type;
