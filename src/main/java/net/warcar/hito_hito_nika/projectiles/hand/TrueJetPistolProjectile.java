@@ -13,7 +13,7 @@ public class TrueJetPistolProjectile extends TruePistolProjectile {
     public TrueJetPistolProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
-        this.setDamage(10F);
+        this.setDamage(30f);
         this.setPhysical();
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onBlockImpactEvent = this::onBlockImpactEvent;

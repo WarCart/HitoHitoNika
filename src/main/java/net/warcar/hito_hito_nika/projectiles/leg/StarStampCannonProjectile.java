@@ -12,8 +12,9 @@ public class StarStampCannonProjectile extends KongStampProjectile {
     public StarStampCannonProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(300);
-        this.setDamage(100F);
+        this.setDamage(125F);
         this.setDamageSource(this.getDamageSource().setPhysical());
+        this.setBlocksAffectedLimit(250);
         this.onBlockImpactEvent = this::onBlockImpactEvent;
         this.onTickEvent = this::onTickEvent;
     }

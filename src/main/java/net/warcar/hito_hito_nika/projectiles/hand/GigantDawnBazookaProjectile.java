@@ -14,8 +14,9 @@ public class GigantDawnBazookaProjectile extends TrueGrizzlyMagnumProjectile {
     public GigantDawnBazookaProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
-        this.setDamage(180f);
+        this.setDamage(120f);
         this.setPassThroughEntities();
+        this.setPassThroughBlocks();
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onEntityImpactEvent = this::onEntityImpactEvent;
         this.onTickEvent = this::onTickEvent;

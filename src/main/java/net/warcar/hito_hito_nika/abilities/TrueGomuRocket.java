@@ -1,5 +1,6 @@
 package net.warcar.hito_hito_nika.abilities;
 
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.hand.TrueGomuRocketProjectile;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
@@ -25,6 +26,11 @@ import java.util.List;
 
 public class TrueGomuRocket extends Ability {
 	public static final AbilityCore<TrueGomuRocket> INSTANCE;
+	public static final TranslationTextComponent JetGiantShell = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Shell");
+	public static final TranslationTextComponent DAWN_ROCKET = TrueGomuHelper.getName("Gomu Gomu no Dawn Rocket");
+	public static final TranslationTextComponent GIANT_SHELL = TrueGomuHelper.getName("Gomu Gomu no Giant Shell");
+	public static final TranslationTextComponent JET_MISSILE = TrueGomuHelper.getName("Gomu Gomu no Jet Missile");
+	public static final TranslationTextComponent ROCKET = TrueGomuHelper.getName("Gomu Gomu no Rocket");
 	protected boolean isFlying = false;
 	protected boolean readyToFly = false;
 	private float cooldown;
@@ -52,9 +58,10 @@ public class TrueGomuRocket extends Ability {
 	private void onStartContinuityEvent(LivingEntity player, IAbility abl) {
 		if (this.continuousComponent.isContinuous()) {
 			this.continuousComponent.stopContinuity(player);
+			return;
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
-		if (TrueGomuHelper.hasGigantActive(props) || TrueGomuHelper.hasGearFourthActive(props)) {
+		if (TrueGomuHelper.hasGigantActive(props) || (TrueGomuHelper.hasGearFourthActive(props) && !TrueGomuHelper.hasPartialGearFourthActive(props))) {
 			player.sendMessage(new TranslationTextComponent("text.mineminenomi.too_heavy"), Util.NIL_UUID);
 			return;
 		}
@@ -115,21 +122,21 @@ public class TrueGomuRocket extends Ability {
 			this.setMaxCooldownNew(0D);
 		} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 			this.setMaxCooldownNew(3.0D);
-			this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Gigant Shell"));
+			this.setDisplayName(JetGiantShell);
 		} else if (TrueGomuHelper.hasGearFifthActive(props)) {
 			this.setMaxCooldownNew(12.0D);
-			this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Dawn Rocket"));
+			this.setDisplayName(DAWN_ROCKET);
 		} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 			this.setMaxCooldownNew(10.0D);
-			this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Shell"));
+			this.setDisplayName(GIANT_SHELL);
 		} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 			this.setMaxCooldownNew(1.0D);
-			this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Missile"));
+			this.setDisplayName(JET_MISSILE);
 		} else if (TrueGomuHelper.hasGearFourthActive(props)) {
 			this.setMaxCooldownNew(0D);
 		} else {
 			this.setMaxCooldownNew(3.0D);
-			this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Rocket"));
+			this.setDisplayName(ROCKET);
 		}
 	}
 

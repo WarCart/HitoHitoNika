@@ -1,25 +1,21 @@
 package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.vector.Vector3d;
-import net.warcar.hito_hito_nika.config.CommonConfig;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import xyz.pixelatedw.mineminenomi.ModMain;
-import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiHardeningAbility;
-import xyz.pixelatedw.mineminenomi.animations.gomu.GomuBazookaAnimation;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimationComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
-import xyz.pixelatedw.mineminenomi.api.animations.IAnimation;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceType;
 import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
@@ -29,10 +25,34 @@ import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModAnimations;
+import xyz.pixelatedw.mineminenomi.init.ModEffects;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
-public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
+public class TrueGomuBazooka extends Ability {
 	public static final AbilityCore<TrueGomuBazooka> INSTANCE;
+	public static final TranslationTextComponent JET_GRIZZLY_MAGNUM = TrueGomuHelper.getName("Gomu Gomu no Jet Grizzly Magnum");
+	public static final TranslationTextComponent JET_GIANT_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Bazooka");
+	public static final TranslationTextComponent GIANT_DAWN_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Bazooka");
+	public static final TranslationTextComponent JET_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Jet Bazooka");
+	public static final TranslationTextComponent TWIN_JET_CULVERIN = TrueGomuHelper.getName("Gomu Gomu no Twin Jet Culverin");
+	public static final TranslationTextComponent LEO_REX_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Leo Rex Bazooka");
+	public static final TranslationTextComponent LEO_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Leo Bazooka");
+	public static final TranslationTextComponent GRIZZLY_MAGNUM = TrueGomuHelper.getName("Gomu Gomu no Grizzly Magnum");
+	public static final TranslationTextComponent GIANT_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Giant Bazooka");
+	public static final TranslationTextComponent DAWN_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Dawn Bazooka");
+	public static final TranslationTextComponent DOUBLE_BAJRANG_GUN = TrueGomuHelper.getName("Gomu Gomu no Double Bajrang Gun");
+	public static final TranslationTextComponent EAGLE_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Eagle Bazooka");
+	public static final TranslationTextComponent BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Bazooka");
+	public static final TranslationTextComponent JET_GIANT_YARI = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Yari");
+	public static final TranslationTextComponent TWIN_RHINO_STAMPEDE = TrueGomuHelper.getName("Gomu Gomu no Twin Rhino Stampede");
+	public static final TranslationTextComponent RHINO_REX_SCHNEIDER = TrueGomuHelper.getName("Gomu Gomu no Rhino Rex Schneider");
+	public static final TranslationTextComponent RHINO_SCHNEIDER = TrueGomuHelper.getName("Gomu Gomu no Rhino Schneider");
+	public static final TranslationTextComponent GIANT_YARI = TrueGomuHelper.getName("Gomu Gomu no Giant Yari");
+	public static final TranslationTextComponent JET_LANCE = TrueGomuHelper.getName("Gomu Gomu no Jet Lance");
+	public static final TranslationTextComponent DAWN_YARI = TrueGomuHelper.getName("Gomu Gomu no Dawn Yari");
+	public static final TranslationTextComponent DOUBLE_BAJRANG_STAMP = TrueGomuHelper.getName("Gomu Gomu no Double Bajrang Stamp");
+	public static final TranslationTextComponent YARI = TrueGomuHelper.getName("Gomu Gomu no Yari");
+	private static final TranslationTextComponent GIANT_DAWN_YARI = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Yari");
 	private final ChargeComponent chargeComponent;
 	private final ProjectileComponent projectileComponent;
 	private final AnimationComponent animationComponent;
@@ -49,7 +69,6 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 	private int chargeTime;
 	private float speed = 2;
 	private float spacingMod = 1;
-	protected boolean leg = false;
 
 	public TrueGomuBazooka(AbilityCore<TrueGomuBazooka> core) {
 		super(core);
@@ -67,12 +86,13 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 	private void onUse(LivingEntity entity, IAbility abl) {
 		this.chargeComponent.startCharging(entity, this.chargeTime);
 		this.animationComponent.start(entity, ModAnimations.GOMU_BAZOOKA);
+		entity.addEffect(new EffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), this.chargeTime, 0));
 	}
 
 	private AbilityProjectileEntity createProjectile(LivingEntity player) {
 		AbilityProjectileEntity projectile;
 		IAbilityData props = AbilityDataCapability.get(player);
-		if (this.leg) {
+		if (EntityStatsCapability.get(player).isBlackLeg()) {
 			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				projectile = new BajrangStampGunProjectile(player.level, player, this);
 				spacingMod = 25F;
@@ -89,7 +109,7 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 				projectile = new RhinoRexSchneiderProjectile(player.level, player, this);
 				speed = 3.0F;
 				spacingMod = 4F;
-			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
+			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
 				projectile = new RhinoSchneiderProjectile(player.level, player, this);
 				speed = 3.0F;
 				spacingMod = 2.5F;
@@ -131,6 +151,10 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 				projectile = new LeoRexBazookaProjectile(player.level, player, this);
 				speed = 5.0F;
 				spacingMod = 2.5F;
+			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
+				projectile = new TrueLeoBazookaProjectile(player.level, player, this);
+				speed = 3.0F;
+				spacingMod = 2.5F;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
 				projectile = new JetCulverinProjectile(player.level, player, this, 7f, 100);
 				speed = 7F;
@@ -160,12 +184,9 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 		this.animationComponent.stop(player);
 		AbilityProjectileEntity projectile1 = this.projectileComponent.getNewProjectile(player);
 		AbilityProjectileEntity projectile2 = this.projectileComponent.getNewProjectile(player);
-		Vector3d dirVec = Vector3d.ZERO;
-		Direction dir = Direction.fromYRot(player.yRot);
-		dirVec = dirVec.add(Math.abs(dir.getNormal().getX()), Math.abs(dir.getNormal().getY()), Math.abs(dir.getNormal().getZ()));
-		dirVec = dirVec.multiply(this.spacingMod, 1.0D, this.spacingMod);
-		projectile1.moveTo(player.getX() + dirVec.z, player.getEyeY(), player.getZ() + dirVec.x, 0.0F, 0.0F);
-		projectile2.moveTo(player.getX() - dirVec.z, player.getEyeY(), player.getZ() - dirVec.x, 0.0F, 0.0F);
+		Vector3d dirVec = player.getLookAngle().cross(new Vector3d(0, 1, 0)).scale(this.spacingMod);
+		projectile1.moveTo(player.getX() + dirVec.x, player.getEyeY(), player.getZ() + dirVec.z, 0.0F, 0.0F);
+		projectile2.moveTo(player.getX() - dirVec.x, player.getEyeY(), player.getZ() - dirVec.z, 0.0F, 0.0F);
 		this.projectileComponent.shoot(projectile1, player, this.speed, 0.0F);
 		this.projectileComponent.shoot(projectile2, player, this.speed, 0.0F);
 		player.swing(Hand.MAIN_HAND, true);
@@ -187,150 +208,139 @@ public class TrueGomuBazooka extends Ability implements IExtraUpdateData {
 			if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Grizzly Magnum"));
+				this.setDisplayName(JET_GRIZZLY_MAGNUM);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka")) ;
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Gigant Bazooka"));
+				this.setDisplayName(JET_GIANT_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setMaxCooldown(10D);
+				this.setMaxCooldown(20D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Dawn Bazooka"));
+				this.setDisplayName(GIANT_DAWN_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setMaxCooldown(7D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Bazooka"));
+				this.setDisplayName(JET_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
 				TrueGearFourthAbility g4 = AbilityDataCapability.get(entity).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 				if (g4.isSnakeman()) {
 					this.setMaxCooldown(5D);
 					this.setMaxChargeTime(0D);
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Twin Jet Culverin"));
+					this.setDisplayName(TWIN_JET_CULVERIN);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Twin Jet Culverine"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props)) {
-					this.setMaxCooldown(15D);
+					this.setMaxCooldown(25D);
 					this.setMaxChargeTime(5.0D);
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Leo Rex Bazooka"));
+					this.setDisplayName(LEO_REX_BAZOOKA);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Double King Kong Gun"));
 				} else {
-					this.setMaxCooldown(12D);
+					this.setMaxCooldown(25f);
 					this.setMaxChargeTime(2.0D);
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Leo Bazooka"));
+					this.setDisplayName(LEO_BAZOOKA);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Bazooka"));
 				}
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setMaxCooldown(15D);
+				this.setMaxCooldown(10);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Grizzly Magnum"));
+				this.setDisplayName(GRIZZLY_MAGNUM);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Bazooka"));
+				this.setDisplayName(GIANT_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-				this.setMaxCooldown(7D);
+				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Dawn Bazooka"));
+				this.setDisplayName(DAWN_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				this.setMaxCooldown(20D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Double Bajrang Gun"));
+				this.setDisplayName(DOUBLE_BAJRANG_GUN);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Double King Kong Gun"));
 			} else if (HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Eagle Bazooka"));
+				this.setDisplayName(EAGLE_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Bazooka"));
 			} else {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Bazooka"));
+				this.setDisplayName(BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			}
-			if (this.getIcon(null).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_bazooka.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_bazooka.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Bazooka"));
 			}
 		} else {
 			if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Gigant Yari"));
+				this.setDisplayName(JET_GIANT_YARI);
+				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
+			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
+				this.setMaxCooldown(20D);
+				this.setMaxChargeTime(2.0D);
+				this.setDisplayName(GIANT_DAWN_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setMaxCooldown(10D);
+				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Gigant Yari"));
+				this.setDisplayName(JET_GIANT_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
 				TrueGearFourthAbility g4 = AbilityDataCapability.get(entity).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 				if (g4.isSnakeman()) {
 					this.setMaxCooldown(5D);
 					this.setMaxChargeTime(0D);
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Twin Rhino Stampede"));
+					this.setDisplayName(TWIN_RHINO_STAMPEDE);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Twin Jet Culverine"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props)) {
-					this.setMaxCooldown(15D);
+					this.setMaxCooldown(25D);
 					this.setMaxChargeTime(5.0D);
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Rhino Rex Schneider"));
+					this.setDisplayName(RHINO_REX_SCHNEIDER);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Double King Kong Gun"));
 				} else {
-					this.setMaxCooldown(12D);
+					this.setMaxCooldown(6);
 					this.setMaxChargeTime(2.0D);
-					this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Rhino Schneider"));
+					this.setDisplayName(RHINO_SCHNEIDER);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Yari"));
 				}
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setMaxCooldown(15D);
+				this.setMaxCooldown(20);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Gigant Yari"));
+				this.setDisplayName(GIANT_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setMaxCooldown(7D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Jet Lance"));
+				this.setDisplayName(JET_LANCE);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-				this.setMaxCooldown(7D);
+				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Dawn Yari"));
+				this.setDisplayName(DAWN_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				this.setMaxCooldown(20D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Double Bajrang Stamp"));
+				this.setDisplayName(DOUBLE_BAJRANG_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Double King Kong Gun"));
 			} else {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
-				this.setDisplayName(TrueGomuHelper.getName("Gomu Gomu no Yari"));
+				this.setDisplayName(YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			}
-			if (this.getIcon(null).equals(new ResourceLocation("mineminenomi:textures/abilities/yari.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/yari.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Yari"));
 			}
 		}
-	}
-
-	public ResourceLocation getIcon(PlayerEntity player) {
-		if (player != null)
-			this.leg = EntityStatsCapability.get(player).isBlackLeg() && CommonConfig.INSTANCE.isLegAbilities();
-		return super.getIcon(player);
-	}
-
-	public void setExtraData(CompoundNBT tag) {
-		this.leg = tag.getBoolean("leg") && CommonConfig.INSTANCE.isLegAbilities();
-	}
-
-	public CompoundNBT getExtraData() {
-		CompoundNBT out = new CompoundNBT();
-		out.putBoolean("leg", this.leg);
-		return out;
 	}
 
 	static {

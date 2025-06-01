@@ -3,30 +3,30 @@ package net.warcar.hito_hito_nika.abilities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.warcar.hito_hito_nika.config.CommonConfig;
+import net.warcar.hito_hito_nika.helpers.EquationHelper;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.SkinOverlayComponent;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.*;
-import xyz.pixelatedw.mineminenomi.particles.effects.ParticleEffect;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
-import java.util.Objects;
+import java.awt.*;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class TrueGearSecondAbility extends Ability {
@@ -36,6 +36,7 @@ public class TrueGearSecondAbility extends Ability {
 	private static final AbilityAttributeModifier STEP_HEIGHT;
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
+	private final SkinOverlayComponent overlayComponent = new SkinOverlayComponent(this, new AbilityOverlay.Builder().setColor(new Color(232, 54, 54, 74)).build());
 	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
 		@Override
 		public void setupDefaultScreams(IAbility ability) {
@@ -45,10 +46,8 @@ public class TrueGearSecondAbility extends Ability {
 	private boolean thirdGearWas = false;
 	private boolean prevSprintValue = false;
 
-	public TrueGearSecondAbility(AbilityCore core) {
+	public TrueGearSecondAbility(AbilityCore<TrueGearSecondAbility> core) {
 		super(core);
-		this.setCustomIcon("Gear Second");
-		this.setDisplayName("Gear Second");
 		this.isNew = true;
 		this.continuousComponent = new ContinuousComponent(this, true);
 		this.statsComponent = new ChangeStatsComponent(this);
@@ -58,9 +57,10 @@ public class TrueGearSecondAbility extends Ability {
 		this.statsComponent.addAttributeModifier(Attributes.ATTACK_DAMAGE, STRENGTH_MODIFIER);
 		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
 		this.addUseEvent(this::onStartContinuity);
+		continuousComponent.addStartEvent(TrueGomuHelper.basicGearStuff());
 		this.continuousComponent.addTickEvent(this::duringContinuity);
 		this.continuousComponent.addEndEvent(this::afterContinuityStopEvent);
-		this.addComponents(this.continuousComponent, this.statsComponent, this.trueScreamComponent);
+		this.addComponents(this.continuousComponent, this.statsComponent, this.trueScreamComponent, this.overlayComponent);
 	}
 
 	private void onStartContinuity(LivingEntity player, IAbility abl) {
@@ -68,7 +68,7 @@ public class TrueGearSecondAbility extends Ability {
 			this.continuousComponent.stopContinuity(player);
 			return;
 		}
-		float time = (float) EntityStatsCapability.get(player).getDoriki() * .02f;
+		float time = (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG2Length(), player, new HashMap<>()).getValue();
 		IAbilityData props = AbilityDataCapability.get(player);
 		if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
@@ -77,6 +77,7 @@ public class TrueGearSecondAbility extends Ability {
 				props.getEquippedAbility(TrueGearThirdAbility.INSTANCE).setSecondGear(true);
 				this.thirdGearWas = true;
 			}
+			this.overlayComponent.showAll(player);
 			if (time >= 500) {
 				this.continuousComponent.startContinuity(player, -1);
 			} else {
@@ -122,22 +123,18 @@ public class TrueGearSecondAbility extends Ability {
 	}
 
 	private void afterContinuityStopEvent(LivingEntity player, IAbility abl) {
-		int cooldown = (int) Math.round(Math.sqrt(this.continuousComponent.getContinueTime()));
-		this.cooldownComponent.startCooldown(player, 20 * (cooldown + 1));
+		this.cooldownComponent.startCooldown(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG2Cooldown(), player, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue());
+		this.overlayComponent.hideAll(player);
 		if (this.thirdGearWas && EntityStatsCapability.get(player).getDoriki() < 3500.0D) {
 			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 300, 1, true, true));
 		} else if ((double) this.continuousComponent.getContinueTime() > (double) this.continuousComponent.getThresholdTime() / 1.425D && EntityStatsCapability.get(player).getDoriki() < 2000.0D) {
 			player.addEffect(new EffectInstance(Effects.HUNGER, 600, 3, true, true));
 			player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200, 1, true, true));
 		}
-		Objects.requireNonNull(player.getAttribute(ModAttributes.STEP_HEIGHT.get())).removeModifier(STEP_HEIGHT);
-		Objects.requireNonNull(player.getAttribute(Attributes.MOVEMENT_SPEED)).removeModifier(STEP_HEIGHT);
-		Objects.requireNonNull(player.getAttribute(ModAttributes.JUMP_HEIGHT.get())).removeModifier(JUMP_HEIGHT);
-		Objects.requireNonNull(player.getAttribute(Attributes.ATTACK_DAMAGE)).removeModifier(STRENGTH_MODIFIER);
-		Objects.requireNonNull(player.getAttribute(ModAttributes.PUNCH_DAMAGE.get())).removeModifier(STRENGTH_MODIFIER);
 		TrueGearThirdAbility thirdGear = AbilityDataCapability.get(player).getEquippedAbility(TrueGearThirdAbility.INSTANCE);
-		if (thirdGear != null && thirdGear.isContinuous()) {
-			//thirdGear.tryStoppingContinuity(player);
+		if (thirdGear != null && thirdGear.isContinuous() && thirdGearWas) {
+			this.setThirdGear(false);
+			thirdGear.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(c -> c.stopContinuity(player));
 		}
 		this.setThirdGear(false);
 		this.statsComponent.removeModifiers(player);
@@ -148,12 +145,11 @@ public class TrueGearSecondAbility extends Ability {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() * .02d >= 20d && DevilFruitCapability.get(user).hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI);
+		return EntityStatsCapability.get(user).getDoriki() * .02d >= 20d && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	static {
 		INSTANCE = (new AbilityCore.Builder<>("Gear Second", AbilityCategory.DEVIL_FRUITS, TrueGearSecondAbility::new)).addDescriptionLine("By speeding up their blood flow, the user gains strength, speed and mobility").setUnlockCheck(TrueGearSecondAbility::canUnlock).build();
-		//OVERLAY = (new AbilityOverlay.Builder()).setColor(new Color(232, 54, 54, 74)).build();
 		JUMP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("a44a9644-369a-4e18-88d9-323727d3d85b"), INSTANCE, "Gear Second Jump Modifier", 5.0D, Operation.ADDITION);
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("a2337b58-7e6d-4361-a8ca-943feee4f906"), INSTANCE, "Gear Second Attack Damage Modifier", 4.0D, Operation.ADDITION);
 		STEP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("eab680cd-a6dc-438a-99d8-46f9eb53a950"), INSTANCE, "Gear Second Step Height Modifier", 1.0D, Operation.ADDITION);

@@ -13,7 +13,8 @@ public class JetElephantGunProjectile extends TrueElephantGunProjectile {
     public JetElephantGunProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
-        this.setDamage(28f);
+        this.setDamage(60f);
+        this.setBlocksAffectedLimit(50);
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onBlockImpactEvent = this::onBlockImpactEvent;
         this.onTickEvent = this::onTickEvent;

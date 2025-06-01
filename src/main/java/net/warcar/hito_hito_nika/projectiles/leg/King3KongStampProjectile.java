@@ -19,7 +19,7 @@ public class King3KongStampProjectile extends AbilityProjectileEntity {
         super(NikaProjectiles.GOMU_GOMU_NO_KING_3_KONG_STAMP.get(), world, player, ability);
         this.setMaxLife(40);
         this.setPhysical();
-        this.setDamage(720F);
+        this.setDamage(100);
         this.setEntityCollisionSize(7d);
         this.setPassThroughEntities();
         this.setCanGetStuckInGround();

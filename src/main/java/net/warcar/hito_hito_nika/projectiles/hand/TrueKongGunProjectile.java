@@ -19,10 +19,10 @@ public class TrueKongGunProjectile extends AbilityProjectileEntity {
         super(NikaProjectiles.GOMU_GOMU_NO_KONG_GUN.get(), world, player, ability);
         this.setMaxLife(12);
         this.setAffectedByHardening();
-        this.setDamage(24F);
+        this.setDamage(40f);
         this.setEntityCollisionSize(2.5d);
         this.setPassThroughEntities();
-        this.setCanGetStuckInGround();
+        this.setBlocksAffectedLimit(75);
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onBlockImpactEvent = this::onBlockImpactEvent;
     }

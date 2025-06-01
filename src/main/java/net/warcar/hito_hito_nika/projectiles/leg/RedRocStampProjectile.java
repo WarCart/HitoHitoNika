@@ -13,8 +13,9 @@ public class RedRocStampProjectile extends ElephantStampProjectile {
     public RedRocStampProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
-        this.setDamage(56f);
+        this.setDamage(90);
         this.setDamageSource(this.getDamageSource().setPhysical());
+        this.setBlocksAffectedLimit(250);
         this.onBlockImpactEvent = this::onBlockImpactEvent;
         this.onTickEvent = this::onTickEvent;
     }

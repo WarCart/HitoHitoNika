@@ -20,10 +20,10 @@ public class YariProjectile extends AbilityProjectileEntity {
         super(NikaProjectiles.GOMU_GOMU_NO_YARI.get(), world, player, ability);
         this.setMaxLife(12);
         this.setAffectedByHardening();
-        this.setDamage(20F);
+        this.setDamage(30F);
         this.setEntityCollisionSize(2.5d);
         this.setPassThroughEntities();
-        this.setCanGetStuckInGround();
+        this.setPassThroughBlocks();
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onEntityImpactEvent = this::onEntityImpactEvent;
     }

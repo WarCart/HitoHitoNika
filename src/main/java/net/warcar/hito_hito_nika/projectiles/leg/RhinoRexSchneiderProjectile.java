@@ -20,7 +20,7 @@ public class RhinoRexSchneiderProjectile extends AbilityProjectileEntity {
 
     public RhinoRexSchneiderProjectile(World world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), world, player, ability);
-        this.setDamage(350.0F);
+        this.setDamage(120f);
         this.setMaxLife(10);
         this.setAffectedByHardening();
         this.setEntityCollisionSize(4d);

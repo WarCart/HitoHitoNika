@@ -16,9 +16,8 @@ public class StampProjectile extends AbilityProjectileEntity {
         super(NikaProjectiles.GOMU_GOMU_NO_STAMP.get(), world, player, ability);
         this.setMaxLife(12);
         this.setAffectedByHardening();
-        this.setDamage(3F);
+        this.setDamage(8F);
         this.setPassThroughEntities();
-        this.setCanGetStuckInGround();
         this.setDamageSource(this.getDamageSource().setPhysical());
     }
 }

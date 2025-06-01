@@ -21,7 +21,7 @@ public class KingBajrangGunProjectile extends AbilityProjectileEntity {
 		this.setDamage(0F);
 		this.setEntityCollisionSize(5);
 		this.setPassThroughEntities();
-		this.setCanGetStuckInGround();
+		this.setPassThroughBlocks();
 		this.setDamageSource(this.getDamageSource().getSource());
 		this.onTickEvent = this::onTickEvent;
 		this.onEntityImpactEvent = this::onEntityImpactEvent;
