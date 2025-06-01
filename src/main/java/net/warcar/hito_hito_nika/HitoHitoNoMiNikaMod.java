@@ -39,6 +39,7 @@ public class HitoHitoNoMiNikaMod
         TrueGomuGomuNoMi.register();
         langMap.put("text.mineminenomi.too_weak", "You are to weak to use this ability");
         langMap.put("text.mineminenomi.too_heavy", "You are to heavy to use this ability");
+        langMap.put("text.mineminenomi.requires_infusion", "You need to activate Hao Infusion to use this move");
         MinecraftForge.EVENT_BUS.register(this);
     }
 

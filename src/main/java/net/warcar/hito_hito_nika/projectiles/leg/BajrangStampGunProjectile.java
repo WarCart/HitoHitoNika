@@ -24,7 +24,7 @@ public class BajrangStampGunProjectile extends AbilityProjectileEntity {
     public BajrangStampGunProjectile(World world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), world, player, ability);
         this.setMaxLife(250);
-        this.setDamage(2000F);
+        this.setDamage(200F);
         this.setPhysical();
         this.setEntityCollisionSize(15);
         this.setPassThroughEntities();

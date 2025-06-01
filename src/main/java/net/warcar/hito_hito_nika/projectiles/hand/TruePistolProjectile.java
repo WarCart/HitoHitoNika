@@ -16,7 +16,7 @@ public class TruePistolProjectile extends AbilityProjectileEntity {
         super(NikaProjectiles.GOMU_GOMU_NO_PISTOL.get(), world, player, ability);
         this.setMaxLife(12);
         this.setAffectedByHardening();
-        this.setDamage(3F);
+        this.setDamage(8F);
         this.setPassThroughEntities();
         this.setDamageSource(this.getDamageSource().setPhysical());
     }

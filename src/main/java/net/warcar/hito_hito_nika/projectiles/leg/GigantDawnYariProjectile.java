@@ -13,7 +13,7 @@ public class GigantDawnYariProjectile extends GigantYariProjectile {
     public GigantDawnYariProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
-        this.setDamage(180f);
+        this.setDamage(150f);
         this.setPassThroughEntities();
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onEntityImpactEvent = this::onEntityImpactEvent;

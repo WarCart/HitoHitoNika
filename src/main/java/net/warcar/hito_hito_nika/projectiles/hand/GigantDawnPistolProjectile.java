@@ -12,7 +12,7 @@ public class GigantDawnPistolProjectile extends TrueElephantGunProjectile {
 
     public GigantDawnPistolProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
-        this.setDamage(150);
+        this.setDamage(40f);
         this.setMaxLife(9);
         this.setBlocksAffectedLimit(200);
         this.onBlockImpactEvent = this::onBlockImpactEvent;

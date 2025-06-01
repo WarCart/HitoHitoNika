@@ -1,5 +1,6 @@
 package net.warcar.hito_hito_nika.abilities;
 
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.hand.TrueGomuRocketProjectile;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;

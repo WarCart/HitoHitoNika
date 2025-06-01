@@ -17,7 +17,7 @@ public class GigantYariProjectile extends AbilityProjectileEntity {
 
     public GigantYariProjectile(World world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_GIGANT_YARI.get(), world, player, ability);
-        this.setDamage(40.0F);
+        this.setDamage(75f);
         this.setMaxLife(10);
         this.setAffectedByHardening();
         this.setPassThroughEntities();

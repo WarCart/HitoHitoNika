@@ -1,6 +1,7 @@
 package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;

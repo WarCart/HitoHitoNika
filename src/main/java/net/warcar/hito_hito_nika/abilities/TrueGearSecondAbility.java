@@ -8,6 +8,9 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Vector3d;
+import net.warcar.hito_hito_nika.config.CommonConfig;
+import net.warcar.hito_hito_nika.helpers.EquationHelper;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
@@ -23,7 +26,7 @@ import xyz.pixelatedw.mineminenomi.init.*;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import java.awt.*;
-import java.util.Objects;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class TrueGearSecondAbility extends Ability {
@@ -54,6 +57,7 @@ public class TrueGearSecondAbility extends Ability {
 		this.statsComponent.addAttributeModifier(Attributes.ATTACK_DAMAGE, STRENGTH_MODIFIER);
 		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
 		this.addUseEvent(this::onStartContinuity);
+		continuousComponent.addStartEvent(TrueGomuHelper.basicGearStuff());
 		this.continuousComponent.addTickEvent(this::duringContinuity);
 		this.continuousComponent.addEndEvent(this::afterContinuityStopEvent);
 		this.addComponents(this.continuousComponent, this.statsComponent, this.trueScreamComponent, this.overlayComponent);
@@ -64,7 +68,7 @@ public class TrueGearSecondAbility extends Ability {
 			this.continuousComponent.stopContinuity(player);
 			return;
 		}
-		float time = (float) EntityStatsCapability.get(player).getDoriki() * .02f;
+		float time = (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG2Length(), player, new HashMap<>()).getValue();
 		IAbilityData props = AbilityDataCapability.get(player);
 		if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
@@ -119,23 +123,18 @@ public class TrueGearSecondAbility extends Ability {
 	}
 
 	private void afterContinuityStopEvent(LivingEntity player, IAbility abl) {
-		int cooldown = (int) Math.round(Math.sqrt(this.continuousComponent.getContinueTime()));
+		this.cooldownComponent.startCooldown(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG2Cooldown(), player, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue());
 		this.overlayComponent.hideAll(player);
-		this.cooldownComponent.startCooldown(player, 20 * (cooldown + 1));
 		if (this.thirdGearWas && EntityStatsCapability.get(player).getDoriki() < 3500.0D) {
 			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 300, 1, true, true));
 		} else if ((double) this.continuousComponent.getContinueTime() > (double) this.continuousComponent.getThresholdTime() / 1.425D && EntityStatsCapability.get(player).getDoriki() < 2000.0D) {
 			player.addEffect(new EffectInstance(Effects.HUNGER, 600, 3, true, true));
 			player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200, 1, true, true));
 		}
-		Objects.requireNonNull(player.getAttribute(ModAttributes.STEP_HEIGHT.get())).removeModifier(STEP_HEIGHT);
-		Objects.requireNonNull(player.getAttribute(Attributes.MOVEMENT_SPEED)).removeModifier(STEP_HEIGHT);
-		Objects.requireNonNull(player.getAttribute(ModAttributes.JUMP_HEIGHT.get())).removeModifier(JUMP_HEIGHT);
-		Objects.requireNonNull(player.getAttribute(Attributes.ATTACK_DAMAGE)).removeModifier(STRENGTH_MODIFIER);
-		Objects.requireNonNull(player.getAttribute(ModAttributes.PUNCH_DAMAGE.get())).removeModifier(STRENGTH_MODIFIER);
 		TrueGearThirdAbility thirdGear = AbilityDataCapability.get(player).getEquippedAbility(TrueGearThirdAbility.INSTANCE);
-		if (thirdGear != null && thirdGear.isContinuous()) {
-			//thirdGear.tryStoppingContinuity(player);
+		if (thirdGear != null && thirdGear.isContinuous() && thirdGearWas) {
+			this.setThirdGear(false);
+			thirdGear.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(c -> c.stopContinuity(player));
 		}
 		this.setThirdGear(false);
 		this.statsComponent.removeModifiers(player);

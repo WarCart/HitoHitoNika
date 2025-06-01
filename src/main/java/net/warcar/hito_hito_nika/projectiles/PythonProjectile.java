@@ -35,6 +35,7 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
         this.onEntityImpactEvent = this::onEntityImpactEvent;
         master = ability;
         this.setLayer(layer);
+        this.setUnavoidable();
         this.speed = speed;
         this.setPassThroughBlocks();
     }

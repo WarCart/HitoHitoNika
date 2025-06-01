@@ -19,7 +19,7 @@ public class TrueLeoBazookaProjectile extends AbilityProjectileEntity {
 
     public TrueLeoBazookaProjectile(World world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_LEO_BAZOOKA.get(), world, player, ability);
-        this.setDamage(70.0F);
+        this.setDamage(80f);
         this.setMaxLife(10);
         this.setAffectedByHardening();
         this.setPassThroughEntities();

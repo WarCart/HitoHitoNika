@@ -14,7 +14,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
+import net.warcar.hito_hito_nika.helpers.EquationHelper;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
@@ -37,6 +40,8 @@ import xyz.pixelatedw.mineminenomi.packets.server.SSyncAbilityDataPacket;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
@@ -74,6 +79,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		this.continuousComponent.addTickEvent(this::duringContinuity);
 		this.continuousComponent.addEndEvent(this::beforeContinuityStopEvent);
 		this.continuousComponent.addStartEvent(this::afterStart);
+		continuousComponent.addStartEvent(TrueGomuHelper.basicGearStuff());
 		this.addUseEvent(this::onStartContinuity);
 		this.addTickEvent(this::onTick);
 		this.getComponent(ModAbilityKeys.SLOT_DECORATION).ifPresent(component -> component.addPreRenderEvent(30, ((livingEntity, minecraft, matrixStack, x, y, partialTicks) ->  {
@@ -87,6 +93,11 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	private void onTick(LivingEntity player, TrueGearFourthAbility ability) {
+		if (TrueGomuHelper.hasGearFifthActive(AbilityDataCapability.get(player))) {
+			this.setDisplayIcon(TrueGomuHelper.getIcon("G4 Muscles"));
+		} else {
+			this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "gear_fourth"));
+		}
 		if (ability.onTargetedTime) {
 			if (ability.targetedTime <= 0) {
 				ability.afterContinuityStopEvent(player);
@@ -106,7 +117,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 
 	private void onStartContinuity(LivingEntity player, TrueGearFourthAbility ability) {
 		IAbilityData props = AbilityDataCapability.get(player);
-		float time = (float) (EntityStatsCapability.get(player).getDoriki()) * .005f;
+		float time = (float) EquationHelper.parseEquation(net.warcar.hito_hito_nika.config.CommonConfig.INSTANCE.getG4Length(), player, new HashMap<>()).getValue();
 		if (time >= 500) {
 			time = -1;
 		} if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
@@ -120,7 +131,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 				ability.stopTargetedTime(player);
 			} else {
 				if (this.isSnakeman()) {
-					time /= 2;
+					time /= 1.2f;
 				}
 				ability.continuousComponent.startContinuity(player, time * 20);
 				ability.statsComponent.applyModifiers(player);
@@ -175,7 +186,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
 		if (this.isBoundman() && player instanceof PlayerEntity) {
-			((PlayerEntity) player).abilities.mayfly = false;
+			((PlayerEntity) player).abilities.mayfly = ((PlayerEntity) player).isCreative() || player.isSpectator();
 		}
 		this.statsComponent.removeModifiers(player);
 		if (this.targetedTime > 0 && this.continuousComponent.getContinueTime() >= this.continuousComponent.getThresholdTime() && !this.continuousComponent.isInfinite() && !this.isBonusTime && props.hasUnlockedAbility(HaoshokuHakiInfusionAbility.INSTANCE) && this.isBoundman()) {
@@ -186,15 +197,23 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	public void afterContinuityStopEvent(LivingEntity player) {
-		int duration = (int) (600.0F - HakiDataCapability.get(player).getTotalHakiExp());
-		this.cooldownComponent.startCooldown(player, 1 + (float) duration / 60 + (this.isBonusTime ? this.continuousComponent.getContinueTime() : ((float) Math.round(Math.sqrt(this.continuousComponent.getContinueTime() / 20)) * 20)));
+		Map<String, Double> bonus = TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime());
+		double duration = EquationHelper.parseEquation(net.warcar.hito_hito_nika.config.CommonConfig.INSTANCE.getG4EffectsLength(), player, bonus).getValue();
+		double cooldown;
+		bonus.put("effect", duration);
+		if (this.isBonusTime) {
+			cooldown = EquationHelper.parseEquation(net.warcar.hito_hito_nika.config.CommonConfig.INSTANCE.getG4PostBonusCooldown(), player, bonus).getValue();
+		} else {
+            cooldown = EquationHelper.parseEquation(net.warcar.hito_hito_nika.config.CommonConfig.INSTANCE.getG4Cooldown(), player, bonus).getValue();
+        }
+		this.cooldownComponent.startCooldown(player, (float) cooldown);
 		if ((this.continuousComponent.getContinueTime() > this.continuousComponent.getThresholdTime() / 10 && this.continuousComponent.getThresholdTime() != 0 && !TrueGomuHelper.hasGearFifthActive(AbilityDataCapability.get(player))) || this.isBonusTime) {
-			player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, duration, 3, true, true));
-			player.addEffect(new EffectInstance(Effects.HUNGER, duration, 1, true, true));
-			player.addEffect(new EffectInstance(Effects.WEAKNESS, duration, 3, true, true));
+			player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, (int) duration, 3, true, true));
+			player.addEffect(new EffectInstance(Effects.HUNGER, (int) duration, 1, true, true));
+			player.addEffect(new EffectInstance(Effects.WEAKNESS, (int) duration, 3, true, true));
 		}
 		if (this.isBonusTime) {
-			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), duration + 100 + (int) (EntityStatsCapability.get(player).getDoriki() / 200), 1, true, true));
+			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), (int) duration + 100, 1, true, true));
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);

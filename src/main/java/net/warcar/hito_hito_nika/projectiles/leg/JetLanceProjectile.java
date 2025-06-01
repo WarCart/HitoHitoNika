@@ -12,7 +12,7 @@ import java.util.Objects;
 public class JetLanceProjectile extends YariProjectile {
     public JetLanceProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
-        this.setDamage(30.0F);
+        this.setDamage(60f);
         this.setMaxLife(5);
         this.setHurtTime(10);
         this.onTickEvent = this::onTickEvent;

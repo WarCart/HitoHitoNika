@@ -4,9 +4,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.warcar.hito_hito_nika.config.CommonConfig;
+import net.warcar.hito_hito_nika.helpers.EquationHelper;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
@@ -16,6 +18,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModAttributes;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class GomuFusenAbility extends Ability {
@@ -46,7 +49,7 @@ public class GomuFusenAbility extends Ability {
 	}
 
 	private void afterContinuityStopEvent(LivingEntity player, IAbility ability) {
-		this.cooldownComponent.startCooldown(player, this.continuousComponent.getContinueTime());
+		this.cooldownComponent.startCooldown(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getFusenCooldown(), player, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue());
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
@@ -54,7 +57,7 @@ public class GomuFusenAbility extends Ability {
 	}
 
 	private void start(LivingEntity entity, IAbility ability) {
-		float time = (float) (EntityStatsCapability.get(entity).getDoriki() * .01f + 15f);
+		float time = (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getFusenLength(), entity, new HashMap<>()).getValue();
 		if (time > 500)
 			time = -1;
 		this.continuousComponent.triggerContinuity(entity, time * 20);

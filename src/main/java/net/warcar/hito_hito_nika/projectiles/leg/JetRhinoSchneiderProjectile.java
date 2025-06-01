@@ -15,7 +15,7 @@ public class JetRhinoSchneiderProjectile extends PythonProjectile {
     public JetRhinoSchneiderProjectile(World world, LivingEntity player, Ability ability, float speed, int layer) {
         super(NikaProjectiles.GOMU_GOMU_NO_JET_RHINO_SCHNEIDER.get(), world, player, ability, speed, layer);
         this.setMaxLife(3);
-        this.setDamage(30F);
+        this.setDamage(70f);
         this.setEntityCollisionSize(2.5d);
         this.setAffectedByHardening();
         this.setPassThroughEntities();

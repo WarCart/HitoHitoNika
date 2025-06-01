@@ -19,7 +19,7 @@ public class TrueElephantGunProjectile extends AbilityProjectileEntity {
         super(NikaProjectiles.GOMU_GOMU_NO_ELEPHANT_GUN.get(), world, player, ability);
         this.setMaxLife(12);
         this.setAffectedByHardening();
-        this.setDamage(24F);
+        this.setDamage(40f);
         this.setEntityCollisionSize(2.5d);
         this.setPassThroughEntities();
         this.setBlocksAffectedLimit(100);

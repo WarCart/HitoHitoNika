@@ -20,7 +20,7 @@ public class TrueBazookaProjectile extends AbilityProjectileEntity {
         super(NikaProjectiles.GOMU_GOMU_NO_BAZOOKA.get(), world, player, ability);
         this.setMaxLife(12);
         this.setAffectedByHardening();
-        this.setDamage(20F);
+        this.setDamage(30F);
         this.setEntityCollisionSize(2.5d);
         this.setPassThroughEntities();
         this.setPassThroughBlocks();

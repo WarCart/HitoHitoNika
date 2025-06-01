@@ -2,6 +2,7 @@ package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
@@ -30,6 +31,7 @@ public class GearSixthAbility extends Ability {
 		continuousComponent = new ContinuousComponent(this, true);
 		this.addUseEvent(this::onStartContinuity);
 		this.addComponents(continuousComponent, trueScreamComponent);
+		continuousComponent.addStartEvent(TrueGomuHelper.basicGearStuff());
 	}
 
 	private void onStartContinuity(LivingEntity player, IAbility ability) {

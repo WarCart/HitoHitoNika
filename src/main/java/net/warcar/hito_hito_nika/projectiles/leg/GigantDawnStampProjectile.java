@@ -11,7 +11,7 @@ import xyz.pixelatedw.mineminenomi.particles.effects.gomu.GearSecondParticleEffe
 public class GigantDawnStampProjectile extends ElephantStampProjectile {
     public GigantDawnStampProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
-        this.setDamage(150);
+        this.setDamage(40);
         this.setMaxLife(9);
         this.setBlocksAffectedLimit(200);
         this.onBlockImpactEvent = this::onBlockImpactEvent;

@@ -76,6 +76,8 @@
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_king_kong_gun": "Gomu Gomu no King Kong Gun",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_king_kong_stamp": "Gomu Gomu no King Kong Stamp",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_king_kong_stamp_gatling": "Gomu Gomu no King Kong Stamp Gatling",
+	"ability.hito_hito_no_mi_nika.gomu_gomu_no_kong_axe": "Gomu Gomu no Kong Axe",
+	"ability.hito_hito_no_mi_nika.gomu_gomu_no_kong_bullet": "Gomu Gomu no Kong Bullet",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_kong_gatling": "Gomu Gomu no Kong Gatling",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_kong_gun": "Gomu Gomu no Kong Gun",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_kong_stamp": "Gomu Gomu no Kong Stamp",
@@ -116,6 +118,7 @@
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_yari": "Gomu Gomu no Yari",
 	"ability.mineminenomi.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
 
+	"text.mineminenomi.requires_infusion": "You need to activate Hao Infusion to use this move",
 	"text.mineminenomi.too_heavy": "You are to heavy to use this ability",
 	"text.mineminenomi.too_weak": "You are to weak to use this ability"
 }

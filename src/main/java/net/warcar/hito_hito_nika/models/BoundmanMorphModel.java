@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 import net.warcar.hito_hito_nika.abilities.GomuBulletAbility;
-import net.warcar.hito_hito_nika.abilities.TrueGomuHelper;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;

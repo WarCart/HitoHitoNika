@@ -19,7 +19,7 @@ public class TrueGrizzlyMagnumProjectile extends AbilityProjectileEntity {
 
     public TrueGrizzlyMagnumProjectile(World world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), world, player, ability);
-        this.setDamage(40.0F);
+        this.setDamage(80f);
         this.setMaxLife(10);
         this.setAffectedByHardening();
         this.setPassThroughEntities();

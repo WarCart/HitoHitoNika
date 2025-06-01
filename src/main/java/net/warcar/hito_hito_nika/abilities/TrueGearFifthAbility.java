@@ -13,17 +13,22 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
+import net.warcar.hito_hito_nika.config.CommonConfig;
+import net.warcar.hito_hito_nika.helpers.EquationHelper;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.SkinOverlayComponent;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.*;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import static xyz.pixelatedw.mineminenomi.api.abilities.AbilityOverlay.RenderType.ENERGY;
@@ -86,12 +91,14 @@ public class TrueGearFifthAbility extends Ability {
 		if (player instanceof ClientPlayerEntity) {
 			this.startPlayingDrums((ClientPlayerEntity) player, true);
 		}
-		this.continuousComponent.startContinuity(player, (float) (EntityStatsCapability.get(player).getDoriki()) * .06f);
+		this.statsComponent.applyModifiers(player);
+		this.continuousComponent.startContinuity(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG5Length(), player, new HashMap<>()).getValue() * 20);
 		this.overlayComponent.showAll(player);
 	}
 
 	private void afterContinuityStop(LivingEntity player, IAbility abl) {
-		player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), (int) (this.continuousComponent.getContinueTime()), 1, true, true));
+		float time = (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG5Cooldown(), player, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue();
+		player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), (int) time, 1, true, true));
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
@@ -99,6 +106,7 @@ public class TrueGearFifthAbility extends Ability {
 		if (player instanceof ClientPlayerEntity) {
 			this.startPlayingDrums((ClientPlayerEntity) player, false);
 		}
+		this.statsComponent.removeModifiers(player);
 		this.overlayComponent.hideAll(player);
 	}
 
@@ -123,7 +131,7 @@ public class TrueGearFifthAbility extends Ability {
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("5fc1a28f-7e59-44bf-9d7a-36953e9c700d"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Attack Damage Modifier", 20.0, AttributeModifier.Operation.ADDITION);
 		DAMAGE_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-4fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Resistance Damage Modifier", 0.5, AttributeModifier.Operation.ADDITION);
 		REGEN = new AbilityAttributeModifier(UUID.fromString("e6a409f2-5c6a-409e-a9f3-5b74899d8129"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Regen Modifier", 5, AttributeModifier.Operation.MULTIPLY_TOTAL);
-		GRAVITY_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-7fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Gravity Damage Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
+		GRAVITY_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-7fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Gravity Damage Modifier", -0.75, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	}
 
 	@OnlyIn(Dist.CLIENT)

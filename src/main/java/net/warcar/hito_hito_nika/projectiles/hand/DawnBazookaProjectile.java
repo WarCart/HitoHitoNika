@@ -13,7 +13,7 @@ public class DawnBazookaProjectile extends TrueBazookaProjectile {
 
     public DawnBazookaProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
-        this.setDamage(120.0F);
+        this.setDamage(85f);
         this.setMaxLife(5);
         this.setPassThroughEntities();
         this.setHurtTime(10);

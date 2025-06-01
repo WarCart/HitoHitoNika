@@ -1,22 +1,30 @@
-package net.warcar.hito_hito_nika.abilities;
+package net.warcar.hito_hito_nika.helpers;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
+import net.warcar.hito_hito_nika.abilities.*;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiEmissionAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiInternalDestructionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrueGomuHelper {
 	public static <A extends Ability> boolean canActivateGear(IAbilityData props, AbilityCore<A> gear) {
 		return !(
 				(gear.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
 				|| (gear.equals(TrueGearThirdAbility.INSTANCE) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
-				|| (gear.equals(TrueGearFourthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props)))
+				|| (gear.equals(TrueGearFourthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasAbilityActive(props, GomuFusenAbility.INSTANCE)))
 				|| (gear.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
 	}
 
@@ -94,5 +102,24 @@ public class TrueGomuHelper {
 		String key = "ability." + modId + "." + resourceName;
 		HitoHitoNoMiNikaMod.getLangMap().put(key, name);
 		return new TranslationTextComponent(key, name);
+	}
+
+	public static void stopGatling(LivingEntity entity) {
+		TrueGomuGatling abl = AbilityDataCapability.get(entity).getEquippedAbility(TrueGomuGatling.INSTANCE);
+		if (abl != null && abl.isContinuous()) {
+			abl.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(comp -> comp.stopContinuity(entity));
+		}
+	}
+
+	public static ContinuousComponent.IStartContinuousEvent basicGearStuff() {
+		return (entity, ability) -> {
+			stopGatling(entity);
+		};
+	}
+
+	public static Map<String, Double> getBasicBonusData(float continueTime) {
+		Map<String, Double> bonusData = new HashMap<>();
+		bonusData.put("length", (double) continueTime);
+		return bonusData;
 	}
 }

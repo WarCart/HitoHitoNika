@@ -1,6 +1,6 @@
 package net.warcar.hito_hito_nika.mixins;
 
-import net.warcar.hito_hito_nika.abilities.TrueGomuHelper;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

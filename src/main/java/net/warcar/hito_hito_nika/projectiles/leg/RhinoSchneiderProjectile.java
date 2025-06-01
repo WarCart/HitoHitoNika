@@ -19,7 +19,7 @@ public class RhinoSchneiderProjectile extends AbilityProjectileEntity {
 
     public RhinoSchneiderProjectile(World world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_RHINO_SCHNEIDER.get(), world, player, ability);
-        this.setDamage(70.0F);
+        this.setDamage(40);
         this.setMaxLife(10);
         this.setAffectedByHardening();
         this.setPassThroughEntities();

@@ -8,6 +8,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import xyz.pixelatedw.mineminenomi.ModMain;
@@ -210,7 +211,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(ROC_GUN);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setMaxCooldown(1.5D);
+				this.setMaxCooldown(5D);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(JET_ELEPHANT_GUN);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
@@ -220,24 +221,24 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(JET_GIANT_PISTOL);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setMaxCooldown(1.5D);
+				this.setMaxCooldown(2D);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(GIANT_DAWN_PISTOL);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearFourthActive(props)) {
-				this.setMaxCooldown(4D);
+				this.setMaxCooldown(8D);
 				this.setMaxChargeTime(1D);
 				this.setDisplayName(STAR_CANNON);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Star Cannon"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
-				this.setMaxCooldown(1.0D);
+				this.setMaxCooldown(6);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(JET_PISTOL);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
 				TrueGearFourthAbility g4 = AbilityDataCapability.get(entity).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 				if (g4.isSnakeman()) {
-					this.setMaxCooldown(5.0D);
+					this.setMaxCooldown(2);
 					this.setMaxChargeTime(0.0D);
 					this.setDisplayName(JET_CULVERIN);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Jet Culverine"));
@@ -252,7 +253,7 @@ public class TrueGomuPistol extends Ability {
 					this.setDisplayName(KING_KONG_GUN);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gun"));
 				} else {
-					this.setMaxCooldown(4.0D);
+					this.setMaxCooldown(4);
 					this.setMaxChargeTime(0.5D);
 					this.setDisplayName(KONG_GUN);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Pistol"));
@@ -263,7 +264,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(ROC_GUN);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setMaxCooldown(6D);
+				this.setMaxCooldown(10);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(ELEPHANT_GUN);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
@@ -283,7 +284,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(HAWK_PISTOL);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Pistol"));
 			} else {
-				this.setMaxCooldown(1.5D);
+				this.setMaxCooldown(1D);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(PISTOL);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
@@ -304,7 +305,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(ROC_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setMaxCooldown(1.5D);
+				this.setMaxCooldown(5D);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(JET_ELEPHANT_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
@@ -314,17 +315,17 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(JET_GIANT_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setMaxCooldown(1.5D);
+				this.setMaxCooldown(2D);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(GIANT_DAWN_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearFourthActive(props)) {
-				this.setMaxCooldown(4D);
+				this.setMaxCooldown(8d);
 				this.setMaxChargeTime(1D);
 				this.setDisplayName(STAR_CANNON_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Star Cannon"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
-				this.setMaxCooldown(1.0D);
+				this.setMaxCooldown(6);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(JET_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
@@ -357,7 +358,7 @@ public class TrueGomuPistol extends Ability {
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Stamp"));
 				}
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setMaxCooldown(6D);
+				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(ELEPHANT_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
@@ -377,7 +378,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(HAWK_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Stamp"));
 			} else {
-				this.setMaxCooldown(1.5D);
+				this.setMaxCooldown(1D);
 				this.setMaxChargeTime(0.0D);
 				this.setDisplayName(STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));

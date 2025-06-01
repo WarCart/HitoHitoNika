@@ -1,15 +1,13 @@
 package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.warcar.hito_hito_nika.config.CommonConfig;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import xyz.pixelatedw.mineminenomi.ModMain;
@@ -54,6 +52,7 @@ public class TrueGomuBazooka extends Ability {
 	public static final TranslationTextComponent DAWN_YARI = TrueGomuHelper.getName("Gomu Gomu no Dawn Yari");
 	public static final TranslationTextComponent DOUBLE_BAJRANG_STAMP = TrueGomuHelper.getName("Gomu Gomu no Double Bajrang Stamp");
 	public static final TranslationTextComponent YARI = TrueGomuHelper.getName("Gomu Gomu no Yari");
+	private static final TranslationTextComponent GIANT_DAWN_YARI = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Yari");
 	private final ChargeComponent chargeComponent;
 	private final ProjectileComponent projectileComponent;
 	private final AnimationComponent animationComponent;
@@ -217,7 +216,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setDisplayName(JET_GIANT_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setMaxCooldown(10D);
+				this.setMaxCooldown(20D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(GIANT_DAWN_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
@@ -234,18 +233,18 @@ public class TrueGomuBazooka extends Ability {
 					this.setDisplayName(TWIN_JET_CULVERIN);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Twin Jet Culverine"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props)) {
-					this.setMaxCooldown(15D);
+					this.setMaxCooldown(25D);
 					this.setMaxChargeTime(5.0D);
 					this.setDisplayName(LEO_REX_BAZOOKA);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Double King Kong Gun"));
 				} else {
-					this.setMaxCooldown(12D);
+					this.setMaxCooldown(25f);
 					this.setMaxChargeTime(2.0D);
 					this.setDisplayName(LEO_BAZOOKA);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Bazooka"));
 				}
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
-				this.setMaxCooldown(15D);
+				this.setMaxCooldown(10);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(GRIZZLY_MAGNUM);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
@@ -255,7 +254,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setDisplayName(GIANT_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-				this.setMaxCooldown(7D);
+				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(DAWN_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
@@ -284,8 +283,13 @@ public class TrueGomuBazooka extends Ability {
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(JET_GIANT_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
+			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
+				this.setMaxCooldown(20D);
+				this.setMaxChargeTime(2.0D);
+				this.setDisplayName(GIANT_DAWN_YARI);
+				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setMaxCooldown(10D);
+				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(JET_GIANT_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
@@ -297,18 +301,18 @@ public class TrueGomuBazooka extends Ability {
 					this.setDisplayName(TWIN_RHINO_STAMPEDE);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Twin Jet Culverine"));
 				} else if (g4.isBoundman() && TrueGomuHelper.hasGearThirdActive(props)) {
-					this.setMaxCooldown(15D);
+					this.setMaxCooldown(25D);
 					this.setMaxChargeTime(5.0D);
 					this.setDisplayName(RHINO_REX_SCHNEIDER);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Double King Kong Gun"));
 				} else {
-					this.setMaxCooldown(12D);
+					this.setMaxCooldown(6);
 					this.setMaxChargeTime(2.0D);
 					this.setDisplayName(RHINO_SCHNEIDER);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Yari"));
 				}
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				this.setMaxCooldown(15D);
+				this.setMaxCooldown(20);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(GIANT_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
@@ -318,7 +322,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setDisplayName(JET_LANCE);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-				this.setMaxCooldown(7D);
+				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(DAWN_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));

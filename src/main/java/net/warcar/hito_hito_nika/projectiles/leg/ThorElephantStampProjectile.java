@@ -12,7 +12,7 @@ public class ThorElephantStampProjectile extends ElephantStampProjectile {
     public ThorElephantStampProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
-        this.setDamage(56f);
+        this.setDamage(75);
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.onEntityImpactEvent = this::onEntityImpactEvent;
     }
