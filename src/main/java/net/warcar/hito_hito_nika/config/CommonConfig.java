@@ -54,7 +54,7 @@ public class CommonConfig {
         this.fusenCooldown = builder.comment("Regulates length of fusen's cooldown").define("Fusen cooldown equation", "length()");
         builder.pop();
         builder.push("Gatling");
-        this.gatlingLength = builder.comment("Regulates length of gatling").define("Gatling length equation", "multiply(n(3), add(n(1), sqrt(divide(doriki(), multiply(n(100), dif())))))");
+        this.gatlingLength = builder.comment("Regulates length of gatling", "Old function: multiply(n(3), add(n(1), sqrt(divide(doriki(), multiply(n(100), dif())))))").define("Gatling length equation", "n(10)");
         this.gatlingCooldown = builder.comment("Regulates length of gatling's cooldown").define("Gatling cooldown equation", "multiply(n(20), max(n(3), divide(multiply(length(), dif()), n(200))))");
         builder.pop();
         builder.pop();
