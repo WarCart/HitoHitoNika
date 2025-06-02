@@ -7,10 +7,12 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.warcar.hito_hito_nika.entities.LuffyBoss;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
@@ -40,10 +42,6 @@ public class GomuProjectileRenderer<E extends AbilityProjectileEntity, M extends
 
     public void render(E entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight){
         if (entity.getThrower() != null && entity.isAffectedByHaki()) {
-            if (HakiHelper.hasHardeningActive(entity.getThrower(), false, true)) {
-                this.setTexture(ModResources.BUSOSHOKU_HAKI_ARM);
-                this.setPlayerTexture(false);
-            }
             super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
             if (TrueGomuHelper.hasHakiEmissionActive(AbilityDataCapability.get(entity.getThrower()))) {
                 IVertexBuilder ivertexbuilder = buffer.getBuffer(ModRenderTypes.TRANSPARENT_COLOR2);
@@ -74,9 +72,9 @@ public class GomuProjectileRenderer<E extends AbilityProjectileEntity, M extends
                 this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 0.886f, 0.5f, 0.1f, 0.4f);
                 matrixStack.popPose();
             }
-            this.setPlayerTexture(true);
         }
     }
+
     public static class Factory extends StretchingProjectileRenderer.Factory{
         protected EntityModel internalStretchingModel;
         public Factory(EntityModel stretchModel) {

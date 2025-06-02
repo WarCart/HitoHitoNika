@@ -44,11 +44,11 @@ import java.util.Arrays;
 public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void onEntityHurt(LivingHurtEvent event) {
-		if (event.getEntityLiving() instanceof PlayerEntity) {
+		if (event.getEntityLiving() instanceof LivingEntity) {
 			DamageSource source = event.getSource();
 			Entity instantSource = source.getDirectEntity();
 			Entity trueSource = source.getEntity();
-			PlayerEntity attacked = (PlayerEntity) event.getEntityLiving();
+			LivingEntity attacked = event.getEntityLiving();
 			IDevilFruit props = DevilFruitCapability.get(attacked);
 			if (props.hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI) && !source.isMagic()) {
 				float reduction = 0.0F;
