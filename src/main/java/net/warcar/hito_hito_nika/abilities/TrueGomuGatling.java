@@ -12,10 +12,7 @@ import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimationComponent;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceType;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
@@ -25,6 +22,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
 import xyz.pixelatedw.mineminenomi.init.ModAnimations;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
@@ -73,6 +71,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			ability.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(chargeComponent -> chargeComponent.addStartEvent((entity, iAbility) -> this.scream(entity, ability.getDisplayName().getString())));
 		}
 	};
+	private final PoolComponent poolComponent = new PoolComponent(this, ModAbilityPools.GRAB_ABILITY);
 	private double leap = 3;
 	private float speed = 3;
 	private float projDamageReduction = 0.8F;
@@ -88,7 +87,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 		this.continuousComponent.addTickEvent(this::duringContinuityEvent);
 		this.continuousComponent.addEndEvent(this::onContinuityStopEvent);
 		this.isNew = true;
-		this.addComponents(continuousComponent, projectileComponent, trueScreamComponent, animationComponent);
+		this.addComponents(continuousComponent, projectileComponent, trueScreamComponent, animationComponent, poolComponent);
 	}
 
 	private AbilityProjectileEntity createProjectile(LivingEntity entity) {
@@ -98,16 +97,19 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				projectile = new BajrangStampGunProjectile(entity.level, entity, this, 15f);
 				projectileSpace = 10;
+				projDamageReduction = 0f;
 				speed = 5f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
 				projectile = new GigantDawnStampProjectile(entity.level, entity, this);
 				projectileSpace = 9;
+				projDamageReduction = 0.6f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
 				projectile = new JetElephantStampProjectile(entity.level, entity, this);
 				projectileSpace = 9;
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
 				projectile = new DawnStampProjectile(entity.level, entity, this);
 				speed = 4;
+				projDamageReduction = 0.4f;
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				projectile = new KingKongStampProjectile(entity.level, entity, this);
 				speed = 4;
@@ -133,24 +135,30 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 				projectile = new JetStampProjectile(entity.level, entity, this);
 				speed = 3.6F;
 				projectile.setMaxLife(4);
+				projDamageReduction = 0.8f;
 			} else {
 				projectile = new StampProjectile(entity.level, entity, this);
 				projectile.setMaxLife(6);
+				projDamageReduction = 0.8f;
 			}
 		} else {
 			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				projectile = new BajrangGunProjectile(entity.level, entity, this, 15f);
+				projDamageReduction = 0f;
 				projectileSpace = 7;
 				speed = 5f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
 				projectile = new GigantDawnPistolProjectile(entity.level, entity, this);
 				projectileSpace = 3;
+				projDamageReduction = 0.6f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
 				projectile = new JetElephantGunProjectile(entity.level, entity, this);
+				projDamageReduction = 0.6f;
 				projectileSpace = 3;
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
 				projectile = new DawnPistolProjectile(entity.level, entity, this);
 				this.projectileSpace = 2;
+				projDamageReduction = 0.4f;
 				speed = 2;
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				projectile = new KingKongGunProjectile(entity.level, entity, this);
@@ -176,9 +184,11 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				projectile = new TrueJetPistolProjectile(entity.level, entity, this);
 				projectile.setMaxLife(4);
+				projDamageReduction = 0.8f;
 				speed = 3.6F;
 			} else {
 				this.projectileSpace = 2;
+				projDamageReduction = 0.8f;
 				projectile = new TruePistolProjectile(entity.level, entity, this);
 				projectile.setMaxLife(6);
 			}

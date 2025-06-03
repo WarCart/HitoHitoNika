@@ -22,6 +22,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.PoolComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceType;
@@ -34,6 +35,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability
 import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiDataCapability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 public class GomuBulletAbility extends Ability {
@@ -81,6 +83,7 @@ public class GomuBulletAbility extends Ability {
 			});
 		}
 	};
+	private final PoolComponent poolComponent = new PoolComponent(this, ModAbilityPools.GRAB_ABILITY);
 	private float chargeTime = 0;
 	private float cooldown = 2;
 	private float speed = 2.5f;
@@ -91,7 +94,7 @@ public class GomuBulletAbility extends Ability {
 		this.setDisplayIcon(TrueGomuPistol.INSTANCE);
 		this.projectileComponent = new ProjectileComponent(this, this::createProjectile);
 		this.chargeComponent = new ChargeComponent(this, false);
-		this.addComponents(chargeComponent, projectileComponent, trueScreamComponent);
+		this.addComponents(chargeComponent, projectileComponent, trueScreamComponent, poolComponent);
 		this.addTickEvent(this::updateModes);
 		this.chargeComponent.addTickEvent(this::duringContinuityEvent);
 		this.chargeComponent.addEndEvent(this::beforeContinuityStopEvent);

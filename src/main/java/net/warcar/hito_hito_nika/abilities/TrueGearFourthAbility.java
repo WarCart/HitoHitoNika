@@ -12,11 +12,14 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
@@ -45,7 +48,12 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
-	public static final AbilityCore<TrueGearFourthAbility> INSTANCE;
+	private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gear_fourth",
+			ImmutablePair.of("The user inflates their muscle structure to tremendously increase the power of their attacks and also allows flight", null),
+			ImmutablePair.of("§2Uses Haki§r", null));
+	public static final AbilityCore<TrueGearFourthAbility> INSTANCE = new AbilityCore.Builder<>("Gear Fourth", AbilityCategory.DEVIL_FRUITS, TrueGearFourthAbility::new)
+			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, ChangeStatsComponent.getTooltip())
+			.setUnlockCheck(TrueGearFourthAbility::canUnlock).build();
 	private static final AbilityAttributeModifier ARMOR_MODIFIER;
 	private static final AbilityAttributeModifier STRENGTH_MODIFIER;
 	private static final AbilityAttributeModifier DAMAGE_REDUCTION_MODIFIER;
@@ -65,7 +73,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	public TrueGearFourthAbility(AbilityCore<TrueGearFourthAbility> core) {
 		super(core);
 		this.isNew = true;
-		this.setCustomIcon("Gear Fourth");
 		this.setDisplayName(new TranslationTextComponent("ability.mineminenomi.gear_fourth"));
 		statsComponent = new ChangeStatsComponent(this);
 		modeComponent = new AltModeComponent<>(this, Mode.class, Mode.BOUNDMAN);
@@ -267,8 +274,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gear Fourth", AbilityCategory.DEVIL_FRUITS, TrueGearFourthAbility::new))
-				.addDescriptionLine("The user inflates their muscle structure to tremendously increase the power of their attacks and also allows flight\n\n§2Uses Haki§r").setUnlockCheck(TrueGearFourthAbility::canUnlock).build();
 		ARMOR_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_ARMOR_UUID, INSTANCE, "Gear Fourth Armor Modifier", 10.0D, Operation.ADDITION);
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_STRENGTH_UUID, INSTANCE, "Gear Fourth Attack Damage Modifier", 15.0D, Operation.ADDITION);
 		DAMAGE_REDUCTION_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_DAMAGE_REDUCTION_UUID, INSTANCE, "Gear Fourth Resistance Damage Modifier", 0.35D, Operation.ADDITION);

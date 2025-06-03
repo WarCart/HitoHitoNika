@@ -8,10 +8,13 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
@@ -30,10 +33,15 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class TrueGearSecondAbility extends Ability {
-	public static final AbilityCore<TrueGearSecondAbility> INSTANCE;
-	private static final AbilityAttributeModifier JUMP_HEIGHT;
-	private static final AbilityAttributeModifier STRENGTH_MODIFIER;
-	private static final AbilityAttributeModifier STEP_HEIGHT;
+	private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gear_second",
+			ImmutablePair.of("By speeding up their blood flow, the user gains strength, speed and mobility.", null));
+	public static final AbilityCore<TrueGearSecondAbility> INSTANCE = new AbilityCore.Builder<>("Gear Second", AbilityCategory.DEVIL_FRUITS, TrueGearSecondAbility::new)
+			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, ChangeStatsComponent.getTooltip())
+			.setUnlockCheck(TrueGearSecondAbility::canUnlock).build();
+	private static final AbilityAttributeModifier JUMP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("a44a9644-369a-4e18-88d9-323727d3d85b"), INSTANCE, "Gear Second Jump Modifier", 5, Operation.ADDITION);
+	private static final AbilityAttributeModifier STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("a2337b58-7e6d-4361-a8ca-943feee4f906"), INSTANCE, "Gear Second Attack Damage Modifier", 4, Operation.ADDITION);
+	private static final AbilityAttributeModifier ATTACK_SPEED_MODIFIER = new AbilityAttributeModifier(UUID.fromString("c495cf01-f3ff-4933-9805-5bb1ed9d27b0"), INSTANCE, "Gear Second Attack Speed Modifier", 4, Operation.ADDITION);
+	private static final AbilityAttributeModifier STEP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("eab680cd-a6dc-438a-99d8-46f9eb53a950"), INSTANCE, "Gear Second Step Height Modifier", 1, Operation.ADDITION);
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
 	private final SkinOverlayComponent overlayComponent = new SkinOverlayComponent(this, new AbilityOverlay.Builder().setColor(new Color(232, 54, 54, 74)).build());
@@ -51,14 +59,14 @@ public class TrueGearSecondAbility extends Ability {
 		this.isNew = true;
 		this.continuousComponent = new ContinuousComponent(this, true);
 		this.statsComponent = new ChangeStatsComponent(this);
-		this.statsComponent.addAttributeModifier(ModAttributes.STEP_HEIGHT, STEP_HEIGHT);
-		this.statsComponent.addAttributeModifier(Attributes.MOVEMENT_SPEED, STEP_HEIGHT);
-		this.statsComponent.addAttributeModifier(ModAttributes.JUMP_HEIGHT, JUMP_HEIGHT);
-		this.statsComponent.addAttributeModifier(Attributes.ATTACK_DAMAGE, STRENGTH_MODIFIER);
+		this.statsComponent.addAttributeModifier(ModAttributes.JUMP_HEIGHT.get(), JUMP_HEIGHT);
+		this.statsComponent.addAttributeModifier(ModAttributes.STEP_HEIGHT.get(), STEP_HEIGHT);
+		this.statsComponent.addAttributeModifier(Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER);
 		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
 		this.addUseEvent(this::onStartContinuity);
 		continuousComponent.addStartEvent(TrueGomuHelper.basicGearStuff());
 		this.continuousComponent.addTickEvent(this::duringContinuity);
+		this.continuousComponent.addTickEvent(TrueGomuHelper.getSpeedEvent(1.75f));
 		this.continuousComponent.addEndEvent(this::afterContinuityStopEvent);
 		this.addComponents(this.continuousComponent, this.statsComponent, this.trueScreamComponent, this.overlayComponent);
 	}
@@ -90,35 +98,8 @@ public class TrueGearSecondAbility extends Ability {
 	}
 
 	private void duringContinuity(LivingEntity entity, IAbility abl) {
-		if (this.continuousComponent.getContinueTime() % 10.0F == 0.0F) {
+		if (this.continuousComponent.getContinueTime() % 10 == 0) {
 			WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), entity, entity.getX(), entity.getY(), entity.getZ());
-		}
-
-		if (AbilityHelper.canUseMomentumAbilities(entity)) {
-			if (entity.isSprinting()) {
-				if (!this.prevSprintValue) {
-					entity.level.playSound(null, entity.blockPosition(), ModSounds.TELEPORT_SFX.get(), SoundCategory.PLAYERS, 2.0F, 1.0F);
-				}
-
-				float maxSpeed = 2.2F;
-				Vector3d vec = entity.getLookAngle();
-				double var10001;
-				double var10003;
-				if (entity.isOnGround()) {
-					var10001 = vec.x * (double)maxSpeed;
-					var10003 = vec.z * (double)maxSpeed;
-					entity.setDeltaMovement(var10001, entity.getDeltaMovement().y, var10003);
-				} else {
-					var10001 = vec.x * (double)maxSpeed * 0.5D;
-					var10003 = vec.z * (double)maxSpeed;
-					entity.setDeltaMovement(var10001, entity.getDeltaMovement().y, var10003 * 0.5D);
-				}
-
-				this.prevSprintValue = entity.isSprinting();
-				entity.hurtMarked = true;
-			} else {
-				this.prevSprintValue = false;
-			}
 		}
 	}
 
@@ -146,12 +127,5 @@ public class TrueGearSecondAbility extends Ability {
 
 	protected static boolean canUnlock(LivingEntity user) {
 		return EntityStatsCapability.get(user).getDoriki() * .02d >= 20d && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
-	}
-
-	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gear Second", AbilityCategory.DEVIL_FRUITS, TrueGearSecondAbility::new)).addDescriptionLine("By speeding up their blood flow, the user gains strength, speed and mobility").setUnlockCheck(TrueGearSecondAbility::canUnlock).build();
-		JUMP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("a44a9644-369a-4e18-88d9-323727d3d85b"), INSTANCE, "Gear Second Jump Modifier", 5.0D, Operation.ADDITION);
-		STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("a2337b58-7e6d-4361-a8ca-943feee4f906"), INSTANCE, "Gear Second Attack Damage Modifier", 4.0D, Operation.ADDITION);
-		STEP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("eab680cd-a6dc-438a-99d8-46f9eb53a950"), INSTANCE, "Gear Second Step Height Modifier", 1.0D, Operation.ADDITION);
 	}
 }

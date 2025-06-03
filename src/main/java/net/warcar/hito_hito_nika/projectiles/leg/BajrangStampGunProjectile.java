@@ -51,7 +51,6 @@ public class BajrangStampGunProjectile extends AbilityProjectileEntity {
     }
 
     private void onEntityImpactEvent(LivingEntity hitEnt) {
-        Vector3d speed = WyHelper.propulsion(Objects.requireNonNull(this.getThrower()), 2000, 2000, 2000);
-        hitEnt.push(speed.x, speed.y, speed.z);
+        AbilityHelper.setDeltaMovement(hitEnt, hitEnt.getDeltaMovement().add(this.getLookAngle()));
     }
 }

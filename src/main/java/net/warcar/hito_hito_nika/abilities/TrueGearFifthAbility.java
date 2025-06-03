@@ -52,6 +52,7 @@ public class TrueGearFifthAbility extends Ability {
 		this.continuousComponent.addEndEvent(this::afterContinuityStop);
 		this.addUseEvent(this::onStartContinuity);
 		this.continuousComponent.addTickEvent(this::duringContinuity);
+		this.continuousComponent.addTickEvent(TrueGomuHelper.getSpeedEvent(0.875f));
 		statsComponent = new ChangeStatsComponent(this);
 		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
 		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, DAMAGE_REDUCTION_MODIFIER);
@@ -98,7 +99,8 @@ public class TrueGearFifthAbility extends Ability {
 
 	private void afterContinuityStop(LivingEntity player, IAbility abl) {
 		float time = (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG5Cooldown(), player, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue();
-		player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), (int) time, 1, true, true));
+		player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), (int) (time * 0.25f), 1, true, true));
+		this.cooldownComponent.startCooldown(player, time * 0.75f);
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
@@ -131,7 +133,7 @@ public class TrueGearFifthAbility extends Ability {
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("5fc1a28f-7e59-44bf-9d7a-36953e9c700d"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Attack Damage Modifier", 20.0, AttributeModifier.Operation.ADDITION);
 		DAMAGE_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-4fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Resistance Damage Modifier", 0.5, AttributeModifier.Operation.ADDITION);
 		REGEN = new AbilityAttributeModifier(UUID.fromString("e6a409f2-5c6a-409e-a9f3-5b74899d8129"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Regen Modifier", 5, AttributeModifier.Operation.MULTIPLY_TOTAL);
-		GRAVITY_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-7fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Gravity Damage Modifier", -0.75, AttributeModifier.Operation.MULTIPLY_TOTAL);
+		GRAVITY_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-7fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Gravity Damage Modifier", -0.25, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	}
 
 	@OnlyIn(Dist.CLIENT)

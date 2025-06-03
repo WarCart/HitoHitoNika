@@ -19,6 +19,8 @@ import net.warcar.hito_hito_nika.abilities.GomuMorphsAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import xyz.pixelatedw.mineminenomi.abilities.gomu.GomuGomuNoDawnWhipAbility;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusOperation;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.events.ability.AbilityUseEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.DorikiEvent;
@@ -39,6 +41,7 @@ import xyz.pixelatedw.mineminenomi.init.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID)
 public class TrueGomuPassiveEffects {
@@ -130,6 +133,11 @@ public class TrueGomuPassiveEffects {
 			GomuMorphsAbility morphs = AbilityDataCapability.get(event.getEntityLiving()).getPassiveAbility(GomuMorphsAbility.INSTANCE);
 			if (morphs != null)
 				morphs.updateModes();
+		}
+		if (event.getAbility().getCore() == GomuGomuNoDawnWhipAbility.INSTANCE) {
+			event.getAbility().getComponent(ModAbilityKeys.COOLDOWN).ifPresent(cooldown -> {
+				cooldown.getBonusManager().addBonus(UUID.fromString("14d86583-ffb8-48ae-8088-9bb9a8f7c6de"), "Rebalanced cooldown", BonusOperation.ADD, 160);
+			});
 		}
 	}
 }
