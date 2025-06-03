@@ -3,13 +3,18 @@ package net.warcar.hito_hito_nika.entities;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
+import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
 import net.warcar.hito_hito_nika.entities.goals.*;
 import net.warcar.hito_hito_nika.init.GomuEntities;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
@@ -18,7 +23,11 @@ import xyz.pixelatedw.mineminenomi.abilities.gomu.BouncyAbility;
 import xyz.pixelatedw.mineminenomi.api.challenges.InProgressChallenge;
 import xyz.pixelatedw.mineminenomi.api.challenges.OPBossEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.ai.NPCPhase;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.MobsHelper;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
 import xyz.pixelatedw.mineminenomi.entities.mobs.IRandomTexture;
 import xyz.pixelatedw.mineminenomi.entities.mobs.OPEntity;
 import xyz.pixelatedw.mineminenomi.entities.mobs.goals.ImprovedMeleeAttackGoal;
@@ -30,6 +39,9 @@ import xyz.pixelatedw.mineminenomi.entities.mobs.goals.abilities.haki.BusoshokuH
 import xyz.pixelatedw.mineminenomi.entities.mobs.goals.abilities.haki.BusoshokuHakiInternalDestructionWrapperGoal;
 import xyz.pixelatedw.mineminenomi.entities.mobs.goals.abilities.haki.HaoshokuHakiInfusionWrapperGoal;
 import xyz.pixelatedw.mineminenomi.entities.mobs.phases.SimplePhase;
+import xyz.pixelatedw.mineminenomi.init.ModEffects;
+import xyz.pixelatedw.mineminenomi.packets.server.SSyncAbilityDataPacket;
+import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
 
 public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture {
     private static final DataParameter<Boolean> POST_TS = EntityDataManager.defineId(LuffyBoss.class, DataSerializers.BOOLEAN);
@@ -91,6 +103,9 @@ public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture
             this.secondPhase.addGoal(0, new HaoshokuHakiInfusionWrapperGoal(this));
             this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
             this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
+            this.secondPhase.addGoal(1, new GearFourthWrapperGoal(this, 0.75f));
+            this.thirdPhase.addGoal(1, new GearFourthWrapperGoal(this, 0));
+            this.lastPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearFifthAbility.INSTANCE));
         }
         this.goalSelector.addGoal(2, new PistolWrapperGoal<>(this));
         this.goalSelector.addGoal(2, new GatlingWrapperGoal<>(this));
@@ -119,6 +134,20 @@ public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture
         return new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/entities/luffy_pre_ts.png");
     }
 
+    @Override
+    public void die(DamageSource p_70645_1_) {
+        if (this.getChallengeInfo().isDifficultyUltimate() && !this.isLastPhase()) {
+            devilFruitData.setAwakenedFruit(true);
+            this.setHealth(5);
+            this.addEffect(new EffectInstance(GomuReviveEffect.INSTANCE.get(), 600, 1, true, false));
+            this.addEffect(new EffectInstance(Effects.REGENERATION, 600, 12, true, true));
+            this.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
+            this.startLastPhase();
+        } else {
+            super.die(p_70645_1_);
+        }
+    }
+
     public boolean isFirstPhaseActive() {
         return this.firstPhase.isActive(this);
     }
@@ -133,10 +162,6 @@ public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture
 
     public void startThirdPhase() {
         this.getPhaseManager().setPhase(thirdPhase);
-    }
-
-    public boolean isThirdPhaseActive() {
-        return this.thirdPhase.isActive(this);
     }
 
     public void startLastPhase() {
@@ -155,5 +180,9 @@ public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(POST_TS, false);
+    }
+
+    public boolean isLastPhase() {
+        return this.lastPhase.isActive(this);
     }
 }

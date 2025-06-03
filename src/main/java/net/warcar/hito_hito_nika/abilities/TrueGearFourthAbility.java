@@ -14,6 +14,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
+import net.warcar.hito_hito_nika.entities.LuffyBoss;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
@@ -296,6 +297,18 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 			this.modeComponent.setMode(livingEntity, mode.next());
 			throw new IllegalStateException("I Hate THIS");
 		}
+	}
+
+	public void setSnakeman(LivingEntity entity) {
+		this.modeComponent.setMode(entity, Mode.SNAKEMAN);
+	}
+
+	public void setBoundman(LivingEntity entity) {
+		this.modeComponent.setMode(entity, Mode.BOUNDMAN);
+	}
+
+	public void setPartial(LivingEntity entity) {
+		this.modeComponent.setMode(entity, Mode.PARTIAL);
 	}
 
 	public enum Mode {

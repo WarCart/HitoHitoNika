@@ -1,13 +1,14 @@
 package net.warcar.hito_hito_nika.entities.goals;
 
 import net.minecraft.entity.MobEntity;
+import net.warcar.hito_hito_nika.entities.LuffyBoss;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.entities.GoalUtil;
 import xyz.pixelatedw.mineminenomi.api.entities.ai.AbilityWrapperGoal;
 
-public class GearWrapperGoal<E extends MobEntity, G extends Ability> extends AbilityWrapperGoal<E, G> {
-    public GearWrapperGoal(E entity, AbilityCore<G> core) {
+public class GearWrapperGoal<G extends Ability> extends AbilityWrapperGoal<LuffyBoss, G> {
+    public GearWrapperGoal(LuffyBoss entity, AbilityCore<G> core) {
         super(entity, core);
     }
 

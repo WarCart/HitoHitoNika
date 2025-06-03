@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -18,11 +19,12 @@ import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
 import xyz.pixelatedw.mineminenomi.renderers.layers.BodyCoatingLayer;
 import xyz.pixelatedw.mineminenomi.renderers.layers.abilities.GomuDawnWhipLayer;
 import xyz.pixelatedw.mineminenomi.renderers.morphs.ZoanMorphRenderer;
+import xyz.pixelatedw.mineminenomi.renderers.morphs.ZoanMorphRenderer2;
 
-public class GomuMorphRenderer<T extends AbstractClientPlayerEntity, M extends MorphModel<?>> extends ZoanMorphRenderer<T, M> {
+public class GomuMorphRenderer<T extends LivingEntity, M extends MorphModel<T>> extends ZoanMorphRenderer2<T, M> {
     private final ResourceLocation[] textures;
     public GomuMorphRenderer(EntityRendererManager rendererManager, MorphInfo info, boolean smallHands, ResourceLocation... overlayTextures) {
-        super(rendererManager, info, smallHands);
+        super(rendererManager, info);
         if (info.getModel() == null) {
             this.addLayer(new BipedArmorLayer<>(this, new BipedModel<>(0.5F), new BipedModel<>(1.0F)));
         }
@@ -33,7 +35,7 @@ public class GomuMorphRenderer<T extends AbstractClientPlayerEntity, M extends M
     }
 
     @Override
-    protected void renderModel(AbstractClientPlayerEntity entity, MatrixStack matrixStack, int packedLight, IRenderTypeBuffer buffer, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    protected void renderModel(T entity, MatrixStack matrixStack, int packedLight, IRenderTypeBuffer buffer, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         super.renderModel(entity, matrixStack, packedLight, buffer, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
         matrixStack.pushPose();
         for (ResourceLocation texture : this.textures) {
@@ -42,8 +44,11 @@ public class GomuMorphRenderer<T extends AbstractClientPlayerEntity, M extends M
         matrixStack.popPose();
     }
 
-    public ResourceLocation getTextureLocation(AbstractClientPlayerEntity entity) {
-        return entity.getSkinTextureLocation();
+    public ResourceLocation getTextureLocation(T entity) {
+        if (entity instanceof AbstractClientPlayerEntity) {
+            return ((AbstractClientPlayerEntity) entity).getSkinTextureLocation();
+        }
+        return this.getOriginalRenderer().getTextureLocation(entity);
     }
 
     public static class Factory<T extends PlayerEntity> implements IRenderFactory<T> {

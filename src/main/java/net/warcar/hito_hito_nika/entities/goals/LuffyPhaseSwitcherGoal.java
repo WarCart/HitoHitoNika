@@ -11,7 +11,7 @@ public class LuffyPhaseSwitcherGoal extends TickedGoal<LuffyBoss> {
 
     @Override
     public boolean canUse() {
-        if (!GoalUtil.hasAliveTarget(this.entity)) {
+        if (!GoalUtil.hasAliveTarget(this.entity) || this.entity.isLastPhase()) {
             return false;
         } else if (this.entity.isFirstPhaseActive() && this.trySwitchToSecondPhase()) {
             this.entity.startSecondPhase();
@@ -19,16 +19,9 @@ public class LuffyPhaseSwitcherGoal extends TickedGoal<LuffyBoss> {
         } else if (this.entity.isSecondPhaseActive() && this.trySwitchToThirdPhase()) {
             this.entity.startThirdPhase();
             return true;
-        } else if (this.entity.isThirdPhaseActive() && this.trySwitchToLastPhase()) {
-            this.entity.startLastPhase();
-            return true;
         } else {
             return false;
         }
-    }
-
-    private boolean trySwitchToLastPhase() {
-        return !GoalUtil.hasHealthAbovePercentage(this.entity, 1) && this.entity.getChallengeInfo().isDifficultyUltimate();
     }
 
 
