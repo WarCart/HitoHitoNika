@@ -14,7 +14,7 @@ public class RedHawkProjectile extends TruePistolProjectile {
     public RedHawkProjectile(World world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
-        this.setDamage(70f);
+        this.setDamage(50f);
         this.setDamageSource(this.getDamageSource().setPhysical());
         this.setBlocksAffectedLimit(75);
         this.onBlockImpactEvent = this::onBlockImpactEvent;
