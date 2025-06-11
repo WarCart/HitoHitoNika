@@ -23,7 +23,7 @@ import xyz.pixelatedw.mineminenomi.renderers.morphs.ZoanMorphRenderer2;
 
 public class GomuMorphRenderer<T extends LivingEntity, M extends MorphModel<T>> extends ZoanMorphRenderer2<T, M> {
     private final ResourceLocation[] textures;
-    public GomuMorphRenderer(EntityRendererManager rendererManager, MorphInfo info, boolean smallHands, ResourceLocation... overlayTextures) {
+    public GomuMorphRenderer(EntityRendererManager rendererManager, MorphInfo info, ResourceLocation... overlayTextures) {
         super(rendererManager, info);
         if (info.getModel() == null) {
             this.addLayer(new BipedArmorLayer<>(this, new BipedModel<>(0.5F), new BipedModel<>(1.0F)));
@@ -53,12 +53,10 @@ public class GomuMorphRenderer<T extends LivingEntity, M extends MorphModel<T>> 
 
     public static class Factory<T extends PlayerEntity> implements IRenderFactory<T> {
         private MorphInfo info;
-        private boolean hasSmallHands;
         private ResourceLocation[] overlays = new ResourceLocation[0];
 
-        public Factory(MorphInfo info, boolean hasSmallHands) {
+        public Factory(MorphInfo info) {
             this.info = info;
-            this.hasSmallHands = hasSmallHands;
         }
 
         public Factory<T> setOverlays(ResourceLocation... overlays) {
@@ -67,7 +65,7 @@ public class GomuMorphRenderer<T extends LivingEntity, M extends MorphModel<T>> 
         }
 
         public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
-            return new GomuMorphRenderer(manager, this.info, this.hasSmallHands, this.overlays);
+            return new GomuMorphRenderer(manager, this.info, this.overlays);
         }
     }
 }

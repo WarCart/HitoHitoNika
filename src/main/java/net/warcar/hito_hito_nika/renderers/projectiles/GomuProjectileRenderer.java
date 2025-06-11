@@ -3,6 +3,7 @@ package net.warcar.hito_hito_nika.renderers.projectiles;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -12,9 +13,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.entities.LuffyBoss;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
-import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModRenderTypes;
@@ -73,6 +74,23 @@ public class GomuProjectileRenderer<E extends AbilityProjectileEntity, M extends
                 matrixStack.popPose();
             }
         }
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(AbilityProjectileEntity entity) {
+        ResourceLocation textureLocation = super.getTextureLocation(entity);
+        //HitoHitoNoMiNikaMod.LOGGER.info(textureLocation);
+        if (textureLocation != ModResources.BUSOSHOKU_HAKI_ARM && entity.getThrower() instanceof LuffyBoss) {
+            ResourceLocation texture = ((LuffyBoss) entity.getThrower()).getCurrentTexture();
+            //HitoHitoNoMiNikaMod.LOGGER.info(texture);
+            return texture;
+        }
+        return textureLocation;
+    }
+
+    @Override
+    public RenderType getRenderType() {
+        return null;
     }
 
     public static class Factory extends StretchingProjectileRenderer.Factory{

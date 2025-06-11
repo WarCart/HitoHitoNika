@@ -37,12 +37,7 @@ public class GearFourthSnakemanMorph extends MorphInfo {
 
     @OnlyIn(Dist.CLIENT)
     public IRenderFactory getRendererFactory(LivingEntity entity) {
-        boolean isSlim = false;
-        if (entity instanceof AbstractClientPlayerEntity) {
-            isSlim = ((AbstractClientPlayerEntity)entity).getModelName().equals("slim");
-        }
-
-        return new GomuMorphRenderer.Factory(this, isSlim).setOverlays(new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/models/gear_4_snakeman_overlay.png"));
+        return new GomuMorphRenderer.Factory(this).setOverlays(new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/models/gear_4_snakeman_overlay.png"));
     }
 
     public AkumaNoMiItem getDevilFruit() {
