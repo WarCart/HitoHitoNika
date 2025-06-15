@@ -12,6 +12,8 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
+import net.warcar.hito_hito_nika.init.GomuEntities;
+import net.warcar.hito_hito_nika.init.ModChallenges;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +39,8 @@ public class HitoHitoNoMiNikaMod
         GomuReviveEffect.register(bus);
         TrueMorphs.init();
         TrueGomuGomuNoMi.register();
+        ModChallenges.register(bus);
+        GomuEntities.register(bus);
         langMap.put("text.mineminenomi.too_weak", "You are to weak to use this ability");
         langMap.put("text.mineminenomi.too_heavy", "You are to heavy to use this ability");
         langMap.put("text.mineminenomi.requires_infusion", "You need to activate Hao Infusion to use this move");

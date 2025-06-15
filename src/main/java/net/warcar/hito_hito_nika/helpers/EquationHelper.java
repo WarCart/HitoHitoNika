@@ -1,7 +1,6 @@
 package net.warcar.hito_hito_nika.helpers;
 
 import net.minecraft.entity.LivingEntity;
-import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import xyz.pixelatedw.mineminenomi.api.enums.HakiType;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiDataCapability;
@@ -108,10 +107,10 @@ public class EquationHelper {
         String op = equation.substring(0, firstBracket);
         if (op.equalsIgnoreCase("n")) {
             String num = equation.substring(firstBracket + 1, equation.indexOf(")"));
-            HitoHitoNoMiNikaMod.LOGGER.info("Flat number: {} with equation {}", num, equation);
+            //HitoHitoNoMiNikaMod.LOGGER.info("Flat number: {} with equation {}", num, equation);
             return new ParseResult(3 + num.length(), Float.parseFloat(num));
         } else if (bonus.containsKey(op)) {
-            HitoHitoNoMiNikaMod.LOGGER.info("Remapped from bonus {}: {}", op, bonus.get(op));
+            //HitoHitoNoMiNikaMod.LOGGER.info("Remapped from bonus {}: {}", op, bonus.get(op));
             return new ParseResult(op.length() + 2, bonus.get(op));
         }
         Operator operator = operators.get(op);
@@ -134,7 +133,7 @@ public class EquationHelper {
             numbersArray[i] = numbers.get(i);
         }
         double value = operator.apply(entity, numbersArray);
-        HitoHitoNoMiNikaMod.LOGGER.info("returning {}: {} (equation is {})", op, value, equation);
+        //HitoHitoNoMiNikaMod.LOGGER.info("returning {}: {} (equation is {})", op, value, equation);
         return new ParseResult(currentPos + 1, value);
     }
 

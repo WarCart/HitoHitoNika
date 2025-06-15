@@ -17,6 +17,7 @@ import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.GomuFusenAbility;
 import net.warcar.hito_hito_nika.abilities.GomuMorphsAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
+import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.gomu.GomuGomuNoDawnWhipAbility;
@@ -47,11 +48,16 @@ import java.util.UUID;
 public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void onEntityHurt(LivingHurtEvent event) {
-		if (event.getEntityLiving() instanceof PlayerEntity) {
+		if (event.getEntityLiving().hasEffect(GomuReviveEffect.INSTANCE.get())) {
+			event.setCanceled(true);
+			event.setAmount(0);
+			return;
+		}
+		if (event.getEntityLiving() instanceof LivingEntity) {
 			DamageSource source = event.getSource();
 			Entity instantSource = source.getDirectEntity();
 			Entity trueSource = source.getEntity();
-			PlayerEntity attacked = (PlayerEntity) event.getEntityLiving();
+			LivingEntity attacked = event.getEntityLiving();
 			IDevilFruit props = DevilFruitCapability.get(attacked);
 			if (props.hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI) && !source.isMagic()) {
 				float reduction = 0.0F;

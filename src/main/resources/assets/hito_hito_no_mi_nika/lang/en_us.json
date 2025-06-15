@@ -29,6 +29,7 @@
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_dawn_pistol": "Gomu Gomu no Giant Dawn Pistol",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_dawn_stamp": "Gomu Gomu no Giant Dawn Stamp",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_dawn_stamp_gatling": "Gomu Gomu no Giant Dawn Stamp Gatling",
+	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_dawn_yari": "Gomu Gomu no Giant Dawn Yari",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_gatling": "Gomu Gomu no Giant Gatling",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_pistol": "Gomu Gomu no Giant Pistol",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_shell": "Gomu Gomu no Giant Shell",
@@ -116,7 +117,10 @@
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_twin_jet_culverin": "Gomu Gomu no Twin Jet Culverin",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_twin_rhino_stampede": "Gomu Gomu no Twin Rhino Stampede",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_yari": "Gomu Gomu no Yari",
+	"ability.hito_hito_no_mi_nika.strawhats": "Strawhats",
 	"ability.mineminenomi.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
+
+	"entity.hito_hito_no_mi_nika.luffy": "Luffy",
 
 	"text.mineminenomi.requires_infusion": "You need to activate Hao Infusion to use this move",
 	"text.mineminenomi.too_heavy": "You are to heavy to use this ability",

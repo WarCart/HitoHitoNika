@@ -13,10 +13,10 @@ import net.warcar.hito_hito_nika.models.KingBajrangGunModel;
 import net.warcar.hito_hito_nika.models.TrueEntityLegModel;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
+import net.warcar.hito_hito_nika.renderers.projectiles.GomuProjectileRenderer;
 import net.warcar.hito_hito_nika.renderers.projectiles.PythonProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.models.abilities.EntityArmModel;
 import xyz.pixelatedw.mineminenomi.renderers.abilities.AbilityProjectileRenderer;
-import xyz.pixelatedw.mineminenomi.renderers.abilities.StretchingProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 import xyz.pixelatedw.mineminenomi.wypi.WyRegistry;
 
@@ -71,28 +71,28 @@ public class NikaProjectiles {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void registerEntityRenderers(FMLClientSetupEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_KONG_GUN.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_BAJRANG_GUN.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel(), new EntityArmModel())).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_KONG_STAMP.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_3_KONG_GUN.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(75D, 75D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_3_KONG_STAMP.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(75D, 75D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel(), new TrueEntityLegModel())).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_ELEPHANT_GUN.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel(), new EntityArmModel())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel(), new EntityArmModel())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_PISTOL.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(3.1D, 3.1D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_BAZOOKA.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(3.1D, 3.1D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KONG_GUN.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_KONG_GUN.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_BAJRANG_GUN.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel(), new EntityArmModel())).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_3_KONG_GUN.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(75D, 75D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_3_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(75D, 75D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel(), new TrueEntityLegModel())).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_ELEPHANT_GUN.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel(), new EntityArmModel())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel(), new EntityArmModel())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_PISTOL.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(3.1D, 3.1D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_BAZOOKA.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(3.1D, 3.1D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KONG_GUN.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
 		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_JET_CULVERIN.get(), (new PythonProjectileRenderer.Factory(new EntityArmModel())).setScale(4.5D, 4.5D, 4.5));
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_LEO_BAZOOKA.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), (new StretchingProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_ELEPHANT_STAMP.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel(), new TrueEntityLegModel())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_GIGANT_YARI.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel(), new TrueEntityLegModel())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_STAMP.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(3.1D, 3.1D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_YARI.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(3.1D, 3.1D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KONG_STAMP.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_LEO_BAZOOKA.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), (new GomuProjectileRenderer.Factory(new EntityArmModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_ELEPHANT_STAMP.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel(), new TrueEntityLegModel())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_GIGANT_YARI.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel(), new TrueEntityLegModel())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_STAMP.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(3.1D, 3.1D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_YARI.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(3.1D, 3.1D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
 		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_JET_RHINO_SCHNEIDER.get(), (new PythonProjectileRenderer.Factory(new TrueEntityLegModel())).setScale(4.5D, 4.5D, 4.5));
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_RHINO_SCHNEIDER.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
-		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), (new StretchingProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_RHINO_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
 		if (WyHelper.isAprilFirst())
 			RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_BAJRANG_GUN.get(), (new AbilityProjectileRenderer.Factory(new KingBajrangGunModel())).setTexture(new ResourceLocation("hito_hito_no_mi_nika:textures/entities/king_bajrang_gun.png")));
 	}

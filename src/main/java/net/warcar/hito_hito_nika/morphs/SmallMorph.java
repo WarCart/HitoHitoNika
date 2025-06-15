@@ -30,12 +30,7 @@ public class SmallMorph extends MorphInfo {
 
     @OnlyIn(Dist.CLIENT)
     public IRenderFactory getRendererFactory(LivingEntity entity) {
-        boolean isSlim = false;
-        if (entity instanceof AbstractClientPlayerEntity) {
-            isSlim = ((AbstractClientPlayerEntity)entity).getModelName().equals("slim");
-        }
-
-        return new GomuMorphRenderer.Factory(this, isSlim);
+        return new GomuMorphRenderer.Factory(this);
     }
 
     @OnlyIn(Dist.CLIENT)
