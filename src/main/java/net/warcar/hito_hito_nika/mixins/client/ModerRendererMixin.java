@@ -1,7 +1,6 @@
 package net.warcar.hito_hito_nika.mixins.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.vector.Vector3f;
 import net.warcar.hito_hito_nika.renderers.IModelRendererMixin;

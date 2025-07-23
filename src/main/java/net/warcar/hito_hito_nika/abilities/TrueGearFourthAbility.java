@@ -153,6 +153,9 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 
 	public void duringContinuity(LivingEntity player, IAbility ability) {
 		float passiveTimer = this.continuousComponent.getContinueTime();
+		if (this.isTankman()) {
+			player.addEffect(new EffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), 2, 1, false, false));
+		}
 		if (passiveTimer % 2 == 0 && this.isBoundman()) {
 			WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), player, player.getX(), player.getY() + 1.0D, player.getZ());
 		}
