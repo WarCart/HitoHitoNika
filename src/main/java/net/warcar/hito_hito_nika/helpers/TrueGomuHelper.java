@@ -1,10 +1,13 @@
 package net.warcar.hito_hito_nika.helpers;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -25,8 +28,6 @@ import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
-import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
-import xyz.pixelatedw.mineminenomi.init.ModSounds;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 import xyz.pixelatedw.mineminenomi.wypi.WyRegistry;
 
@@ -34,12 +35,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TrueGomuHelper {
+	public static final TranslationTextComponent TOO_HEAVY = getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
 	private static final Object[] EMPTY_ARGS = new Object[0];
+	public static final IDataSerializer<Vector3d> VECTOR_SERIALIZER = new IDataSerializer<Vector3d>() {
+		@Override
+		public void write(PacketBuffer buffer, Vector3d vector) {
+			buffer.writeDouble(vector.x);
+			buffer.writeDouble(vector.y);
+			buffer.writeDouble(vector.z);
+		}
+
+		@Override
+		public Vector3d read(PacketBuffer buffer) {
+			double x = buffer.readDouble();
+			double y = buffer.readDouble();
+			double z = buffer.readDouble();
+			return new Vector3d(x, y, z);
+		}
+
+		@Override
+		public Vector3d copy(Vector3d vector) {
+			return new Vector3d(vector.x, vector.y, vector.z);
+		}
+	};
+
 	public static <A extends Ability> boolean canActivateGear(IAbilityData props, AbilityCore<A> gear) {
 		return !(
 				(gear.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
 				|| (gear.equals(TrueGearThirdAbility.INSTANCE) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
-				|| (gear.equals(TrueGearFourthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasAbilityActive(props, GomuFusenAbility.INSTANCE)))
+				|| (gear.equals(TrueGearFourthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props)))
 				|| (gear.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
 	}
 
@@ -76,6 +100,11 @@ public class TrueGomuHelper {
 	public static boolean hasGearFourthSnakemanActive(IAbilityData props) {
 		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 		return ability != null && ability.isContinuous() && ability.isSnakeman();
+	}
+
+	public static boolean hasGearFourthTankmanActive(IAbilityData props) {
+		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		return ability != null && ability.isContinuous() && ability.isTankman();
 	}
 
 	public static boolean hasPartialGearFourthActive(IAbilityData props) {
@@ -139,14 +168,18 @@ public class TrueGomuHelper {
 	}
 
 
+    @SafeVarargs
+    public static IFormattableTextComponent[] registerDescriptionText(String abilityName, Pair<String, Object[]>... pairs) {
+        return registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, abilityName, pairs);
+    }
 
-	@SafeVarargs
+    @SafeVarargs
 	public static IFormattableTextComponent[] registerDescriptionText(String modid, String abilityName, Pair<String, Object[]>... pairs) {
 		IFormattableTextComponent[] components = new IFormattableTextComponent[pairs.length];
 
 		for(int i = 0; i < pairs.length; ++i) {
 			String key = String.format("ability.%s.%s.description.%s", modid, abilityName, i);
-			key = WyRegistry.registerName(key, pairs[i].getKey());
+			key = registerName(key, pairs[i].getKey());
 			Object[] args = pairs[i].getValue();
 			if (args != null) {
 				for(int j = 0; j < args.length; ++j) {
@@ -168,6 +201,10 @@ public class TrueGomuHelper {
 		return components;
 	}
 
+	private static String registerName(String key, String localizedName) {
+		HitoHitoNoMiNikaMod.getLangMap().put(key, localizedName);
+		return key;
+	}
 
 
 	private static IFormattableTextComponent mentionEntry(IForgeRegistryEntry<?> entry) {
@@ -196,5 +233,9 @@ public class TrueGomuHelper {
 				AbilityHelper.setDeltaMovement(entity, (vec.x * speed * 0.5F), entity.getDeltaMovement().y, (vec.z * speed * 0.5F));
 			}
 		};
+	}
+
+	static {
+		DataSerializers.registerSerializer(VECTOR_SERIALIZER);
 	}
 }

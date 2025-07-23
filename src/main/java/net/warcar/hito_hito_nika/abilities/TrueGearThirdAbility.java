@@ -12,6 +12,7 @@ import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.abilities.haki.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
@@ -56,6 +57,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 	public TrueGearThirdAbility(AbilityCore<TrueGearThirdAbility> core) {
 		super(core);
 		this.isNew = true;
+		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "gear_third"));
 		modeComponent = new AltModeComponent<>(this, Mode.class, Mode.NORMAL);
 		this.modeComponent.addChangeModeEvent(this::onModeChange);
 		this.continuousComponent = new ContinuousComponent(this, true);
@@ -172,7 +174,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 
 	protected static boolean canUnlock(LivingEntity user) {
 		IDevilFruit fruit = DevilFruitCapability.get(user);
-		return EntityStatsCapability.get(user).getDoriki() * .01d >= 20d && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
+		return EntityStatsCapability.get(user).getDoriki() >= 2000d && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	public boolean isGiant() {

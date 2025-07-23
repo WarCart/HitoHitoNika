@@ -12,6 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
+import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.renderers.layers.TrueGomuSmokeLayer;
 
 import java.util.Map;
@@ -33,6 +34,7 @@ public class ModSetup {
                 PlayerRenderer playerRenderer = entry.getValue();
                 playerRenderer.addLayer(new TrueGomuSmokeLayer<>(playerRenderer));
             }
+            GomuAnimations.clientInit();
         });
     }
 }

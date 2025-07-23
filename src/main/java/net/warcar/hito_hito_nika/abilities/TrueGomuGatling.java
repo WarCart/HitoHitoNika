@@ -77,8 +77,9 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	private float projDamageReduction = 0.8F;
 	private int projectileSpace = 2;
 
-	public TrueGomuGatling(AbilityCore core) {
+	public TrueGomuGatling(AbilityCore<TrueGomuGatling> core) {
 		super(core);
+		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 		this.addTickEvent(this::updateModes);
 		this.addUseEvent(this::onStartContinuityEvent);
 		this.continuousComponent = new ContinuousComponent(this);
@@ -172,7 +173,6 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 				projDamageReduction = 0.6F;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
 				projectile = new JetCulverinProjectile(entity.level, entity, this, 7f, 5);
-				projectile.setKnockbackStrength(1);
 				speed = 7F;
 				projectileSpace = 2;
 				projDamageReduction = 0.4F;
@@ -207,39 +207,39 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 		double dif;
 		if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
 			this.leap = 1;
-			dif = 5;
+			dif = 1;
 		} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearSecondActive(props) && HakiHelper.hasInfusionActive(player) && TrueGomuHelper.hasHakiEmissionActive(props)) {
 			this.leap = 1;
-			dif = 50;
+			dif = 1;
 		} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
 			this.leap = 1;
-			dif = 40;
+			dif = 1;
 		} else if (TrueGomuHelper.hasGearFifthActive(props)) {
 			this.leap = 0.25;
 			dif = 2;
 		} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasInfusionActive(player)) {
 			this.leap = 20;
-			dif = 70;
+			dif = 2;
 		} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 			this.leap = 40;
-			dif = 70;
+			dif = 2;
 		} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
 			this.leap = 1;
-			dif = 20;
+			dif = 1;
 		} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props) && HakiHelper.hasInfusionActive(player)) {
 			this.leap = 1;
-			dif = 50;
+			dif = 3;
 		} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
 			this.leap = 1;
-			dif = 20;
+			dif = 2.5;
 		} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 			this.leap = 2;
-			dif = 30;
+			dif = 1;
 		} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 			this.leap = 0.2d;
-			dif = 10;
+			dif = 1;
 		} else {
-			dif = 5;
+			dif = 1;
 			this.leap = 0.5;
 		}
 		double time = EquationHelper.parseEquation(CommonConfig.INSTANCE.getGatlingLength(), player, getBonusData(dif)).getValue();

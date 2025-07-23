@@ -14,6 +14,7 @@ import net.warcar.hito_hito_nika.models.TrueEntityLegModel;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import net.warcar.hito_hito_nika.renderers.projectiles.GomuProjectileRenderer;
+import net.warcar.hito_hito_nika.renderers.projectiles.MolePistolRenderer;
 import net.warcar.hito_hito_nika.renderers.projectiles.PythonProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.models.abilities.EntityArmModel;
 import xyz.pixelatedw.mineminenomi.renderers.abilities.AbilityProjectileRenderer;
@@ -66,6 +67,8 @@ public class NikaProjectiles {
 
 	public static final RegistryObject<EntityType<RhinoRexSchneiderProjectile>> GOMU_GOMU_NO_RHINO_REX_SCHNEIDER = WyRegistry.registerEntityType("Gomu Gomu no Rhino Rex Schneider", () -> WyRegistry.createEntityType(RhinoRexSchneiderProjectile::new).sized(5F, 5F).build("mineminenomi:gomu_gomu_no_rhino_rex_schneider"));
 
+	public static final RegistryObject<EntityType<MolePistolProjectile>> GOMU_GOMU_NO_MOLE_PISTOL = WyRegistry.registerEntityType("Gomu Gomu no Mole Pistol", () -> WyRegistry.createEntityType(MolePistolProjectile::new).sized(1.25f, 2.25f).build("meh"));
+
 	public static final RegistryObject<EntityType<KingBajrangGunProjectile>> GOMU_GOMU_NO_KING_BAJRANG_GUN = WyHelper.isAprilFirst() ? WyRegistry.registerEntityType("Gomu Gomu no King Bajrang Gun", () -> WyRegistry.createEntityType(KingBajrangGunProjectile::new).sized(0.5F, 0.5F).build("mineminenomi:gomu_gomu_no_king_bajrang_gun")) : null;
 
 	@OnlyIn(Dist.CLIENT)
@@ -93,6 +96,7 @@ public class NikaProjectiles {
 		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_JET_RHINO_SCHNEIDER.get(), (new PythonProjectileRenderer.Factory(new TrueEntityLegModel())).setScale(4.5D, 4.5D, 4.5));
 		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_RHINO_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(4.5D, 4.5D).setPlayerTexture());
 		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory(new TrueEntityLegModel())).setStretchScale(25D, 25D, 10D).setPlayerTexture());
+		RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_MOLE_PISTOL.get(), MolePistolRenderer::new);
 		if (WyHelper.isAprilFirst())
 			RenderingRegistry.registerEntityRenderingHandler(GOMU_GOMU_NO_KING_BAJRANG_GUN.get(), (new AbilityProjectileRenderer.Factory(new KingBajrangGunModel())).setTexture(new ResourceLocation("hito_hito_no_mi_nika:textures/entities/king_bajrang_gun.png")));
 	}

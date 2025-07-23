@@ -8,6 +8,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import xyz.pixelatedw.mineminenomi.ModMain;
@@ -72,6 +73,7 @@ public class TrueGomuBazooka extends Ability {
 
 	public TrueGomuBazooka(AbilityCore<TrueGomuBazooka> core) {
 		super(core);
+		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 		this.addTickEvent(this::updateModes);
 		this.chargeComponent = (new ChargeComponent(this)).addEndEvent(this::onEndCharging);
 		this.projectileComponent = new ProjectileComponent(this, this::createProjectile);
@@ -85,7 +87,9 @@ public class TrueGomuBazooka extends Ability {
 
 	private void onUse(LivingEntity entity, IAbility abl) {
 		this.chargeComponent.startCharging(entity, this.chargeTime);
-		this.animationComponent.start(entity, ModAnimations.GOMU_BAZOOKA);
+		if (!TrueGomuHelper.hasGearFourthBoundmanActive(AbilityDataCapability.get(entity))) {
+            this.animationComponent.start(entity, GomuAnimations.BAZOOKA, this.chargeTime);
+        }
 		entity.addEffect(new EffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), this.chargeTime, 0));
 	}
 

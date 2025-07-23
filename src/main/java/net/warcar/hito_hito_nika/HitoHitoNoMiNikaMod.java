@@ -36,13 +36,12 @@ public class HitoHitoNoMiNikaMod
         bus.addListener(this::processIMC);
         bus.addListener(this::doClientStuff);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
-        GomuReviveEffect.register(bus);
+        GomuReviveEffect.register();
         TrueMorphs.init();
-        TrueGomuGomuNoMi.register();
+        TrueGomuGomuNoMi.register(bus);
         ModChallenges.register(bus);
         GomuEntities.register(bus);
         langMap.put("text.mineminenomi.too_weak", "You are to weak to use this ability");
-        langMap.put("text.mineminenomi.too_heavy", "You are to heavy to use this ability");
         langMap.put("text.mineminenomi.requires_infusion", "You need to activate Hao Infusion to use this move");
         MinecraftForge.EVENT_BUS.register(this);
     }

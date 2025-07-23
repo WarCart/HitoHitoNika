@@ -79,8 +79,9 @@ public class TrueGomuPistol extends Ability {
 	private float speed = 2;
 	private float charge = 0;
 
-	public TrueGomuPistol(AbilityCore core) {
+	public TrueGomuPistol(AbilityCore<TrueGomuPistol> core) {
 		super(core);
+		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 		this.addTickEvent(this::updateModes);
 		chargeComponent = new ChargeComponent(this);
 		projectileComponent = new ProjectileComponent(this, this::createProjectile);

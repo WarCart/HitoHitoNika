@@ -5,6 +5,7 @@ import net.minecraft.client.audio.TickableSound;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -89,7 +90,7 @@ public class TrueGearFifthAbility extends Ability {
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
 			morphs.updateModes();
-		if (player instanceof ClientPlayerEntity) {
+		if (player instanceof PlayerEntity && player.level.isClientSide) {
 			this.startPlayingDrums((ClientPlayerEntity) player, true);
 		}
 		this.statsComponent.applyModifiers(player);
@@ -105,7 +106,7 @@ public class TrueGearFifthAbility extends Ability {
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
 			morphs.updateModes();
-		if (player instanceof ClientPlayerEntity) {
+		if (player instanceof PlayerEntity && player.level.isClientSide) {
 			this.startPlayingDrums((ClientPlayerEntity) player, false);
 		}
 		this.statsComponent.removeModifiers(player);
@@ -113,7 +114,7 @@ public class TrueGearFifthAbility extends Ability {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() * .003d >= 25d && DevilFruitCapability.get(user).hasAwakenedFruit() && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
+		return DevilFruitCapability.get(user).hasAwakenedFruit() && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -129,7 +130,7 @@ public class TrueGearFifthAbility extends Ability {
 
 	static {
 		INSTANCE = new AbilityCore.Builder<>("Gear Fifth", AbilityCategory.DEVIL_FRUITS, TrueGearFifthAbility::new).setUnlockCheck(TrueGearFifthAbility::canUnlock)
-				.addDescriptionLine("Awakening ability, that makes you insanely powerful").build();
+				.addDescriptionLine("Awakening ability, that makes you insanely powerful").addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, ChangeStatsComponent.getTooltip()).build();
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("5fc1a28f-7e59-44bf-9d7a-36953e9c700d"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Attack Damage Modifier", 20.0, AttributeModifier.Operation.ADDITION);
 		DAMAGE_REDUCTION_MODIFIER = new AbilityAttributeModifier(UUID.fromString("2efdb212-33d0-4fad-b806-4d39d7091ffd"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Resistance Damage Modifier", 0.5, AttributeModifier.Operation.ADDITION);
 		REGEN = new AbilityAttributeModifier(UUID.fromString("e6a409f2-5c6a-409e-a9f3-5b74899d8129"), TrueGearFifthAbility.INSTANCE, "Gear Fifth Regen Modifier", 5, AttributeModifier.Operation.MULTIPLY_TOTAL);

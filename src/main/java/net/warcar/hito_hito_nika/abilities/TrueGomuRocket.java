@@ -38,9 +38,10 @@ public class TrueGomuRocket extends Ability {
 	private final ProjectileComponent projectileComponent;
 	private final HitTrackerComponent trackerComponent;
 
-	public TrueGomuRocket(AbilityCore core) {
+	public TrueGomuRocket(AbilityCore<TrueGomuRocket> core) {
 		super(core);
 		this.isNew = true;
+		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Rocket"));
 		this.continuousComponent = new ContinuousComponent(this);
 		this.addTickEvent(this::updateModes);
 		this.addUseEvent(this::onStartContinuityEvent);
@@ -62,7 +63,7 @@ public class TrueGomuRocket extends Ability {
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
 		if (TrueGomuHelper.hasGigantActive(props) || (TrueGomuHelper.hasGearFourthActive(props) && !TrueGomuHelper.hasPartialGearFourthActive(props))) {
-			player.sendMessage(new TranslationTextComponent("text.mineminenomi.too_heavy"), Util.NIL_UUID);
+			player.sendMessage(TrueGomuHelper.TOO_HEAVY, Util.NIL_UUID);
 			return;
 		}
 		this.continuousComponent.startContinuity(player, -1);

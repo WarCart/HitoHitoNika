@@ -8,14 +8,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.GomuFusenAbility;
 import net.warcar.hito_hito_nika.abilities.GomuMorphsAbility;
+import net.warcar.hito_hito_nika.abilities.TrueBouncyAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
@@ -26,6 +30,7 @@ import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.events.ability.AbilityUseEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.DorikiEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.HakiExpEvent;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.ItemsHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
@@ -39,9 +44,11 @@ import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.PopGreenProjectile
 import xyz.pixelatedw.mineminenomi.entities.projectiles.hitodaibutsu.ImpactBlastProjectile;
 import xyz.pixelatedw.mineminenomi.events.abilities.AbilityValidationEvents;
 import xyz.pixelatedw.mineminenomi.init.*;
+import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID)
@@ -140,10 +147,19 @@ public class TrueGomuPassiveEffects {
 			if (morphs != null)
 				morphs.updateModes();
 		}
-		if (event.getAbility().getCore() == GomuGomuNoDawnWhipAbility.INSTANCE) {
-			event.getAbility().getComponent(ModAbilityKeys.COOLDOWN).ifPresent(cooldown -> {
-				cooldown.getBonusManager().addBonus(UUID.fromString("14d86583-ffb8-48ae-8088-9bb9a8f7c6de"), "Rebalanced cooldown", BonusOperation.ADD, 160);
-			});
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onFall(LivingFallEvent event) {
+		LivingEntity entity = event.getEntityLiving();
+		if (event.getDistance() < 3) {
+			return;
+		}
+		List<LivingEntity> entities = WyHelper.getNearbyLiving(entity.position(), entity.level, 5, ModEntityPredicates.getFriendlyFactions(entity).and(ent -> ent instanceof LivingEntity && TrueGomuHelper.hasGearFifthActive(AbilityDataCapability.get((LivingEntity) ent))));
+		if (!entities.isEmpty()) {
+			Vector3d speed = new Vector3d(entity.getDeltaMovement().x, event.getDistance() / 15, entity.getDeltaMovement().z);
+			AbilityHelper.setDeltaMovement(entity, speed);
+			event.setCanceled(true);
 		}
 	}
 }

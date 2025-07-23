@@ -9,6 +9,8 @@ public class TrueMorphs {
 
     public static final RegistryObject<MorphInfo> BOUNDMAN = WyRegistry.registerMorph("gear_4_boundman", GearFourthBoundmanMorph::new);
 
+    public static final RegistryObject<MorphInfo> TANKMAN = WyRegistry.registerMorph("gear_4_tankman", GearFourthTankmanMorph::new);
+
     public static final RegistryObject<MorphInfo> SNAKEMAN = WyRegistry.registerMorph("gear_4_snakeman", GearFourthSnakemanMorph::new);
 
     public static final RegistryObject<MorphInfo> FUSEN = WyRegistry.registerMorph("fusen", FusenMorph::new);

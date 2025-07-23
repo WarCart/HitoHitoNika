@@ -54,6 +54,10 @@ public class GomuFusenAbility extends Ability {
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
 			morphs.updateModes();
+		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		if (g4 != null) {
+			g4.setBoundman(player);
+		}
 	}
 
 	private void start(LivingEntity entity, IAbility ability) {
@@ -69,6 +73,10 @@ public class GomuFusenAbility extends Ability {
 		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, new AbilityAttributeModifier(UUID.fromString("2a0bf464-0873-11ef-b635-325096b39f47"), INSTANCE, "Fusen Resistance Damage Modifier", TrueGomuHelper.hasGearThirdActive(props) ? 0.5 : 0.25, Operation.ADDITION));
 		if (morphs != null)
 			morphs.updateModes();
+		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		if (g4 != null) {
+			g4.setTankman(player);
+		}
 	}
 
 	static {

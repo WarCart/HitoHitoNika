@@ -6,11 +6,18 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.data.entity.projectilesextra.IProjectileExtras;
+import xyz.pixelatedw.mineminenomi.data.entity.projectilesextra.ProjectileExtrasCapability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModEntityPredicates;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
@@ -25,6 +32,7 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
     protected static final DataParameter<Integer> LAYER = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
     protected Ability master;
     protected float speed = 0f;
+    private boolean sneakyStatic;
 
     public PythonProjectile(EntityType type, World world) {
         super(type, world);
@@ -76,14 +84,39 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
 
     public abstract PythonProjectile getNew();
 
+    @Override
+    public void onModHit(RayTraceResult hit) {
+        if (this.isStatic()) {
+            return;
+        }
+        if (hit instanceof EntityRayTraceResult && ((EntityRayTraceResult) hit).getEntity() instanceof AbilityProjectileEntity) {
+            return;
+        }
+        boolean wasInfused = false;
+        IProjectileExtras extras = ProjectileExtrasCapability.get(this);
+        if (extras.isProjectileHaoshokuInfused()) {
+            wasInfused = true;
+            extras.setProjectileHaoshokuInfused(false);
+        }
+        super.onModHit(hit);
+        if (wasInfused) {
+            extras.setProjectileHaoshokuInfused(true);
+        }
+    }
+
     public void tick() {
-        if (this.getLife() <= 0 && !this.isStatic()) {
+        if (!this.level.isClientSide() && this.master != null) {
+            Optional<ContinuousComponent> component = this.master.getComponent(ModAbilityKeys.CONTINUOUS);
+            if (component.isPresent() && !component.get().isContinuous()) {
+                this.remove();
+                return;
+            }
+        }
+        if (this.getLife() <= 0 && !this.isStatic() && !this.level.isClientSide) {
             if (this.getThrower() == null || this.getLayer() == 0) {
                 this.remove();
                 return;
             }
-            PythonProjectile projectile = this.getNew();
-            projectile.setDamage(this.getDamage());
             Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getThrower().position(), this.level, 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getThrower())).stream().min(Comparator.comparing(this::distanceTo));
             if (!closest.isPresent() && this.getMaxLife() == 5) {
                 super.tick();
@@ -93,29 +126,34 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
                 super.tick();
                 return;
             } else {
+                PythonProjectile projectile = this.getNew();
                 this.setStatic(true);
                 this.setMaxLife(100000000);
+                this.setPassThroughBlocks();
+                LivingEntity entity = closest.get();
+                Vector3d vec = this.position().vectorTo(entity.position());
+                projectile.setDamage(this.getDamage());
+                projectile.shootFromRotation(this, 0, 0, 0, 0, 0);
+                projectile.setDeltaMovement(vec.normalize().scale(this.speed));
+                this.level.addFreshEntity(projectile);
+                this.setNext(projectile);
+                projectile.setPrev(this);
+                projectile.setPosAndOldPos(this.getX(), this.getY(), this.getZ());
+                this.setDeltaMovement(0, 0, 0);
             }
-            LivingEntity entity = closest.get();
-            Vector3d vec = this.position().vectorTo(entity.position());
-            projectile.shootFromRotation(this, 0, 0, 0, 0, 0);
-            projectile.setDeltaMovement(vec.normalize().scale(this.speed));
-            this.onEntityImpactEvent = (ent) -> {};
-            this.level.addFreshEntity(projectile);
-            this.setNext(projectile);
-            projectile.setPrev(this);
-            projectile.setPosAndOldPos(this.getX(), this.getY(), this.getZ());
-            this.setDeltaMovement(0, 0, 0);
-        } else if (this.isStatic() && (this.getNext() == null || !this.getNext().isAlive())) {
-            this.remove();
+        }
+        if (this.isStatic()) {
+            if ((this.getNext() == null || !this.getNext().isAlive())) {
+                this.remove();
+            }
+            return;
         }
         super.tick();
-        if (this.isStatic() && this.getNext() != null && this.getNext().isAlive()) {
+        if (this.getNext() != null && this.getNext().isAlive()) {
             Entity prev = this.getPrev();
             if (prev == null) {
                 prev = this.getThrower();
             }
-            assert prev != null;
             Vector3d vec = prev.position().vectorTo(this.position());
             float f = MathHelper.sqrt(getHorizontalDistanceSqr(vec));
             this.xRot = (float)(MathHelper.atan2(vec.y, f) * (double)(180F / (float)Math.PI));
@@ -126,11 +164,13 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
     }
 
     protected void setStatic(boolean b) {
-        this.entityData.set(IS_STATIC, b);
+        this.sneakyStatic = b;
+        //this.entityData.set(IS_STATIC, b);
     }
 
     protected boolean isStatic() {
-        return this.entityData.get(IS_STATIC);
+        return sneakyStatic;
+        //return this.entityData.get(IS_STATIC);
     }
 
     protected int getLayer() {

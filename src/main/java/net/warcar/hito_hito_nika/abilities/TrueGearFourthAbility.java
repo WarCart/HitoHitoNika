@@ -22,6 +22,7 @@ import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiFullBodyHardeningAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
@@ -74,7 +75,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	public TrueGearFourthAbility(AbilityCore<TrueGearFourthAbility> core) {
 		super(core);
 		this.isNew = true;
-		this.setDisplayName(new TranslationTextComponent("ability.mineminenomi.gear_fourth"));
+		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "gear_fourth"));
 		statsComponent = new ChangeStatsComponent(this);
 		modeComponent = new AltModeComponent<>(this, Mode.class, Mode.BOUNDMAN);
 		modeComponent.addChangeModeEvent(this::changeMode);
@@ -124,6 +125,9 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	private void onStartContinuity(LivingEntity player, TrueGearFourthAbility ability) {
+		if (!this.modeComponent.getCurrentMode().canUnlock.test(player)) {
+			this.modeComponent.revertToDefault(player);
+		}
 		IAbilityData props = AbilityDataCapability.get(player);
 		float time = (float) EquationHelper.parseEquation(net.warcar.hito_hito_nika.config.CommonConfig.INSTANCE.getG4Length(), player, new HashMap<>()).getValue();
 		if (time >= 500) {
@@ -241,7 +245,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() * .005d >= 25d && HakiDataCapability.get(user).getBusoshokuHakiExp() > HakiHelper.getBusoshokuFullBodyExpNeeded(user) && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
+		return EntityStatsCapability.get(user).getDoriki() >= 5000d && HakiDataCapability.get(user).getBusoshokuHakiExp() > HakiHelper.getBusoshokuFullBodyExpNeeded(user) && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	public Mode getModeComponent() {
@@ -268,6 +272,10 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 
 	public boolean isBoundman() {
 		return this.getModeComponent() == Mode.BOUNDMAN;
+	}
+
+	public boolean isTankman() {
+		return this.getModeComponent() == Mode.TANKMAN;
 	}
 
 	public boolean isPartial() {
@@ -312,6 +320,10 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		this.modeComponent.setMode(entity, Mode.BOUNDMAN);
 	}
 
+	public void setTankman(LivingEntity entity) {
+		this.modeComponent.setMode(entity, Mode.TANKMAN);
+	}
+
 	public void setPartial(LivingEntity entity) {
 		this.modeComponent.setMode(entity, Mode.PARTIAL);
 	}
@@ -319,18 +331,22 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	public enum Mode {
 		BOUNDMAN,
 		SNAKEMAN,
-		TANKMAN(Predicates.alwaysFalse()),
-		PARTIAL(e -> DevilFruitCapability.get(e).hasAwakenedFruit());
+		TANKMAN(Mode::hasFusen),
+		PARTIAL(e -> DevilFruitCapability.get(e).hasAwakenedFruit() && !hasFusen(e));
 
         private final Predicate<LivingEntity> canUnlock;
 
         Mode() {
-			this(Predicates.alwaysTrue());
+			this(e -> !hasFusen(e));
 		}
 
 		Mode(Predicate<LivingEntity> canUnlock) {
             this.canUnlock = canUnlock;
         }
+
+		private static boolean hasFusen(LivingEntity e) {
+			return TrueGomuHelper.hasAbilityActive(AbilityDataCapability.get(e), GomuFusenAbility.INSTANCE);
+		}
 
 		public Mode next() {
 			return values()[(this.ordinal() + 1) % values().length];

@@ -12,6 +12,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.projectiles.KingBajrangGunProjectile;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
@@ -20,10 +21,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.PoolComponent;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceType;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
@@ -36,6 +34,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiDataCapability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
+import xyz.pixelatedw.mineminenomi.init.ModAnimations;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 public class GomuBulletAbility extends Ability {
@@ -84,6 +83,7 @@ public class GomuBulletAbility extends Ability {
 		}
 	};
 	private final PoolComponent poolComponent = new PoolComponent(this, ModAbilityPools.GRAB_ABILITY);
+	private final AnimationComponent animationComponent = new AnimationComponent(this);
 	private float chargeTime = 0;
 	private float cooldown = 2;
 	private float speed = 2.5f;
@@ -91,10 +91,10 @@ public class GomuBulletAbility extends Ability {
 
 	public GomuBulletAbility(AbilityCore<GomuBulletAbility> core) {
 		super(core);
-		this.setDisplayIcon(TrueGomuPistol.INSTANCE);
+		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 		this.projectileComponent = new ProjectileComponent(this, this::createProjectile);
 		this.chargeComponent = new ChargeComponent(this, false);
-		this.addComponents(chargeComponent, projectileComponent, trueScreamComponent, poolComponent);
+		this.addComponents(chargeComponent, projectileComponent, trueScreamComponent, poolComponent, animationComponent);
 		this.addTickEvent(this::updateModes);
 		this.chargeComponent.addTickEvent(this::duringContinuityEvent);
 		this.chargeComponent.addEndEvent(this::beforeContinuityStopEvent);
@@ -107,9 +107,15 @@ public class GomuBulletAbility extends Ability {
 	}
 
 	private void onStart(LivingEntity entity, IAbility iAbility) {
-		if (TrueGomuHelper.hasGearFifthActive(AbilityDataCapability.get(entity))) {
+		IAbilityData props = AbilityDataCapability.get(entity);
+		if (TrueGomuHelper.hasGearFifthActive(props)) {
 			Vector3d movement = entity.getDeltaMovement();
 			AbilityHelper.setDeltaMovement(entity, movement.x, 3, movement.z);
+		}
+		if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
+			this.animationComponent.start(entity, ModAnimations.BODY_ROTATION_WIDE_ARMS, (int) (this.chargeTime * 20));
+		} else if (!TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
+			this.animationComponent.start(entity, GomuAnimations.BULLET, (int) (this.chargeTime * 20));
 		}
 	}
 

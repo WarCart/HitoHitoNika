@@ -56,6 +56,8 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 				return TrueMorphs.SNAKEMAN.get();
 			} else if (g4.isBoundman()) {
 				return TrueMorphs.BOUNDMAN.get();
+			} else if (g4.isTankman()) {
+				return TrueMorphs.TANKMAN.get();
 			}
 		} else if (TrueGomuHelper.hasGigantActive(props)) {
 			return TrueMorphs.GIANT.get();

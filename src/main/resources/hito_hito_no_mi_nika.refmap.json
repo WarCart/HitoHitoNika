@@ -1,0 +1,8 @@
+{
+  "mappings": {
+    "net/warcar/hito_hito_nika/mixins/client/ModelRendererMixin": {
+      "translateAndRotate": "func_228307_a_(Lcom/mojang/blaze3d/matrix/MatrixStack;)V",
+      "copyFrom": "func_217177_a(Lnet/minecraft/client/renderer/model/ModelRenderer;)V"
+    }
+  }
+}

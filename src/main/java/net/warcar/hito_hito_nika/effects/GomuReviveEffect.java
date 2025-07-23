@@ -65,6 +65,6 @@ public class GomuReviveEffect extends ModEffect {
         }
     }
 
-    public static void register(IEventBus eventBus) {
+    public static void register() {
     }
 }
