@@ -1,15 +1,13 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import net.minecraft.block.SlimeBlock;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
-import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.abilities.NoFallDamageAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -25,6 +23,7 @@ public class TrueBouncyAbility extends NoFallDamageAbility {
 
     public TrueBouncyAbility(AbilityCore<TrueBouncyAbility> ability) {
         super(ability);
+        this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Bouncy"));
         super.damageTakenComponent.addOnAttackEvent(this::onDamageTaken);
         super.addDuringPassiveEvent(this::duringPassiveEvent);
     }

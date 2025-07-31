@@ -14,14 +14,14 @@ import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
-public class MolePistolProjectile extends AbilityProjectileEntity {
-    private static final DataParameter<Vector3d> TARGET_POS = EntityDataManager.defineId(MolePistolProjectile.class, TrueGomuHelper.VECTOR_SERIALIZER);
+public class GomuGomuNoMoguraPistolProjectile extends AbilityProjectileEntity {
+    private static final DataParameter<Vector3d> TARGET_POS = EntityDataManager.defineId(GomuGomuNoMoguraPistolProjectile.class, TrueGomuHelper.VECTOR_SERIALIZER);
 
-    public MolePistolProjectile(EntityType type, World world) {
+    public GomuGomuNoMoguraPistolProjectile(EntityType type, World world) {
         super(type, world);
     }
 
-    public MolePistolProjectile(World world, LivingEntity player) {
+    public GomuGomuNoMoguraPistolProjectile(World world, LivingEntity player) {
         super(NikaProjectiles.GOMU_GOMU_NO_MOLE_PISTOL.get(), world, player, MoguraPistolAbility.INSTANCE);
         this.setDamage(50.0F);
         this.setMaxLife(8);

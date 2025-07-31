@@ -132,7 +132,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		float time = (float) EquationHelper.parseEquation(net.warcar.hito_hito_nika.config.CommonConfig.INSTANCE.getG4Length(), player, new HashMap<>()).getValue();
 		if (time >= 500) {
 			time = -1;
-		} if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
+		} if (!TrueGomuHelper.canActivateGear(props, this)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
 		} else if (TrueGomuHelper.hasGearFifthActive(props) && ability.isSnakeman()) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
@@ -289,6 +289,10 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		ARMOR_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_ARMOR_UUID, INSTANCE, "Gear Fourth Armor Modifier", 10.0D, Operation.ADDITION);
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_STRENGTH_UUID, INSTANCE, "Gear Fourth Attack Damage Modifier", 15.0D, Operation.ADDITION);
 		DAMAGE_REDUCTION_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_DAMAGE_REDUCTION_UUID, INSTANCE, "Gear Fourth Resistance Damage Modifier", 0.35D, Operation.ADDITION);
+	}
+
+	public void stopContinuity(LivingEntity user) {
+		this.continuousComponent.stopContinuity(user);
 	}
 
 	public boolean onUserDeath(LivingEntity entity) {

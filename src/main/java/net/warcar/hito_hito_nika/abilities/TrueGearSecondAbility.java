@@ -82,7 +82,7 @@ public class TrueGearSecondAbility extends Ability {
 		}
 		float time = (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG2Length(), player, new HashMap<>()).getValue();
 		IAbilityData props = AbilityDataCapability.get(player);
-		if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
+		if (!TrueGomuHelper.canActivateGear(props, this)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
 		} else {
 			if (!this.prevSprintValue && player.isSprinting()) {

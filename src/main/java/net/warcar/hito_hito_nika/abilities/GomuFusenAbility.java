@@ -57,7 +57,14 @@ public class GomuFusenAbility extends Ability {
 		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 		if (g4 != null) {
 			g4.setBoundman(player);
+			if (g4.isContinuous()) {
+				g4.stopContinuity(player);
+			}
 		}
+	}
+
+	public void stopContinuity(LivingEntity player) {
+		this.continuousComponent.stopContinuity(player);
 	}
 
 	private void start(LivingEntity entity, IAbility ability) {

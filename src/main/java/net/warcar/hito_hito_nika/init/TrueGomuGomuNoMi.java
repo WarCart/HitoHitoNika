@@ -51,7 +51,7 @@ public class TrueGomuGomuNoMi {
 	static {
 		ABILITIES = DeferredRegister.create(ModRegistries.ABILITIES, HitoHitoNoMiNikaMod.MOD_ID);
 		AbilityCore<?>[] cores = new AbilityCore[]{TrueGomuPistol.INSTANCE, GomuBulletAbility.INSTANCE, TrueGomuGatling.INSTANCE, TrueGomuBazooka.INSTANCE, GomuFusenAbility.INSTANCE, TrueGomuRocket.INSTANCE, TrueGearSecondAbility.INSTANCE, TrueGearThirdAbility.INSTANCE, TrueGearFourthAbility.INSTANCE,
-				TrueGearFifthAbility.INSTANCE, GomuUfoAbility.INSTANCE, MoguraPistolAbility.INSTANCE, GomuGomuNoCannonballAbility.INSTANCE, TrueBouncyAbility.INSTANCE, GomuMorphsAbility.INSTANCE, GomuTrampleAbility.INSTANCE};
+				TrueGearFifthAbility.INSTANCE, GomuUfoAbility.INSTANCE, MoguraPistolAbility.INSTANCE, GomuGomuNoKaminariAbility.INSTANCE, GomuGomuNoCannonballAbility.INSTANCE, TrueBouncyAbility.INSTANCE, GomuMorphsAbility.INSTANCE, GomuTrampleAbility.INSTANCE};
 		if (WyHelper.isAprilFirst()) {
             cores = Arrays.copyOf(cores, cores.length + 1);
 			cores[cores.length-1] = GearSixthAbility.INSTANCE;

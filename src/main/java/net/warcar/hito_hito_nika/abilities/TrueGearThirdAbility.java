@@ -89,7 +89,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 		}
 		IAbilityData props = AbilityDataCapability.get(player);
 		double time = EquationHelper.parseEquation(CommonConfig.INSTANCE.getG3Length(), player, new HashMap<>()).getValue();
-		if (!TrueGomuHelper.canActivateGear(props, INSTANCE)) {
+		if (!TrueGomuHelper.canActivateGear(props, this)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
 		} else {
 			if (this.isGiant()) {

@@ -7,7 +7,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.gen.Heightmap.Type;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
-import net.warcar.hito_hito_nika.projectiles.MolePistolProjectile;
+import net.warcar.hito_hito_nika.projectiles.GomuGomuNoMoguraPistolProjectile;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
@@ -59,7 +59,7 @@ public class MoguraPistolAbility extends Ability {
 
     private void endChargeEvent(LivingEntity entity, IAbility ability) {
         if (!entity.level.isClientSide) {
-            MolePistolProjectile pillar = this.projectileComponent.getNewProjectile(entity);
+            GomuGomuNoMoguraPistolProjectile pillar = this.projectileComponent.getNewProjectile(entity);
             pillar.moveTo(this.targetPos.x, this.targetPos.y, this.targetPos.z, 0.0F, 0.0F);
             pillar.shoot(0.0F, 0.7, 0.0F, 1.4F, 0.0F);
             entity.level.addFreshEntity(pillar);
@@ -70,7 +70,7 @@ public class MoguraPistolAbility extends Ability {
     }
 
     private AbilityProjectileEntity createProjectile(LivingEntity entity) {
-        MolePistolProjectile projectile = new MolePistolProjectile(entity.level, entity);
+        GomuGomuNoMoguraPistolProjectile projectile = new GomuGomuNoMoguraPistolProjectile(entity.level, entity);
         projectile.setTargetPos(this.targetPos);
         return projectile;
     }

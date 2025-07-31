@@ -45,7 +45,10 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	public static final TranslationTextComponent ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Elephant Gatling");
 	public static final TranslationTextComponent GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Gatling");
 	public static final TranslationTextComponent HAWK_GATLING = TrueGomuHelper.getName("Gomu Gomu no Hawk Gatling");
+	public static final TranslationTextComponent JET_STORM = TrueGomuHelper.getName("Gomu Gomu no Jet Storm");
+	public static final TranslationTextComponent STORM = TrueGomuHelper.getName("Gomu Gomu no Storm");
 	public static final TranslationTextComponent GATLING = TrueGomuHelper.getName("Gomu Gomu no Gatling");
+
 	public static final TranslationTextComponent STAMP_ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Stamp Roc Gatling");
 	public static final TranslationTextComponent JET_ELEPHANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Stamp Gatling");
 	public static final TranslationTextComponent JET_GIANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Stamp Gatling");
@@ -132,11 +135,20 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 				speed = 2.4F;
 				projectileSpace = 9;
 				projDamageReduction = 0.6F;
+			} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
+				projDamageReduction = 0.4f;
+				speed = 3.6F;
+				projectile = new JetStampProjectile(entity.level, entity, this);
+				projectile.setMaxLife(6);
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				projectile = new JetStampProjectile(entity.level, entity, this);
 				speed = 3.6F;
 				projectile.setMaxLife(4);
 				projDamageReduction = 0.8f;
+			} else if (TrueGomuHelper.hasFusenActive(props)) {
+				projectile = new StampProjectile(entity.level, entity, this);
+				projectile.setMaxLife(6);
+				projDamageReduction = 0.4f;
 			} else {
 				projectile = new StampProjectile(entity.level, entity, this);
 				projectile.setMaxLife(6);
@@ -181,11 +193,21 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 				speed = 2.4F;
 				projectileSpace = 3;
 				projDamageReduction = 0.6F;
+			} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
+				projDamageReduction = 0.4f;
+				speed = 3.6F;
+				projectile = new TrueJetPistolProjectile(entity.level, entity, this);
+				projectile.setMaxLife(6);
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				projectile = new TrueJetPistolProjectile(entity.level, entity, this);
 				projectile.setMaxLife(4);
 				projDamageReduction = 0.8f;
 				speed = 3.6F;
+			} else if (TrueGomuHelper.hasFusenActive(props)) {
+				this.projectileSpace = 2;
+				projDamageReduction = 0.4f;
+				projectile = new TruePistolProjectile(entity.level, entity, this);
+				projectile.setMaxLife(6);
 			} else {
 				this.projectileSpace = 2;
 				projDamageReduction = 0.8f;
@@ -235,9 +257,15 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 		} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 			this.leap = 2;
 			dif = 1;
+		} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
+			dif = 2;
+			this.leap = 0.1;
 		} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 			this.leap = 0.2d;
 			dif = 1;
+		} else if (TrueGomuHelper.hasFusenActive(props)) {
+			dif = 2;
+			this.leap = 0.25;
 		} else {
 			dif = 1;
 			this.leap = 0.5;
@@ -306,6 +334,9 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			} else if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				this.setDisplayName(BAJRANG_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
+			} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
+				this.setDisplayName(JET_STORM);
+				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setDisplayName(JET_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
@@ -318,6 +349,9 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			} else if (HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayName(HAWK_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
+			} else if (TrueGomuHelper.hasFusenActive(props)) {
+				this.setDisplayName(STORM);
+				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else {
 				this.setDisplayName(GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
@@ -357,6 +391,9 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 					this.setDisplayName(KONG_STAMP_GATLING);
 					this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 				}
+			} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
+				this.setDisplayName(JET_STORM);
+				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setDisplayName(JET_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
@@ -375,6 +412,9 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			} else if (HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayName(TAKO_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
+			} else if (TrueGomuHelper.hasFusenActive(props)) {
+				this.setDisplayName(STORM);
+				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else {
 				this.setDisplayName(STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
@@ -404,6 +444,10 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			dif = 3;
 		} else {
 			dif = 5;
+		}
+		GomuFusenAbility ability = props.getEquippedAbility(GomuFusenAbility.INSTANCE);
+		if (ability != null && ability.isContinuous()) {
+			ability.stopContinuity(player);
 		}
 		this.animationComponent.stop(player);
 		this.cooldownComponent.startCooldown(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getGatlingCooldown(), player, getBonusData(dif)).getValue());

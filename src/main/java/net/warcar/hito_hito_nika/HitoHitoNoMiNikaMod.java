@@ -12,6 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuEntities;
 import net.warcar.hito_hito_nika.init.ModChallenges;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
@@ -38,6 +39,7 @@ public class HitoHitoNoMiNikaMod
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         GomuReviveEffect.register();
         TrueMorphs.init();
+        TrueGomuHelper.init();
         TrueGomuGomuNoMi.register(bus);
         ModChallenges.register(bus);
         GomuEntities.register(bus);

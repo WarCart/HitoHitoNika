@@ -82,7 +82,7 @@ public class TrueGearFifthAbility extends Ability {
 			this.continuousComponent.stopContinuity(player);
 			return;
 		}
-		if (!TrueGomuHelper.canActivateGear(AbilityDataCapability.get(player), INSTANCE)) {
+		if (!TrueGomuHelper.canActivateGear(AbilityDataCapability.get(player), this)) {
 			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
 			return;
 		}

@@ -4,10 +4,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -37,6 +39,9 @@ public class GomuUfoAbility extends Ability {
     private static final int DAMAGE = 5;
     private static final int G2_DAMAGE = 10;
     private static final int G5_DAMAGE = 20;
+    public static final TranslationTextComponent UFO = TrueGomuHelper.getName("Gomu Gomu no Ufo");
+    public static final TranslationTextComponent JET_UFO = TrueGomuHelper.getName("Gomu Gomu no Jet Ufo");
+    public static final TranslationTextComponent DAWN_WHIP = TrueGomuHelper.getName("Gomu Gomu no Dawn Whip");
     public static final AbilityCore<GomuUfoAbility> INSTANCE;
     private final ContinuousComponent continuousComponent = (new ContinuousComponent(this)).addStartEvent(this::startContinuityEvent).addTickEvent(this::duringContinuityEvent).addEndEvent(this::endContinuityEvent);
     private final HitTrackerComponent hitTrackerComponent = new HitTrackerComponent(this);
@@ -50,7 +55,22 @@ public class GomuUfoAbility extends Ability {
         this.isNew = true;
         this.addComponents(this.continuousComponent, this.hitTrackerComponent, this.animationComponent, this.rangeComponent, this.dealDamageComponent, this.statsComponent);
         this.addUseEvent(this::useEvent);
+        this.addTickEvent(this::onTick);
         this.addCanUseCheck(this::canUse);
+    }
+
+    private void onTick(LivingEntity entity, Ability ability) {
+        IAbilityData props = AbilityDataCapability.get(entity);
+        if (TrueGomuHelper.hasGearSecondActive(props)) {
+            this.setDisplayName(JET_UFO);
+            this.setDisplayIcon(TrueGomuHelper.getIcon("Gomu Gomu no Ufo"));
+        } else if (TrueGomuHelper.hasGearFifthActive(props)) {
+            this.setDisplayName(DAWN_WHIP);
+            this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Dawn Whip"));
+        } else {
+            this.setDisplayName(UFO);
+            this.setDisplayIcon(TrueGomuHelper.getIcon("Gomu Gomu no Ufo"));
+        }
     }
 
     private void useEvent(LivingEntity entity, IAbility ability) {

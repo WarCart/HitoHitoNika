@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.animations.Animation;
 import xyz.pixelatedw.mineminenomi.api.animations.AnimationId;
 
-public class TimedAnimation<E extends LivingEntity, M extends EntityModel> extends Animation<E, M> {
+public abstract class TimedAnimation<E extends LivingEntity, M extends EntityModel> extends Animation<E, M> {
     protected int maxTicks = 0;
 
     public <A extends Animation<E, M>> TimedAnimation(AnimationId<A> animId) {
@@ -23,6 +23,9 @@ public class TimedAnimation<E extends LivingEntity, M extends EntityModel> exten
     }
 
     public double getPercentage() {
-        return (double) this.getAnimationDuration() / this.maxTicks;
+        if (this.getMaxTicks() == 0) {
+            return 0;
+        }
+        return (double) this.getAnimationDuration() / this.getMaxTicks();
     }
 }

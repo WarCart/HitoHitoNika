@@ -1,6 +1,5 @@
 package net.warcar.hito_hito_nika.helpers;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketBuffer;
@@ -29,7 +28,6 @@ import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
-import xyz.pixelatedw.mineminenomi.wypi.WyRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,12 +57,30 @@ public class TrueGomuHelper {
 		}
 	};
 
-	public static <A extends Ability> boolean canActivateGear(IAbilityData props, AbilityCore<A> gear) {
+	public static <A extends Ability> boolean canActivateGear(IAbilityData props, A gear) {
+		if (gear instanceof TrueGearFourthAbility) {
+			TrueGearFourthAbility fourthGear = (TrueGearFourthAbility) gear;
+			if (fourthGear.isBoundman()) {
+				return !hasGearThirdActive(props) && !hasGearSecondActive(props) && !hasFusenActive(props);
+			} else if (fourthGear.isSnakeman()) {
+				return !hasGearThirdActive(props) && !hasGearSecondActive(props) && !hasGearFifthActive(props) && !hasFusenActive(props);
+			} else if (fourthGear.isPartial()) {
+				return !hasGearThirdActive(props) && !hasGearSecondActive(props) && !hasGearFifthActive(props);
+			} else if (fourthGear.isTankman()) {
+				return !hasGearThirdActive(props) && !hasGearSecondActive(props) && !hasGearFifthActive(props);
+			}
+			return false;
+		}
+		AbilityCore<?> core = gear.getCore();
 		return !(
-				(gear.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
-				|| (gear.equals(TrueGearThirdAbility.INSTANCE) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
-				|| (gear.equals(TrueGearFourthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props)))
-				|| (gear.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
+				(core.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
+				|| (core.equals(TrueGearThirdAbility.INSTANCE) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
+				|| (core.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
+	}
+
+	public static boolean hasFusenActive(IAbilityData props) {
+		Ability ability = props.getEquippedAbility(GomuFusenAbility.INSTANCE);
+		return ability != null && ability.isContinuous();
 	}
 
 	public static boolean hasGearSecondActive(IAbilityData props) {
@@ -235,7 +251,8 @@ public class TrueGomuHelper {
 		};
 	}
 
-	static {
+	public static void init() {
+		getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
 		DataSerializers.registerSerializer(VECTOR_SERIALIZER);
 	}
 }

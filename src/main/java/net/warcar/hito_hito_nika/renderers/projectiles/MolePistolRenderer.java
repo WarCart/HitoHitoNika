@@ -9,17 +9,16 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
-import net.warcar.hito_hito_nika.projectiles.MolePistolProjectile;
+import net.warcar.hito_hito_nika.projectiles.GomuGomuNoMoguraPistolProjectile;
 import xyz.pixelatedw.mineminenomi.renderers.abilities.AbilityProjectileRenderer;
 
-public class MolePistolRenderer extends AbilityProjectileRenderer<MolePistolProjectile, EntityModel<MolePistolProjectile>> {
+public class MolePistolRenderer extends AbilityProjectileRenderer<GomuGomuNoMoguraPistolProjectile, EntityModel<GomuGomuNoMoguraPistolProjectile>> {
     public MolePistolRenderer(EntityRendererManager renderManager) {
         super(renderManager, null, null);
     }
 
     @Override
-    public void render(MolePistolProjectile entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+    public void render(GomuGomuNoMoguraPistolProjectile entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
         Minecraft mc = Minecraft.getInstance();
         Vector3d to = entity.getTargetPos();
         Vector3d from = entity.position().scale(partialTicks).add(new Vector3d(entity.xo, entity.yo, entity.zo).scale(1 - partialTicks));

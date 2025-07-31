@@ -67,7 +67,7 @@ public class NikaProjectiles {
 
 	public static final RegistryObject<EntityType<RhinoRexSchneiderProjectile>> GOMU_GOMU_NO_RHINO_REX_SCHNEIDER = WyRegistry.registerEntityType("Gomu Gomu no Rhino Rex Schneider", () -> WyRegistry.createEntityType(RhinoRexSchneiderProjectile::new).sized(5F, 5F).build("mineminenomi:gomu_gomu_no_rhino_rex_schneider"));
 
-	public static final RegistryObject<EntityType<MolePistolProjectile>> GOMU_GOMU_NO_MOLE_PISTOL = WyRegistry.registerEntityType("Gomu Gomu no Mole Pistol", () -> WyRegistry.createEntityType(MolePistolProjectile::new).sized(1.25f, 2.25f).build("meh"));
+	public static final RegistryObject<EntityType<GomuGomuNoMoguraPistolProjectile>> GOMU_GOMU_NO_MOLE_PISTOL = WyRegistry.registerEntityType("Gomu Gomu no Mole Pistol", () -> WyRegistry.createEntityType(GomuGomuNoMoguraPistolProjectile::new).sized(1.25f, 2.25f).build("meh"));
 
 	public static final RegistryObject<EntityType<KingBajrangGunProjectile>> GOMU_GOMU_NO_KING_BAJRANG_GUN = WyHelper.isAprilFirst() ? WyRegistry.registerEntityType("Gomu Gomu no King Bajrang Gun", () -> WyRegistry.createEntityType(KingBajrangGunProjectile::new).sized(0.5F, 0.5F).build("mineminenomi:gomu_gomu_no_king_bajrang_gun")) : null;
 
