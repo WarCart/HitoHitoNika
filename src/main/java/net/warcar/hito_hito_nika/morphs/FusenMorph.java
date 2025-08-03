@@ -1,6 +1,5 @@
 package net.warcar.hito_hito_nika.morphs;
 
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.LivingEntity;
@@ -18,6 +17,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.init.ModAbilities;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class FusenMorph extends MorphInfo {
@@ -61,6 +61,9 @@ public class FusenMorph extends MorphInfo {
     }
 
     public Map<Pose, EntitySize> getSizes() {
-        return ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, STANDING_SIZE_FUSEN).put(Pose.CROUCHING, CROUCHING_SIZE_FUSEN).build();
+        Map<Pose, EntitySize> sizes = new HashMap<>();
+        sizes.put(Pose.STANDING, STANDING_SIZE_FUSEN);
+        sizes.put(Pose.CROUCHING, CROUCHING_SIZE_FUSEN);
+        return sizes;
     }
 }

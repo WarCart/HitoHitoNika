@@ -1,6 +1,5 @@
 package net.warcar.hito_hito_nika.init;
 
-import com.google.common.base.Joiner;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +31,7 @@ public class GomuEntities {
     public static <E extends Entity> EntityType<E> register(String name, EntityType<E> entityType) {
         String registryName = WyHelper.getResourceName(name);
         ENTITIES.register(registryName, () -> entityType);
-        HitoHitoNoMiNikaMod.getLangMap().put(Joiner.on('.').join("entity", HitoHitoNoMiNikaMod.MOD_ID, registryName), name);
+        HitoHitoNoMiNikaMod.getLangMap().put(String.format("entity.%s.%s", HitoHitoNoMiNikaMod.MOD_ID, registryName), name);
         return entityType;
     }
 

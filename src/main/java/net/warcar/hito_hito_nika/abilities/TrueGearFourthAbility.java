@@ -1,6 +1,5 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import com.google.common.base.Predicates;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;

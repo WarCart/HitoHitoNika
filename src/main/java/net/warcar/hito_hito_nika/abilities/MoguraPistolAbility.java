@@ -83,6 +83,7 @@ public class MoguraPistolAbility extends Ability {
         INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Mogura Pistol", AbilityCategory.DEVIL_FRUITS, MoguraPistolAbility::new)
                 .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME))
                 .addAdvancedDescriptionLine(ProjectileComponent.getProjectileTooltips()).setSourceHakiNature(SourceHakiNature.HARDENING)
-                .setSourceType(SourceType.FIST).build();
+                .setSourceType(SourceType.FIST).setUnlockCheck(TrueGearFifthAbility::canUnlock)
+                .build();
     }
 }

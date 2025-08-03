@@ -129,6 +129,7 @@ public class GomuGomuNoKaminariAbility extends Ability {
     }
 
     static {
-        INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Kaminari", AbilityCategory.DEVIL_FRUITS, GomuGomuNoKaminariAbility::new)).addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME)).setSourceElement(SourceElement.LIGHTNING).setSourceHakiNature(SourceHakiNature.SPECIAL).build();
+        INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Kaminari", AbilityCategory.DEVIL_FRUITS, GomuGomuNoKaminariAbility::new)).addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME)).setSourceElement(SourceElement.LIGHTNING).setSourceHakiNature(SourceHakiNature.SPECIAL)
+                .setUnlockCheck(TrueGearFifthAbility::canUnlock).build();
     }
 }
