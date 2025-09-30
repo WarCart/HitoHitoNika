@@ -12,16 +12,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
-import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
-import net.warcar.hito_hito_nika.entities.LuffyBoss;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.GomuEffects;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
-import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiFullBodyHardeningAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
@@ -55,9 +52,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	public static final AbilityCore<TrueGearFourthAbility> INSTANCE = new AbilityCore.Builder<>("Gear Fourth", AbilityCategory.DEVIL_FRUITS, TrueGearFourthAbility::new)
 			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, ChangeStatsComponent.getTooltip())
 			.setUnlockCheck(TrueGearFourthAbility::canUnlock).build();
-	private static final AbilityAttributeModifier ARMOR_MODIFIER;
-	private static final AbilityAttributeModifier STRENGTH_MODIFIER;
-	private static final AbilityAttributeModifier DAMAGE_REDUCTION_MODIFIER;
 	private final AltModeComponent<Mode> modeComponent;
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
@@ -80,14 +74,21 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		modeComponent.addChangeModeEvent(this::changeMode);
 		continuousComponent = new ContinuousComponent(this, true);
 		this.addComponents(continuousComponent, statsComponent, modeComponent, trueScreamComponent);
-		this.statsComponent.addAttributeModifier(Attributes.ARMOR, ARMOR_MODIFIER);
-		this.statsComponent.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ARMOR_MODIFIER);
-		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
-		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, DAMAGE_REDUCTION_MODIFIER);
+		this.statsComponent.addAttributeModifier(Attributes.ARMOR, new AbilityAttributeModifier(AttributeHelper.MORPH_ARMOR_UUID, INSTANCE, "Gear Fourth Armor Modifier", 10.0D, Operation.ADDITION),
+				(e) -> this.continuousComponent.isContinuous() && (this.isBoundman() || this.isTankman()));
+		this.statsComponent.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, new AbilityAttributeModifier(AttributeHelper.MORPH_ARMOR_TOUGHNESS_UUID, INSTANCE, "Gear Fourth Armor Toughness Modifier", 3.0D, Operation.ADDITION),
+				(e) -> this.continuousComponent.isContinuous() && (this.isBoundman() || this.isTankman()));
+		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, new AbilityAttributeModifier(AttributeHelper.MORPH_STRENGTH_UUID, INSTANCE, "Gear Fourth Attack Damage Modifier", 5.0D, Operation.ADDITION),
+				(e) -> this.continuousComponent.isContinuous() && (this.isBoundman() || this.isTankman()));
+		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, new AbilityAttributeModifier(AttributeHelper.MORPH_DAMAGE_REDUCTION_UUID, INSTANCE, "Gear Fourth Resistance Damage Modifier", 0.35D, Operation.ADDITION),
+				(e) -> this.continuousComponent.isContinuous() && !this.isPartial());
+		this.statsComponent.addAttributeModifier(Attributes.MOVEMENT_SPEED, new AbilityAttributeModifier(AttributeHelper.MORPH_MOVEMENT_SPEED_UUID, INSTANCE, "Gear Fourth Resistance Damage Modifier", 0.5D, Operation.MULTIPLY_TOTAL),
+				(e) -> this.continuousComponent.isContinuous() && this.isSnakeman());
 		this.continuousComponent.addTickEvent(this::duringContinuity);
 		this.continuousComponent.addEndEvent(this::beforeContinuityStopEvent);
 		this.continuousComponent.addStartEvent(this::afterStart);
 		continuousComponent.addStartEvent(TrueGomuHelper.basicGearStuff());
+		continuousComponent.addTickEvent(this::duringContinuous);
 		this.addUseEvent(this::onStartContinuity);
 		this.addTickEvent(this::onTick);
 		this.getComponent(ModAbilityKeys.SLOT_DECORATION).ifPresent(component -> component.addPreRenderEvent(30, ((livingEntity, minecraft, matrixStack, x, y, partialTicks) ->  {
@@ -98,6 +99,12 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 				component.setDisplayText(" ");
 			}
 		})));
+	}
+
+	private void duringContinuous(LivingEntity entity, IAbility ability) {
+		if (this.isSnakeman()) {
+			TrueGomuHelper.getSpeedEvent(1f).duringContinuous(entity, ability);
+		}
 	}
 
 	private void onTick(LivingEntity player, TrueGearFourthAbility ability) {
@@ -145,7 +152,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 					time /= 1.2f;
 				}
 				ability.continuousComponent.startContinuity(player, time * 20);
-				ability.statsComponent.applyModifiers(player);
 			}
 		}
 	}
@@ -202,7 +208,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		if (this.isBoundman() && player instanceof PlayerEntity) {
 			((PlayerEntity) player).abilities.mayfly = ((PlayerEntity) player).isCreative() || player.isSpectator();
 		}
-		this.statsComponent.removeModifiers(player);
 		if (this.targetedTime > 0 && this.continuousComponent.getContinueTime() >= this.continuousComponent.getThresholdTime() && !this.continuousComponent.isInfinite() && !this.isBonusTime && props.hasUnlockedAbility(HaoshokuHakiInfusionAbility.INSTANCE) && this.isBoundman()) {
 			this.onTargetedTime = true;
 			return;
@@ -284,13 +289,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		return this.getModeComponent() == Mode.PARTIAL;
 	}
 
-	static {
-		ARMOR_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_ARMOR_UUID, INSTANCE, "Gear Fourth Armor Modifier", 10.0D, Operation.ADDITION);
-		STRENGTH_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_STRENGTH_UUID, INSTANCE, "Gear Fourth Attack Damage Modifier", 15.0D, Operation.ADDITION);
-		DAMAGE_REDUCTION_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_DAMAGE_REDUCTION_UUID, INSTANCE, "Gear Fourth Resistance Damage Modifier", 0.35D, Operation.ADDITION);
-	}
-
-	public void stopContinuity(LivingEntity user) {
+    public void stopContinuity(LivingEntity user) {
 		this.continuousComponent.stopContinuity(user);
 	}
 
@@ -299,7 +298,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		if (this.isBonusTime && !awakeningProps.hasAwakenedFruit() && CommonConfig.INSTANCE.hasAwakeningsEnabled() && EntityStatsCapability.get(entity).getDoriki() >= 8300) {
 			awakeningProps.setAwakenedFruit(true);
 			entity.setHealth(5);
-			entity.addEffect(new EffectInstance(GomuReviveEffect.INSTANCE.get(), 600, 1, true, false));
+			entity.addEffect(new EffectInstance(GomuEffects.GOMU_REVIVE.get(), 600, 1, true, false));
 			entity.addEffect(new EffectInstance(Effects.REGENERATION, 600, 4, true, true));
 			entity.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
 			if (entity instanceof PlayerEntity) {

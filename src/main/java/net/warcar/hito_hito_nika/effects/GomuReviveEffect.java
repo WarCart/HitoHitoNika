@@ -22,7 +22,6 @@ import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
 import xyz.pixelatedw.mineminenomi.wypi.WyRegistry;
 
 public class GomuReviveEffect extends ModEffect {
-    public static final RegistryObject<Effect> INSTANCE = WyRegistry.registerEffect("Dead", GomuReviveEffect::new);
     public GomuReviveEffect() {
         super(EffectType.HARMFUL, WyHelper.hexToRGB("#000000").getRGB());
     }
@@ -63,8 +62,5 @@ public class GomuReviveEffect extends ModEffect {
                 }
             }
         }
-    }
-
-    public static void register() {
     }
 }

@@ -14,8 +14,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
-import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
 import net.warcar.hito_hito_nika.entities.goals.*;
+import net.warcar.hito_hito_nika.init.GomuEffects;
 import net.warcar.hito_hito_nika.init.GomuEntities;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.brawler.BrawlerPassiveBonusesAbility;
@@ -139,7 +139,7 @@ public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture
         if (this.getChallengeInfo().isDifficultyUltimate() && !this.isLastPhase()) {
             devilFruitData.setAwakenedFruit(true);
             this.setHealth(5);
-            this.addEffect(new EffectInstance(GomuReviveEffect.INSTANCE.get(), 600, 1, true, false));
+            this.addEffect(new EffectInstance(GomuEffects.GOMU_REVIVE.get(), 600, 1, true, false));
             this.addEffect(new EffectInstance(Effects.REGENERATION, 600, 12, true, true));
             this.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
             this.startLastPhase();

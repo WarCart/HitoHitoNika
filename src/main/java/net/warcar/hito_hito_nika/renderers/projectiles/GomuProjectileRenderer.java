@@ -81,9 +81,7 @@ public class GomuProjectileRenderer<E extends AbilityProjectileEntity, M extends
         ResourceLocation textureLocation = super.getTextureLocation(entity);
         //HitoHitoNoMiNikaMod.LOGGER.info(textureLocation);
         if (textureLocation != ModResources.BUSOSHOKU_HAKI_ARM && entity.getThrower() instanceof LuffyBoss) {
-            ResourceLocation texture = ((LuffyBoss) entity.getThrower()).getCurrentTexture();
-            //HitoHitoNoMiNikaMod.LOGGER.info(texture);
-            return texture;
+            return ((LuffyBoss) entity.getThrower()).getCurrentTexture();
         }
         return textureLocation;
     }

@@ -1,5 +1,6 @@
 package net.warcar.hito_hito_nika.events;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,8 +8,11 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -19,13 +23,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.GomuFusenAbility;
 import net.warcar.hito_hito_nika.abilities.GomuMorphsAbility;
-import net.warcar.hito_hito_nika.abilities.TrueBouncyAbility;
 import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
-import net.warcar.hito_hito_nika.effects.GomuReviveEffect;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.GomuEffects;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
-import xyz.pixelatedw.mineminenomi.abilities.gomu.GomuGomuNoDawnWhipAbility;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusOperation;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.events.ability.AbilityUseEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.DorikiEvent;
@@ -49,13 +50,12 @@ import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID)
 public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void onEntityHurt(LivingHurtEvent event) {
-		if (event.getEntityLiving().hasEffect(GomuReviveEffect.INSTANCE.get())) {
+		if (event.getEntityLiving().hasEffect(GomuEffects.GOMU_REVIVE.get())) {
 			event.setCanceled(true);
 			event.setAmount(0);
 			return;
@@ -160,6 +160,31 @@ public class TrueGomuPassiveEffects {
 			Vector3d speed = new Vector3d(entity.getDeltaMovement().x, event.getDistance() / 15, entity.getDeltaMovement().z);
 			AbilityHelper.setDeltaMovement(entity, speed);
 			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void beforeEntityRender(RenderLivingEvent.Pre<LivingEntity, ?> event) {
+		LivingEntity entity = event.getEntity();
+		if (entity.hasEffect(GomuEffects.SQUISHED.get())) {
+			entity.getPersistentData().putBoolean("GomuSquished", true);
+			MatrixStack stack = event.getMatrixStack();
+			stack.pushPose();
+			EffectInstance squishedEffect = entity.getEffect(GomuEffects.SQUISHED.get());
+			float angle = (float) (squishedEffect.getAmplifier() * Math.PI / 256);
+			stack.mulPose(Vector3f.YP.rotation(angle));
+			stack.scale(1, 1, 0.01f);
+			stack.mulPose(Vector3f.YN.rotation(angle));
+		}
+	}
+
+	@SubscribeEvent
+	public static void afterEntityRender(RenderLivingEvent.Post<LivingEntity, ?> event) {
+		LivingEntity entity = event.getEntity();
+		if (entity.getPersistentData().getBoolean("GomuSquished")) {
+			MatrixStack stack = event.getMatrixStack();
+			stack.popPose();
+			entity.getPersistentData().remove("GomuSquished");
 		}
 	}
 }
