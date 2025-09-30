@@ -29,7 +29,10 @@ import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 public class GomuTrampleAbility extends PassiveAbility2 {
     private static final ITextComponent[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "deka_trample", ImmutablePair.of("Running speed increases with acceleration trampling any nearby entity.", null));
-    public static final AbilityCore<GomuTrampleAbility> INSTANCE;
+    public static final AbilityCore<GomuTrampleAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new)
+            .addDescriptionLine(DESCRIPTION).addDescriptionLine(AbilityDescriptionLine.NEW_LINE, RequireMorphComponent.getTooltip())
+            .addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, RangeComponent.getTooltip(5.0F, RangeType.AOE), DealDamageComponent.getTooltip(8.0F))
+            .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
     private final RangeComponent rangeComponent = new RangeComponent(this);
     private final DealDamageComponent dealDamageComponent = new DealDamageComponent(this);
     private final BreakingBlocksParticleEffect.Details details;
@@ -87,11 +90,6 @@ public class GomuTrampleAbility extends PassiveAbility2 {
 
             }
         }
-    }
-
-    static {
-        INSTANCE = new AbilityCore.Builder<>("Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new).addDescriptionLine(DESCRIPTION).addDescriptionLine(AbilityDescriptionLine.NEW_LINE, RequireMorphComponent.getTooltip()).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, RangeComponent.getTooltip(5.0F, RangeType.AOE), DealDamageComponent.getTooltip(8.0F)).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST)
-                .setHidden().build();
     }
 
     private AbilityUseResult canUse(LivingEntity entity, IAbility iAbility) {

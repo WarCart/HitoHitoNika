@@ -3,10 +3,12 @@ package net.warcar.hito_hito_nika.abilities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
@@ -22,7 +24,9 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class GomuFusenAbility extends Ability {
-	public static final AbilityCore<GomuFusenAbility> INSTANCE;
+	private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_fusen", ImmutablePair.of("By inhaling a lot of air user inflates their chest to gain invulnerability to cannon balls", null));
+ 	public static final AbilityCore<GomuFusenAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Fusen", AbilityCategory.DEVIL_FRUITS, GomuFusenAbility::new)
+			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(ChangeStatsComponent.getTooltip()).build();
 	public static final TranslationTextComponent NAME = TrueGomuHelper.getName(ModMain.PROJECT_ID, "Gomu Gomu no Fusen", "gomu_gomu_no_fusen");
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
@@ -86,7 +90,4 @@ public class GomuFusenAbility extends Ability {
 		}
 	}
 
-	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Fusen", AbilityCategory.DEVIL_FRUITS, GomuFusenAbility::new)).addDescriptionLine("").build();
-	}
 }

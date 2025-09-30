@@ -4,12 +4,15 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
@@ -29,7 +32,9 @@ import xyz.pixelatedw.mineminenomi.init.ModEffects;
 import java.util.Map;
 
 public class TrueGomuGatling extends Ability implements IExtraUpdateData {
-	public static final AbilityCore<TrueGomuGatling> INSTANCE;
+	private static final ITextComponent[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_gatling", new Pair[]{ImmutablePair.of("Rapidly punches enemies in front of the user.", (Object)null)});
+	public static final AbilityCore<TrueGomuGatling> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Gatling", AbilityCategory.DEVIL_FRUITS, TrueGomuGatling::new)
+			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
 	public static final TranslationTextComponent ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Roc Gatling");
 	public static final TranslationTextComponent JET_ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gatling");
 	public static final TranslationTextComponent JET_GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Gatling");
@@ -469,8 +474,4 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 		return out;
 	}
 
-	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Gatling", AbilityCategory.DEVIL_FRUITS, TrueGomuGatling::new)).addDescriptionLine("Rapidly punches enemies using rubber fists").setSourceHakiNature(SourceHakiNature.HARDENING)
-				.setSourceType(SourceType.FIST).build();
-	}
 }

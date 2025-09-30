@@ -16,7 +16,8 @@ import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import javax.annotation.Nullable;
 
 public class GomuMorphsAbility extends PassiveAbility2 {
-	public static final AbilityCore<GomuMorphsAbility> INSTANCE;
+	public static final AbilityCore<GomuMorphsAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Transformations", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuMorphsAbility::new)
+			.setHidden().build();
 
 	private int needsUpdate = 0;
 
@@ -71,7 +72,4 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 		return null;
 	}
 
-	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gomu Transformations", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuMorphsAbility::new)).setHidden().build();
-	}
 }

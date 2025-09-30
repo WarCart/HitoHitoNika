@@ -23,7 +23,11 @@ public class MoguraPistolAbility extends Ability {
     private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_mogura_pistol", ImmutablePair.of("User pushes their hand through blocks to attack enemy from below.", null));
     private static final int COOLDOWN = 400;
     private static final int CHARGE_TIME = 10;
-    public static final AbilityCore<MoguraPistolAbility> INSTANCE;
+    public static final AbilityCore<MoguraPistolAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Mogura Pistol", AbilityCategory.DEVIL_FRUITS, MoguraPistolAbility::new)
+            .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME))
+            .addAdvancedDescriptionLine(ProjectileComponent.getProjectileTooltips()).setSourceHakiNature(SourceHakiNature.HARDENING)
+            .setSourceType(SourceType.FIST).setUnlockCheck(TrueGearFifthAbility::canUnlock)
+            .build();
     private final ChargeComponent chargeComponent = (new ChargeComponent(this)).addTickEvent(this::duringChargeEvent).addEndEvent(this::endChargeEvent);
     private final ProjectileComponent projectileComponent = new ProjectileComponent(this, this::createProjectile);
     private final RequireAbilityComponent requireAbilityComponent = new RequireAbilityComponent(this, new RequireAbilityComponent.CheckData(TrueGearFifthAbility.INSTANCE, RequireAbilityComponent.IS_ACTIVE));
@@ -79,11 +83,4 @@ public class MoguraPistolAbility extends Ability {
         this.targetPos = vec;
     }
 
-    static {
-        INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Mogura Pistol", AbilityCategory.DEVIL_FRUITS, MoguraPistolAbility::new)
-                .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME))
-                .addAdvancedDescriptionLine(ProjectileComponent.getProjectileTooltips()).setSourceHakiNature(SourceHakiNature.HARDENING)
-                .setSourceType(SourceType.FIST).setUnlockCheck(TrueGearFifthAbility::canUnlock)
-                .build();
-    }
 }

@@ -7,11 +7,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Util;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.ForgeMod;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.abilities.haki.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
@@ -19,6 +22,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.AttributeHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
@@ -32,7 +36,9 @@ import xyz.pixelatedw.mineminenomi.init.*;
 import java.util.HashMap;
 
 public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
-	public static final AbilityCore<TrueGearThirdAbility> INSTANCE;
+	private static final ITextComponent[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gear_third", new Pair[]{ImmutablePair.of("By blowing air and inflating their body, the user's attacks get bigger and gain incredible strength.", (Object)null)});
+	public static final AbilityCore<TrueGearThirdAbility> INSTANCE = (new AbilityCore.Builder<>("Gear Third", AbilityCategory.DEVIL_FRUITS, TrueGearThirdAbility::new))
+			.addDescriptionLine(DESCRIPTION).setUnlockCheck(TrueGearThirdAbility::canUnlock).build();
 	private static final AbilityAttributeModifier SPEED_MODIFIER;
 	private static final AbilityAttributeModifier JUMP_MODIFIER;
 	private static final AbilityAttributeModifier ARMOR_MODIFIER;
@@ -182,9 +188,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 	}
 
 	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gear Third", AbilityCategory.DEVIL_FRUITS, TrueGearThirdAbility::new)).addDescriptionLine("By blowing air and inflating their body, the user's attacks get bigger and gain incredible strength")
-				.setUnlockCheck(TrueGearThirdAbility::canUnlock).build();
-		SPEED_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_MOVEMENT_SPEED_UUID, INSTANCE, "Mega Mega Speed Modifier", 1.0199999809265137D, Operation.MULTIPLY_BASE);
+        SPEED_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_MOVEMENT_SPEED_UUID, INSTANCE, "Mega Mega Speed Modifier", 1.0199999809265137D, Operation.MULTIPLY_BASE);
 		JUMP_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_JUMP_BOOST_UUID, INSTANCE, "Mega Mega Jump Modifier", 2.0D, Operation.ADDITION);
 		ARMOR_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_ARMOR_UUID, INSTANCE, "Mega Mega Armor Modifier", 5.0D, Operation.ADDITION);
 		STRENGTH_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_STRENGTH_UUID, INSTANCE, "Mega Mega Strength Modifier", 3.0D, Operation.ADDITION);

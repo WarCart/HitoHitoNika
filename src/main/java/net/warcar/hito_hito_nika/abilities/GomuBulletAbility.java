@@ -7,6 +7,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,6 +17,7 @@ import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.projectiles.KingBajrangGunProjectile;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
@@ -38,7 +40,9 @@ import xyz.pixelatedw.mineminenomi.init.ModAnimations;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 public class GomuBulletAbility extends Ability {
-	public static final AbilityCore<GomuBulletAbility> INSTANCE;
+	private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_bullet", ImmutablePair.of("User stretches his hand far back to strike enemies with immense force", null));
+	public static final AbilityCore<GomuBulletAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Bullet", AbilityCategory.DEVIL_FRUITS, GomuBulletAbility::new)
+			.setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).addDescriptionLine(DESCRIPTION).build();
 	public static final TranslationTextComponent KING_BAJRANG_GUN = TrueGomuHelper.getName("Gomu Gomu no King Bajrang Gun");
 	public static final TranslationTextComponent BAJRANG_GUN = TrueGomuHelper.getName("Gomu Gomu no Bajrang Gun");
 	public static final TranslationTextComponent RED_ROC = TrueGomuHelper.getName("Gomu Gomu no Red Roc");
@@ -443,7 +447,4 @@ public class GomuBulletAbility extends Ability {
 		return this.chargeComponent.getChargeTime();
 	}
 
-	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Bullet", AbilityCategory.DEVIL_FRUITS, GomuBulletAbility::new)).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
-	}
 }

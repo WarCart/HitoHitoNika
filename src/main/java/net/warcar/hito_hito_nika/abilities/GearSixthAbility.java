@@ -13,7 +13,8 @@ import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 
 public class GearSixthAbility extends Ability {
-	public static final AbilityCore<GearSixthAbility> INSTANCE;
+	public static final AbilityCore<GearSixthAbility> INSTANCE = new AbilityCore.Builder<>("Gear Sixth", AbilityCategory.DEVIL_FRUITS, GearSixthAbility::new)
+			.build();
 	public static final TranslationTextComponent NAME = TrueGomuHelper.getName("Gomu Gomu no Strange Pistol", "gear_sixth");
 	private final ContinuousComponent continuousComponent;
 	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
@@ -38,7 +39,4 @@ public class GearSixthAbility extends Ability {
 		this.continuousComponent.startContinuity(player, -1);
 	}
 
-	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gear Sixth", AbilityCategory.DEVIL_FRUITS, GearSixthAbility::new)).build();
-	}
 }

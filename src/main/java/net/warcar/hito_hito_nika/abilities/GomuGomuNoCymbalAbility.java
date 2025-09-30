@@ -2,21 +2,28 @@ package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuEffects;
-import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
-import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceType;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
 import xyz.pixelatedw.mineminenomi.init.ModDamageSource;
 
 public class GomuGomuNoCymbalAbility extends Ability {
+    private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_cymbal", ImmutablePair.of("User grabs enemy, stretches their hands back and then forcefully slams them into opponent flattening them into thin disc", null),
+            ImmutablePair.of("Requires Gear 5 and Giant form", null));
     public static final AbilityCore<GomuGomuNoCymbalAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Cymbal", AbilityCategory.DEVIL_FRUITS, GomuGomuNoCymbalAbility::new)
-            .setSourceType(SourceType.FIST).setSourceElement(SourceElement.RUBBER).setSourceHakiNature(SourceHakiNature.HARDENING).build();
+            .setSourceType(SourceType.FIST).setSourceElement(SourceElement.RUBBER).addDescriptionLine(DESCRIPTION)
+            .addAdvancedDescriptionLine(ChargeComponent.getTooltip(30), CooldownComponent.getTooltip(300), DealDamageComponent.getTooltip(15))
+            .setSourceHakiNature(SourceHakiNature.HARDENING).build();
 
     private final GrabEntityComponent grabComponent = new GrabEntityComponent(this, true, false, 0);
     private final ChargeComponent chargeComponent = new ChargeComponent(this).addTickEvent(this::duringCharging).addEndEvent(this::endCharging);
@@ -29,6 +36,7 @@ public class GomuGomuNoCymbalAbility extends Ability {
         this.isNew = true;
         this.addComponents(grabComponent, chargeComponent, continuousComponent, damageComponent, hitTriggerComponent, poolComponent);
         this.addUseEvent(this::onUse);
+        this.addCanUseCheck(this::canUse);
     }
 
     private void onUse(LivingEntity entity, IAbility iAbility) {
@@ -85,5 +93,13 @@ public class GomuGomuNoCymbalAbility extends Ability {
         } else {
             target.moveTo(entity.getX() - Math.sin(Math.PI * (30 - t) / 5 + rot) * 5, entity.getY(), entity.getZ() + Math.cos(Math.PI * (30 - t) / 5 + rot) * 5);
         }
+    }
+
+    private AbilityUseResult canUse(LivingEntity entity, IAbility ability) {
+        IAbilityData props = AbilityDataCapability.get(entity);
+        if (TrueGomuHelper.hasGigantActive(props)) {
+            return AbilityUseResult.success();
+        }
+        return AbilityUseResult.fail(null);
     }
 }

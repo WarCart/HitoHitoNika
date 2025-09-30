@@ -16,8 +16,9 @@ import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 
 public class TrueBouncyAbility extends NoFallDamageAbility {
-    private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("bouncy", new Pair[]{ImmutablePair.of("Makes the user bounce upon landing", (Object)null)});
-    public static final AbilityCore<TrueBouncyAbility> INSTANCE;
+    private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("bouncy", ImmutablePair.of("Makes the user bounce upon landing", null));
+    public static final AbilityCore<TrueBouncyAbility> INSTANCE = new AbilityCore.Builder<>("Bouncy", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, TrueBouncyAbility::new)
+            .addDescriptionLine(DESCRIPTION).build();
     private boolean touchedGround = true;
     private double bounceValue = 0;
 
@@ -48,7 +49,4 @@ public class TrueBouncyAbility extends NoFallDamageAbility {
         return damageSource == DamageSource.FLY_INTO_WALL ? 0.0F : damage;
     }
 
-    static {
-        INSTANCE = new AbilityCore.Builder<>("Bouncy", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, TrueBouncyAbility::new).addDescriptionLine(DESCRIPTION).build();
-    }
 }

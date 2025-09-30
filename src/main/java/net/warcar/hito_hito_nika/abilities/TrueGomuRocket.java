@@ -1,10 +1,13 @@
 package net.warcar.hito_hito_nika.abilities;
 
+import net.minecraft.util.text.ITextComponent;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.hand.TrueGomuRocketProjectile;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.DealDamageComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.HitTrackerComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
@@ -25,7 +28,12 @@ import net.minecraft.entity.LivingEntity;
 import java.util.List;
 
 public class TrueGomuRocket extends Ability {
-	public static final AbilityCore<TrueGomuRocket> INSTANCE;
+
+	private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_rocket", ImmutablePair.of("Stretches towards a block, then launches the user on an arch depending on where they fist landed.", null),
+			ImmutablePair.of("Slamming into enemies will deal damage", null));
+	public static final AbilityCore<TrueGomuRocket> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Rocket", AbilityCategory.DEVIL_FRUITS, TrueGomuRocket::new)
+			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.PHYSICAL)
+			.addAdvancedDescriptionLine(DealDamageComponent.getTooltip(2, 100)).build();
 	public static final TranslationTextComponent JetGiantShell = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Shell");
 	public static final TranslationTextComponent DAWN_ROCKET = TrueGomuHelper.getName("Gomu Gomu no Dawn Rocket");
 	public static final TranslationTextComponent GIANT_SHELL = TrueGomuHelper.getName("Gomu Gomu no Giant Shell");
@@ -145,8 +153,4 @@ public class TrueGomuRocket extends Ability {
 		this.cooldown = (float) cooldown * 20;
 	}
 
-	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Rocket", AbilityCategory.DEVIL_FRUITS, TrueGomuRocket::new)).addDescriptionLine("Stretches towards a block, then launches the user on an arch depending on where they fist landed")
-				.setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.PHYSICAL).build();
-	}
 }

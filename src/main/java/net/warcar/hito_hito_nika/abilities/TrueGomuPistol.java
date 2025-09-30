@@ -5,13 +5,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.abilities.gomu.GomuGomuNoPistolAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -21,6 +25,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesource.SourceType;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.RendererHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
@@ -31,7 +36,9 @@ import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 public class TrueGomuPistol extends Ability {
-	public static final AbilityCore<TrueGomuPistol> INSTANCE;
+	private static final ITextComponent[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_pistol", new Pair[]{ImmutablePair.of("The user stretches their arm to punch the opponent.", (Object)null)});
+	public static final AbilityCore<TrueGomuPistol> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Pistol", AbilityCategory.DEVIL_FRUITS, TrueGomuPistol::new)
+			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
 	public static final TranslationTextComponent BAJRANG_GUN = TrueGomuHelper.getName("Gomu Gomu no Bajrang Gun");
 	public static final TranslationTextComponent ROC_GUN = TrueGomuHelper.getName("Gomu Gomu no Roc Gun");
 	public static final TranslationTextComponent JET_ELEPHANT_GUN = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gun");
@@ -398,12 +405,7 @@ public class TrueGomuPistol extends Ability {
 		this.cooldown = cooldown;
 	}
 
-	static {
-		INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Pistol", AbilityCategory.DEVIL_FRUITS, TrueGomuPistol::new)).addDescriptionLine("The user stretches their arm to hit the opponent").setSourceHakiNature(SourceHakiNature.HARDENING)
-				.setSourceType(SourceType.FIST).build();
-	}
-
-	private void onUse(LivingEntity entity, IAbility ability) {
+    private void onUse(LivingEntity entity, IAbility ability) {
 		if (this.charge == 0) {
 			this.trueScreamComponent.scream(entity);
 			this.shoot(entity, ability);

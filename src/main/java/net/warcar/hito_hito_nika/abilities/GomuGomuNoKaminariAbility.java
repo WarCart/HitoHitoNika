@@ -32,7 +32,10 @@ public class GomuGomuNoKaminariAbility extends Ability {
     private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_kaminari", ImmutablePair.of("User grabs a lightning from the sky and throws it at enemy", null), ImmutablePair.of("Requires Gear 5 and Thunderstorm", null));
     private static final int CHARGE_TIME = 80;
     private static final int COOLDOWN = 360;
-    public static final AbilityCore<GomuGomuNoKaminariAbility> INSTANCE;
+    public static final AbilityCore<GomuGomuNoKaminariAbility> INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Kaminari", AbilityCategory.DEVIL_FRUITS, GomuGomuNoKaminariAbility::new))
+            .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME))
+            .setSourceElement(SourceElement.LIGHTNING).setSourceHakiNature(SourceHakiNature.SPECIAL).setUnlockCheck(TrueGearFifthAbility::canUnlock)
+            .build();
     private final ChargeComponent chargeComponent = (new ChargeComponent(this, (component) -> component.getChargeTime() >= 10.0F)).addStartEvent(this::onChargeStart).addTickEvent(this::onChargeTick).addEndEvent(this::onChargeEnd);
     private final AnimationComponent animationComponent = new AnimationComponent(this);
     private final RequireAbilityComponent abilityComponent = new RequireAbilityComponent(this, new RequireAbilityComponent.CheckData(TrueGearFifthAbility.INSTANCE, RequireAbilityComponent.IS_ACTIVE));
@@ -128,8 +131,4 @@ public class GomuGomuNoKaminariAbility extends Ability {
         bolt.setTargetTimeToReset(resetTime);
     }
 
-    static {
-        INSTANCE = (new AbilityCore.Builder<>("Gomu Gomu no Kaminari", AbilityCategory.DEVIL_FRUITS, GomuGomuNoKaminariAbility::new)).addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME)).setSourceElement(SourceElement.LIGHTNING).setSourceHakiNature(SourceHakiNature.SPECIAL)
-                .setUnlockCheck(TrueGearFifthAbility::canUnlock).build();
-    }
 }

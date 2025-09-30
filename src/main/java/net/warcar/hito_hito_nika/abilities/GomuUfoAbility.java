@@ -42,7 +42,9 @@ public class GomuUfoAbility extends Ability {
     public static final TranslationTextComponent UFO = TrueGomuHelper.getName("Gomu Gomu no Ufo");
     public static final TranslationTextComponent JET_UFO = TrueGomuHelper.getName("Gomu Gomu no Jet Ufo");
     public static final TranslationTextComponent DAWN_WHIP = TrueGomuHelper.getName("Gomu Gomu no Dawn Whip");
-    public static final AbilityCore<GomuUfoAbility> INSTANCE;
+    public static final AbilityCore<GomuUfoAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no UFO", AbilityCategory.DEVIL_FRUITS, GomuUfoAbility::new)
+            .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ContinuousComponent.getTooltip(HOLD_TIME), RangeComponent.getTooltip(RANGE, RangeType.AOE), DealDamageComponent.getTooltip(DAMAGE, G5_DAMAGE))
+            .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.PHYSICAL).setUnlockCheck(GomuUfoAbility::canUnlock).build();
     private final ContinuousComponent continuousComponent = (new ContinuousComponent(this)).addStartEvent(this::startContinuityEvent).addTickEvent(this::duringContinuityEvent).addEndEvent(this::endContinuityEvent);
     private final HitTrackerComponent hitTrackerComponent = new HitTrackerComponent(this);
     private final AnimationComponent animationComponent = new AnimationComponent(this);
@@ -136,7 +138,4 @@ public class GomuUfoAbility extends Ability {
         return AbilityUseResult.success();
     }
 
-    static {
-        INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no UFO", AbilityCategory.DEVIL_FRUITS, GomuUfoAbility::new).addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ContinuousComponent.getTooltip(HOLD_TIME), RangeComponent.getTooltip(RANGE, RangeType.AOE), DealDamageComponent.getTooltip(DAMAGE, G5_DAMAGE)).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.PHYSICAL).setUnlockCheck(GomuUfoAbility::canUnlock).build();
-    }
 }
