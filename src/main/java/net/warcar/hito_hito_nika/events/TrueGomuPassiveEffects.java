@@ -145,7 +145,7 @@ public class TrueGomuPassiveEffects {
 		if (Arrays.asList(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.getAbilities()).contains(event.getAbility().getCore())) {
 			GomuMorphsAbility morphs = AbilityDataCapability.get(event.getEntityLiving()).getPassiveAbility(GomuMorphsAbility.INSTANCE);
 			if (morphs != null)
-				morphs.updateModes();
+				morphs.updateModes(event.getEntityLiving());
 		}
 	}
 

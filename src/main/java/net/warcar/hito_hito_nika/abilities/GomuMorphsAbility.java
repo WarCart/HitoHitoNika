@@ -1,17 +1,18 @@
 package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityType;
-import xyz.pixelatedw.mineminenomi.api.abilities.PassiveAbility2;
+import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.MorphComponent;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
+import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateEquippedAbilityPacket;
+import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdatePassiveAbilityDataPacket;
+import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
 
 import javax.annotation.Nullable;
 
@@ -44,8 +45,11 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 		}
 	}
 
-	public void updateModes() {
+	public void updateModes(LivingEntity entity) {
 		this.needsUpdate = 2;
+		if (!entity.level.isClientSide) {
+			WyNetwork.sendToAllTrackingAndSelf(new SUpdatePassiveAbilityDataPacket(entity, this), entity);
+		}
 	}
 
 	@Nullable
@@ -72,4 +76,15 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 		return null;
 	}
 
+	@Override
+	public CompoundNBT save(CompoundNBT nbt) {
+		nbt.putInt("updateTicks", needsUpdate);
+		return super.save(nbt);
+	}
+
+	@Override
+	public void load(CompoundNBT nbt) {
+		super.load(nbt);
+		this.needsUpdate = nbt.getInt("updateTicks");
+	}
 }

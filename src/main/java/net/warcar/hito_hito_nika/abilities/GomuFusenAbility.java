@@ -16,7 +16,6 @@ import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModAttributes;
 
@@ -57,7 +56,7 @@ public class GomuFusenAbility extends Ability {
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
-			morphs.updateModes();
+			morphs.updateModes(player);
 		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 		if (g4 != null) {
 			g4.setBoundman(player);
@@ -83,7 +82,7 @@ public class GomuFusenAbility extends Ability {
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, new AbilityAttributeModifier(UUID.fromString("2a0bf464-0873-11ef-b635-325096b39f47"), INSTANCE, "Fusen Resistance Damage Modifier", TrueGomuHelper.hasGearThirdActive(props) ? 0.5 : 0.25, Operation.ADDITION));
 		if (morphs != null)
-			morphs.updateModes();
+			morphs.updateModes(player);
 		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 		if (g4 != null) {
 			g4.setTankman(player);

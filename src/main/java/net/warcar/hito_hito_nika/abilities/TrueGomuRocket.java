@@ -117,7 +117,7 @@ public class TrueGomuRocket extends Ability {
 		this.readyToFly = false;
 		this.cooldownComponent.startCooldown(entity, this.cooldown);
 		this.trackerComponent.clearHits();
-		AbilityDataCapability.get(entity).getPassiveAbility(GomuMorphsAbility.INSTANCE).updateModes();
+		AbilityDataCapability.get(entity).getPassiveAbility(GomuMorphsAbility.INSTANCE).updateModes(entity);
 	}
 
 	public void setFlying() {

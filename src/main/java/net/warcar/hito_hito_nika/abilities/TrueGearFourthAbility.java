@@ -38,6 +38,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability
 import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiDataCapability;
 import xyz.pixelatedw.mineminenomi.init.*;
 import xyz.pixelatedw.mineminenomi.packets.server.SSyncAbilityDataPacket;
+import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateEquippedAbilityPacket;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
 
@@ -127,7 +128,7 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 
 	private void afterStart(LivingEntity entity, IAbility ability) {
 		GomuMorphsAbility morphs = AbilityDataCapability.get(entity).getPassiveAbility(GomuMorphsAbility.INSTANCE);
-		if (morphs != null) morphs.updateModes();
+		if (morphs != null) morphs.updateModes(entity);
 	}
 
 	private void onStartContinuity(LivingEntity player, TrueGearFourthAbility ability) {
@@ -200,6 +201,9 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 	}
 
 	protected void beforeContinuityStopEvent(LivingEntity player, IAbility ability) {
+		if (player.level.isClientSide()) {
+			return;
+		}
 		if (player instanceof PlayerEntity) {
 			((PlayerEntity) player).abilities.flying = false;
 			((PlayerEntity) player).onUpdateAbilities();
@@ -208,8 +212,12 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		if (this.isBoundman() && player instanceof PlayerEntity) {
 			((PlayerEntity) player).abilities.mayfly = ((PlayerEntity) player).isCreative() || player.isSpectator();
 		}
+		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
+		if (morphs != null)
+			morphs.updateModes(player);
 		if (this.targetedTime > 0 && this.continuousComponent.getContinueTime() >= this.continuousComponent.getThresholdTime() && !this.continuousComponent.isInfinite() && !this.isBonusTime && props.hasUnlockedAbility(HaoshokuHakiInfusionAbility.INSTANCE) && this.isBoundman()) {
 			this.onTargetedTime = true;
+			WyNetwork.sendToAllTrackingAndSelf(new SUpdateEquippedAbilityPacket(player, this), player);
 			return;
 		}
 		this.afterContinuityStopEvent(player);
@@ -234,10 +242,6 @@ public class TrueGearFourthAbility extends Ability implements IExtraUpdateData {
 		if (this.isBonusTime) {
 			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), (int) duration + 100, 1, true, true));
 		}
-		IAbilityData props = AbilityDataCapability.get(player);
-		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
-		if (morphs != null)
-			morphs.updateModes();
 		this.targetedTime = 30;
 		this.onTargetedTime = false;
 		this.isBonusTime = false;

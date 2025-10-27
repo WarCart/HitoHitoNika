@@ -29,7 +29,6 @@ import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.*;
 
 import java.util.HashMap;
@@ -94,7 +93,7 @@ public class TrueGearFifthAbility extends Ability {
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
-			morphs.updateModes();
+			morphs.updateModes(player);
 		if (player instanceof PlayerEntity && player.level.isClientSide) {
 			this.startPlayingDrums((ClientPlayerEntity) player, true);
 		}
@@ -110,7 +109,7 @@ public class TrueGearFifthAbility extends Ability {
 		IAbilityData props = AbilityDataCapability.get(player);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
-			morphs.updateModes();
+			morphs.updateModes(player);
 		if (player instanceof PlayerEntity && player.level.isClientSide) {
 			this.startPlayingDrums((ClientPlayerEntity) player, false);
 		}

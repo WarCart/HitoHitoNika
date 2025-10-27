@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.12.0'
+version = '0.12.1-Tester'
 group = 'net.warcar.hito_hito_nika' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'hito_hito_nika'
 
@@ -142,9 +142,9 @@ dependencies {
 
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:6558607")
+    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:7090619")
     runtimeOnly fg.deobf("xyz.pixelatedw.ziusudra:ziusudra:1.16.5-1.0.0.2")
-    runtimeOnly fg.deobf("blank:cartaddon:0.7.5")
+    //runtimeOnly fg.deobf("blank:cartaddon:0.7.5")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

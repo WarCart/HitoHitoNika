@@ -85,7 +85,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 
 	private void afterStart(LivingEntity entity, IAbility ability) {
 		GomuMorphsAbility morphs = AbilityDataCapability.get(entity).getPassiveAbility(GomuMorphsAbility.INSTANCE);
-		if (morphs != null) morphs.updateModes();
+		if (morphs != null) morphs.updateModes(entity);
 	}
 
 	protected void onStartContinuityEvent(LivingEntity player, IAbility abl) {
@@ -171,7 +171,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 		this.setSecondGear(false);
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
-			morphs.updateModes();
+			morphs.updateModes(player);
 	}
 
 	public void setSecondGear(boolean newWas) {
@@ -217,7 +217,7 @@ public class TrueGearThirdAbility extends Ability implements IExtraUpdateData {
 
 	public void smallTick(LivingEntity player, IAbility abl) {
 		if (this.smallFormCooldown == 1 || this.smallFormCooldown >= 299)
-			AbilityDataCapability.get(player).getPassiveAbility(GomuMorphsAbility.INSTANCE).updateModes();
+			AbilityDataCapability.get(player).getPassiveAbility(GomuMorphsAbility.INSTANCE).updateModes(player);
 		if (this.smallFormCooldown > 0) --this.smallFormCooldown;
 		else if (this.smallFormCooldown < 0) this.smallFormCooldown = 0;
 	}
