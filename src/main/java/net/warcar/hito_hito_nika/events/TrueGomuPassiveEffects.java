@@ -12,6 +12,8 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -163,6 +165,7 @@ public class TrueGomuPassiveEffects {
 		}
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void beforeEntityRender(RenderLivingEvent.Pre<LivingEntity, ?> event) {
 		LivingEntity entity = event.getEntity();
@@ -178,6 +181,7 @@ public class TrueGomuPassiveEffects {
 		}
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void afterEntityRender(RenderLivingEvent.Post<LivingEntity, ?> event) {
 		LivingEntity entity = event.getEntity();
