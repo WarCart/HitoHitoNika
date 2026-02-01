@@ -15,7 +15,7 @@ public abstract class WyHelperMixin {
         throw new IllegalStateException("Mixin not mixin-ing");
     }
 
-    @ModifyVariable(method = "generateJSONLangs", at = @At("STORE"), remap = false)
+    @ModifyVariable(method = "generateJSONLangs", at = @At("STORE"), remap = false, name = "sorted")
     private static Map<String, String> modifySorted(Map<String, String> value) {
         return sortAlphabetically(HitoHitoNoMiNikaMod.getLangMap());
     }
