@@ -1,23 +1,22 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.MorphComponent;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
-import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateEquippedAbilityPacket;
-import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdatePassiveAbilityDataPacket;
-import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
+import xyz.pixelatedw.mineminenomi.init.ModNetwork;
+import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateAbilityNBTPacket;
 
 import javax.annotation.Nullable;
 
-public class GomuMorphsAbility extends PassiveAbility2 {
-	public static final AbilityCore<GomuMorphsAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Transformations", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuMorphsAbility::new)
+public class GomuMorphsAbility extends PassiveAbility {
+	public static final AbilityCore<GomuMorphsAbility> INSTANCE = new AbilityCore.Builder<>("gomu_transformations", "Gomu Transformations", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuMorphsAbility::new)
 			.setHidden().build();
 
 	private int needsUpdate = 0;
@@ -27,7 +26,7 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 	public GomuMorphsAbility(AbilityCore<GomuMorphsAbility> core) {
 		super(core);
 		this.morphComponent = new MorphComponent(this);
-		this.getComponents().remove(ModAbilityKeys.DISABLE);
+		this.getComponents().remove(ModAbilityComponents.DISABLE.get());
 		this.addComponents(morphComponent);
 		this.addDuringPassiveEvent(this::update);
 	}
@@ -47,14 +46,14 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 
 	public void updateModes(LivingEntity entity) {
 		this.needsUpdate = 2;
-		if (!entity.level.isClientSide) {
-			WyNetwork.sendToAllTrackingAndSelf(new SUpdatePassiveAbilityDataPacket(entity, this), entity);
+		if (!entity.level().isClientSide) {
+			ModNetwork.sendToAllTrackingAndSelf(new SUpdateAbilityNBTPacket(entity, this), entity);
 		}
 	}
 
 	@Nullable
 	public MorphInfo getTransformation(LivingEntity target) {
-		IAbilityData props = AbilityDataCapability.get(target);
+		IAbilityData props = AbilityCapability.get(target).get();
 		if (TrueGomuHelper.hasGearFourthActive(props)) {
 			TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 			if (g4.isSnakeman()) {
@@ -77,14 +76,12 @@ public class GomuMorphsAbility extends PassiveAbility2 {
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT nbt) {
+	public void saveAdditional(CompoundTag nbt) {
 		nbt.putInt("updateTicks", needsUpdate);
-		return super.save(nbt);
 	}
 
 	@Override
-	public void load(CompoundNBT nbt) {
-		super.load(nbt);
+	public void loadAdditional(CompoundTag nbt) {
 		this.needsUpdate = nbt.getInt("updateTicks");
 	}
 }

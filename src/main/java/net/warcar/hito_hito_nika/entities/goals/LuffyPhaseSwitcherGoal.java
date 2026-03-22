@@ -1,8 +1,8 @@
 package net.warcar.hito_hito_nika.entities.goals;
 
 import net.warcar.hito_hito_nika.entities.LuffyBoss;
-import xyz.pixelatedw.mineminenomi.api.entities.GoalUtil;
 import xyz.pixelatedw.mineminenomi.api.entities.ai.TickedGoal;
+import xyz.pixelatedw.mineminenomi.api.helpers.GoalHelper;
 
 public class LuffyPhaseSwitcherGoal extends TickedGoal<LuffyBoss> {
     public LuffyPhaseSwitcherGoal(LuffyBoss entity) {
@@ -11,7 +11,7 @@ public class LuffyPhaseSwitcherGoal extends TickedGoal<LuffyBoss> {
 
     @Override
     public boolean canUse() {
-        if (!GoalUtil.hasAliveTarget(this.entity) || this.entity.isLastPhase()) {
+        if (!GoalHelper.hasAliveTarget(this.entity) || this.entity.isLastPhase()) {
             return false;
         } else if (this.entity.isFirstPhaseActive() && this.trySwitchToSecondPhase()) {
             this.entity.startSecondPhase();
@@ -26,10 +26,10 @@ public class LuffyPhaseSwitcherGoal extends TickedGoal<LuffyBoss> {
 
 
     private boolean trySwitchToSecondPhase() {
-        return !GoalUtil.hasHealthAbovePercentage(this.entity, 50);
+        return !GoalHelper.hasHealthAbovePercentage(this.entity, 50);
     }
 
     private boolean trySwitchToThirdPhase() {
-        return !GoalUtil.hasHealthAbovePercentage(this.entity, 25);
+        return !GoalHelper.hasHealthAbovePercentage(this.entity, 25);
     }
 }

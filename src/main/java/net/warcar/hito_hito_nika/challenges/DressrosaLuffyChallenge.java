@@ -1,16 +1,16 @@
 package net.warcar.hito_hito_nika.challenges;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.entities.LuffyBoss;
 import net.warcar.hito_hito_nika.init.GomuEntities;
 import net.warcar.hito_hito_nika.init.NPCGroups;
 import xyz.pixelatedw.mineminenomi.api.challenges.*;
 import xyz.pixelatedw.mineminenomi.challenges.arenas.JungleClearingSimpleArena;
 import xyz.pixelatedw.mineminenomi.init.ModArmors;
-import xyz.pixelatedw.mineminenomi.items.armors.StrawHatItem;
+import xyz.pixelatedw.mineminenomi.items.armors.Mod3DArmorItem;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -28,13 +28,12 @@ public class DressrosaLuffyChallenge extends Challenge {
     }
 
 
-    public static LivingEntity createShowcase(World level) {
+    public static LivingEntity createShowcase(Level level) {
         LuffyBoss boss = GomuEntities.LUFFY.create(level);
         boss.setPostTs(true);
-        StrawHatItem hat = (StrawHatItem) ModArmors.STRAW_HAT.get();
+        Mod3DArmorItem hat = ModArmors.STRAW_HAT.get();
         ItemStack item = new ItemStack(hat);
-        hat.setColor(item, Color.RED.getRGB());
-        boss.setItemSlot(EquipmentSlotType.HEAD, item);
+        boss.setItemSlot(EquipmentSlot.HEAD, item);
         return boss;
     }
 }

@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 
 import java.util.Map;
 

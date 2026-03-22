@@ -1,20 +1,20 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.DamageTakenComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.DealDamageComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.GrabEntityComponent;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 
-public class GomuGomuNoCannonballAbility extends PassiveAbility2 {
-    public static final AbilityCore<GomuGomuNoCannonballAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Cannonball", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuGomuNoCannonballAbility::new)
+public class GomuGomuNoCannonballAbility extends PassiveAbility {
+    public static final AbilityCore<GomuGomuNoCannonballAbility> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_cannonball", "Gomu Gomu no Cannonball", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuGomuNoCannonballAbility::new)
             .setUnlockCheck(GomuGomuNoCannonballAbility::canUnlock).build();
 
     private final ChargeComponent chargeComponent = new ChargeComponent(this).addEndEvent(this::onChargeEnd);
@@ -23,10 +23,10 @@ public class GomuGomuNoCannonballAbility extends PassiveAbility2 {
     private final DealDamageComponent damageComponent = new DealDamageComponent(this);
 
     private float onDamageTaken(LivingEntity entity, IAbility iAbility, DamageSource source, float amount) {
-        if (this.isPaused() || !TrueGomuHelper.hasGearFourthTankmanActive(AbilityDataCapability.get(entity)) || this.chargeComponent.isCharging()) {
+        if (this.isPaused() || !TrueGomuHelper.hasGearFourthTankmanActive(AbilityCapability.get(entity).get()) || this.chargeComponent.isCharging()) {
             return amount;
         }
-        if (!source.isProjectile() || (source.getDirectEntity() instanceof AbilityProjectileEntity && ((AbilityProjectileEntity) source.getDirectEntity()).isPhysical())) {
+        if (!source.isIndirect() || (source.getDirectEntity() instanceof NuProjectileEntity && ((NuProjectileEntity) source.getDirectEntity()).isPhysical())) {
             if (source.getEntity() instanceof LivingEntity) {
                 this.grabEntityComponent.grabManually(entity, (LivingEntity) source.getEntity());
             }
@@ -43,8 +43,8 @@ public class GomuGomuNoCannonballAbility extends PassiveAbility2 {
         if (this.grabEntityComponent.hasGrabbedEntity()) {
             LivingEntity grabbedEntity = this.grabEntityComponent.getGrabbedEntity();
             this.damageComponent.hurtTarget(entity, grabbedEntity, 30);
-            Vector3d position = new Vector3d(entity.position().x, entity.getEyeY(), entity.position().z);
-            Vector3d velocity = position.vectorTo(grabbedEntity.position()).normalize().scale(5);
+            Vec3 position = new Vec3(entity.position().x, entity.getEyeY(), entity.position().z);
+            Vec3 velocity = position.vectorTo(grabbedEntity.position()).normalize().scale(5);
             AbilityHelper.setDeltaMovement(grabbedEntity, velocity.x, 1, velocity.z);
             this.grabEntityComponent.release(entity);
         }

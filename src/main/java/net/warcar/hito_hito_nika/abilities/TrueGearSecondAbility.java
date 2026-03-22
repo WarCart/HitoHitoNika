@@ -1,16 +1,14 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.common.ForgeMod;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
@@ -18,27 +16,28 @@ import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.SkinOverlayComponent;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.*;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
+import xyz.pixelatedw.mineminenomi.init.i18n.ModI18nAbilities;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class TrueGearSecondAbility extends Ability {
-	private static final ITextComponent[] DESCRIPTION = TrueGomuHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gear_second",
+	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gear_second",
 			ImmutablePair.of("By speeding up their blood flow, the user gains strength, speed and mobility.", null));
-	public static final AbilityCore<TrueGearSecondAbility> INSTANCE = new AbilityCore.Builder<>("Gear Second", AbilityCategory.DEVIL_FRUITS, TrueGearSecondAbility::new)
+	public static final AbilityCore<TrueGearSecondAbility> INSTANCE = new AbilityCore.Builder<>("gear_second", "Gear Second", AbilityCategory.DEVIL_FRUITS, TrueGearSecondAbility::new)
 			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, ChangeStatsComponent.getTooltip())
 			.setUnlockCheck(TrueGearSecondAbility::canUnlock).build();
 	private static final AbilityAttributeModifier JUMP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("a44a9644-369a-4e18-88d9-323727d3d85b"), INSTANCE, "Gear Second Jump Modifier", 5, Operation.ADDITION);
@@ -48,23 +47,16 @@ public class TrueGearSecondAbility extends Ability {
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
 	private final SkinOverlayComponent overlayComponent = new SkinOverlayComponent(this, new AbilityOverlay.Builder().setColor(new Color(232, 54, 54, 74)).build());
-	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
-		@Override
-		public void setupDefaultScreams(IAbility ability) {
-			ability.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(chargeComponent -> chargeComponent.addStartEvent((entity, iAbility) -> this.scream(entity, ability.getDisplayName().getString())));
-		}
-	};
 	private boolean thirdGearWas = false;
 	private boolean prevSprintValue = false;
 
 	public TrueGearSecondAbility(AbilityCore<TrueGearSecondAbility> core) {
 		super(core);
-		this.isNew = true;
 		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "gear_second"));
 		this.continuousComponent = new ContinuousComponent(this, true);
 		this.statsComponent = new ChangeStatsComponent(this);
 		this.statsComponent.addAttributeModifier(ModAttributes.JUMP_HEIGHT.get(), JUMP_HEIGHT);
-		this.statsComponent.addAttributeModifier(ModAttributes.STEP_HEIGHT.get(), STEP_HEIGHT);
+		this.statsComponent.addAttributeModifier(ForgeMod.STEP_HEIGHT_ADDITION.get(), STEP_HEIGHT);
 		this.statsComponent.addAttributeModifier(Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER);
 		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
 		this.addUseEvent(this::onStartContinuity);
@@ -72,7 +64,7 @@ public class TrueGearSecondAbility extends Ability {
 		this.continuousComponent.addTickEvent(this::duringContinuity);
 		this.continuousComponent.addTickEvent(TrueGomuHelper.getSpeedEvent(1.75f));
 		this.continuousComponent.addEndEvent(this::afterContinuityStopEvent);
-		this.addComponents(this.continuousComponent, this.statsComponent, this.trueScreamComponent, this.overlayComponent);
+		this.addComponents(this.continuousComponent, this.statsComponent, this.overlayComponent);
 	}
 
 	private void onStartContinuity(LivingEntity player, IAbility abl) {
@@ -81,12 +73,13 @@ public class TrueGearSecondAbility extends Ability {
 			return;
 		}
 		float time = (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG2Length(), player, new HashMap<>()).getValue();
-		IAbilityData props = AbilityDataCapability.get(player);
+		IAbilityData props = AbilityCapability.get(player).get();
 		if (!TrueGomuHelper.canActivateGear(props, this)) {
-			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
+			player.sendSystemMessage(ModI18nAbilities.MESSAGE_GEAR_ACTIVE);
 		} else {
 			if (!this.prevSprintValue && player.isSprinting()) {
-				player.level.playSound(null, player.blockPosition(), ModSounds.TELEPORT_SFX.get(), SoundCategory.PLAYERS, 2.0F, 1.0F);			}
+				player.level().playSound(null, player.blockPosition(), ModSounds.TELEPORT_SFX.get(), SoundSource.PLAYERS, 2.0F, 1.0F);
+			}
 			if (TrueGomuHelper.hasGearThirdActive(props)) {
 				props.getEquippedAbility(TrueGearThirdAbility.INSTANCE).setSecondGear(true);
 				this.thirdGearWas = true;
@@ -98,7 +91,7 @@ public class TrueGearSecondAbility extends Ability {
 				this.continuousComponent.startContinuity(player, time * 20);
 			}
 			this.statsComponent.applyModifiers(player);
-			player.level.playSound(null, player.blockPosition(), ModSounds.GEAR_SECOND_SFX.get(), SoundCategory.PLAYERS, 0.5F, 1.0F);
+			player.level().playSound(null, player.blockPosition(), ModSounds.GEAR_SECOND_SFX.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
 			this.prevSprintValue = player.isSprinting();
 		}
 	}
@@ -112,16 +105,16 @@ public class TrueGearSecondAbility extends Ability {
 	private void afterContinuityStopEvent(LivingEntity player, IAbility abl) {
 		this.cooldownComponent.startCooldown(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG2Cooldown(), player, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue());
 		this.overlayComponent.hideAll(player);
-		if (this.thirdGearWas && EntityStatsCapability.get(player).getDoriki() < 3500.0D) {
-			player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 300, 1, true, true));
-		} else if ((double) this.continuousComponent.getContinueTime() > (double) this.continuousComponent.getThresholdTime() / 1.425D && EntityStatsCapability.get(player).getDoriki() < 2000.0D) {
-			player.addEffect(new EffectInstance(Effects.HUNGER, 600, 3, true, true));
-			player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200, 1, true, true));
+		if (this.thirdGearWas && EntityStatsCapability.get(player).get().getDoriki() < 3500.0D) {
+			player.addEffect(new MobEffectInstance(ModEffects.UNCONSCIOUS.get(), 300, 1, true, true));
+		} else if ((double) this.continuousComponent.getContinueTime() > (double) this.continuousComponent.getThresholdTime() / 1.425D && EntityStatsCapability.get(player).get().getDoriki() < 2000.0D) {
+			player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 600, 3, true, true));
+			player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1, true, true));
 		}
-		TrueGearThirdAbility thirdGear = AbilityDataCapability.get(player).getEquippedAbility(TrueGearThirdAbility.INSTANCE);
+		TrueGearThirdAbility thirdGear = AbilityCapability.get(player).get().getEquippedAbility(TrueGearThirdAbility.INSTANCE);
 		if (thirdGear != null && thirdGear.isContinuous() && thirdGearWas) {
 			this.setThirdGear(false);
-			thirdGear.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(c -> c.stopContinuity(player));
+			thirdGear.getComponent(ModAbilityComponents.CONTINUOUS.get()).ifPresent(c -> c.stopContinuity(player));
 		}
 		this.setThirdGear(false);
 		this.statsComponent.removeModifiers(player);
@@ -132,6 +125,6 @@ public class TrueGearSecondAbility extends Ability {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return EntityStatsCapability.get(user).getDoriki() >= 1500d && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
+		return EntityStatsCapability.get(user).get().getDoriki() >= 1500d && DevilFruitCapability.get(user).get().hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 }

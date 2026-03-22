@@ -1,17 +1,16 @@
 package net.warcar.hito_hito_nika.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
 import net.warcar.hito_hito_nika.entities.goals.*;
@@ -20,31 +19,25 @@ import net.warcar.hito_hito_nika.init.GomuEntities;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.brawler.BrawlerPassiveBonusesAbility;
 import xyz.pixelatedw.mineminenomi.abilities.gomu.BouncyAbility;
+import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiHardeningAbility;
+import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiInternalDestructionAbility;
+import xyz.pixelatedw.mineminenomi.abilities.haki.HaoshokuHakiInfusionAbility;
 import xyz.pixelatedw.mineminenomi.api.challenges.InProgressChallenge;
-import xyz.pixelatedw.mineminenomi.api.challenges.OPBossEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.ai.NPCPhase;
-import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
+import xyz.pixelatedw.mineminenomi.api.entities.ai.SimplePhase;
 import xyz.pixelatedw.mineminenomi.api.helpers.MobsHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
-import xyz.pixelatedw.mineminenomi.entities.mobs.IRandomTexture;
+import xyz.pixelatedw.mineminenomi.entities.ai.goals.ImprovedMeleeAttackGoal;
+import xyz.pixelatedw.mineminenomi.entities.ai.goals.JumpOutOfHoleGoal;
+import xyz.pixelatedw.mineminenomi.entities.ai.goals.SprintTowardsTargetGoal;
+import xyz.pixelatedw.mineminenomi.entities.ai.goals.abilities.ActiveGuardAbilityWrapperGoal;
+import xyz.pixelatedw.mineminenomi.entities.ai.goals.abilities.AlwaysActiveAbilityWrapperGoal;
+import xyz.pixelatedw.mineminenomi.entities.ai.goals.abilities.HakiAbilityWrapperGoal;
+import xyz.pixelatedw.mineminenomi.entities.mobs.OPBossEntity;
 import xyz.pixelatedw.mineminenomi.entities.mobs.OPEntity;
-import xyz.pixelatedw.mineminenomi.entities.mobs.goals.ImprovedMeleeAttackGoal;
-import xyz.pixelatedw.mineminenomi.entities.mobs.goals.JumpOutOfHoleGoal;
-import xyz.pixelatedw.mineminenomi.entities.mobs.goals.SprintTowardsTargetGoal;
-import xyz.pixelatedw.mineminenomi.entities.mobs.goals.abilities.AlwaysActiveAbilityWrapperGoal;
-import xyz.pixelatedw.mineminenomi.entities.mobs.goals.abilities.TakedownKickWrapperGoal;
-import xyz.pixelatedw.mineminenomi.entities.mobs.goals.abilities.haki.BusoshokuHakiHardeningWrapperGoal;
-import xyz.pixelatedw.mineminenomi.entities.mobs.goals.abilities.haki.BusoshokuHakiInternalDestructionWrapperGoal;
-import xyz.pixelatedw.mineminenomi.entities.mobs.goals.abilities.haki.HaoshokuHakiInfusionWrapperGoal;
-import xyz.pixelatedw.mineminenomi.entities.mobs.phases.SimplePhase;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
-import xyz.pixelatedw.mineminenomi.packets.server.SSyncAbilityDataPacket;
-import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
 
-public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture {
-    private static final DataParameter<Boolean> POST_TS = EntityDataManager.defineId(LuffyBoss.class, DataSerializers.BOOLEAN);
+public class LuffyBoss extends OPBossEntity {
+    private static final EntityDataAccessor<Boolean> POST_TS = SynchedEntityData.defineId(LuffyBoss.class, EntityDataSerializers.BOOLEAN);
 
     private final NPCPhase<LuffyBoss> firstPhase = new SimplePhase<>("First phase", this);
     private final NPCPhase<LuffyBoss> secondPhase = new SimplePhase<>("Second phase", this);
@@ -75,32 +68,31 @@ public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture
         MobsHelper.addBasicNPCGoals(this);
         this.goalSelector.addGoal(0, new LuffyPhaseSwitcherGoal(this));
         this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, GomuMorphsAbility.INSTANCE));
-        this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, BrawlerPassiveBonusesAbility.INSTANCE));
-        this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, BouncyAbility.INSTANCE));
+        this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, BrawlerPassiveBonusesAbility.INSTANCE.get()));
+        this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, BouncyAbility.INSTANCE.get()));
         this.goalSelector.addGoal(0, new JumpOutOfHoleGoal(this));
         this.goalSelector.addGoal(1, new SprintTowardsTargetGoal(this));
         this.goalSelector.addGoal(1, new ImprovedMeleeAttackGoal(this, 1, true));
-        this.goalSelector.addGoal(2, new TakedownKickWrapperGoal(this));
         if (inProgressChallenge.isStandardDifficulty()) {
             this.secondPhase.addGoal(2, new BulletWrapperGoal<>(this));
             this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
             this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
             this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
             this.thirdPhase.addGoal(2, new BulletWrapperGoal<>(this));
-            this.goalSelector.addGoal(3, new FusenWrapperGoal(this));
+            this.goalSelector.addGoal(3, new ActiveGuardAbilityWrapperGoal<>(this, GomuFusenAbility.INSTANCE));
         } else if (inProgressChallenge.isHardDifficulty()) {
-            this.goalSelector.addGoal(0, new BusoshokuHakiHardeningWrapperGoal(this));
+            this.goalSelector.addGoal(0, new HakiAbilityWrapperGoal<>(this, BusoshokuHakiHardeningAbility.INSTANCE.get()));
             this.goalSelector.addGoal(2, new BulletWrapperGoal<>(this));
             this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
             this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
             this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearFourthAbility.INSTANCE));
         } else {
-            this.goalSelector.addGoal(0, new BusoshokuHakiHardeningWrapperGoal(this));
-            this.goalSelector.addGoal(0, new BusoshokuHakiInternalDestructionWrapperGoal(this));
+            this.goalSelector.addGoal(0, new HakiAbilityWrapperGoal<>(this, BusoshokuHakiHardeningAbility.INSTANCE.get()));
+            this.goalSelector.addGoal(0, new HakiAbilityWrapperGoal<>(this, BusoshokuHakiInternalDestructionAbility.INSTANCE.get()));
             this.goalSelector.addGoal(2, new BulletWrapperGoal<>(this));
             this.firstPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
             this.firstPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
-            this.secondPhase.addGoal(0, new HaoshokuHakiInfusionWrapperGoal(this));
+            this.goalSelector.addGoal(0, new HakiAbilityWrapperGoal<>(this, HaoshokuHakiInfusionAbility.INSTANCE.get()));
             this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
             this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
             this.secondPhase.addGoal(1, new GearFourthWrapperGoal(this, 0.75f));
@@ -113,25 +105,23 @@ public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture
         this.getPhaseManager().setPhase(firstPhase);
     }
 
-    public LuffyBoss(EntityType type, World world) {
+    public LuffyBoss(EntityType type, Level world) {
         super(type, world);
     }
 
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return OPEntity.createAttributes().add(Attributes.MAX_HEALTH, 300).add(Attributes.ATTACK_DAMAGE, 5);
     }
 
-    @Override
     public ResourceLocation getCurrentTexture() {
         if (!this.isPostTs()) {
-            return new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/entities/luffy_pre_ts.png");
+            return ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, "textures/entities/luffy_pre_ts.png");
         }
-        return new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/entities/luffy_post_ts.png");
+        return ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, "textures/entities/luffy_post_ts.png");
     }
 
-    @Override
     public ResourceLocation getDefaultTexture() {
-        return new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, "textures/entities/luffy_pre_ts.png");
+        return ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, "textures/entities/luffy_pre_ts.png");
     }
 
     @Override
@@ -139,9 +129,9 @@ public class LuffyBoss extends OPBossEntity<LuffyBoss> implements IRandomTexture
         if (this.getChallengeInfo().isDifficultyUltimate() && !this.isLastPhase()) {
             devilFruitData.setAwakenedFruit(true);
             this.setHealth(5);
-            this.addEffect(new EffectInstance(GomuEffects.GOMU_REVIVE.get(), 600, 1, true, false));
-            this.addEffect(new EffectInstance(Effects.REGENERATION, 600, 12, true, true));
-            this.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
+            this.addEffect(new MobEffectInstance(GomuEffects.GOMU_REVIVE.get(), 600, 1, true, false));
+            this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 12, true, true));
+            this.addEffect(new MobEffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
             this.startLastPhase();
         } else {
             super.die(p_70645_1_);

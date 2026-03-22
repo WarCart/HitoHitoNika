@@ -1,17 +1,17 @@
 package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.TickableSound;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.resources.sounds.AbstractSoundInstance;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
@@ -21,15 +21,17 @@ import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.joml.Math;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.SkinOverlayComponent;
-import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
 import xyz.pixelatedw.mineminenomi.init.*;
+import xyz.pixelatedw.mineminenomi.init.i18n.ModI18nAbilities;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -37,8 +39,8 @@ import java.util.UUID;
 import static xyz.pixelatedw.mineminenomi.api.abilities.AbilityOverlay.RenderType.ENERGY;
 
 public class TrueGearFifthAbility extends Ability {
-	private static final ITextComponent[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gear_fifth", new Pair[]{ImmutablePair.of("The absolute peak bringing joy and freedom to those around them.", (Object)null)});
-	public static final AbilityCore<TrueGearFifthAbility> INSTANCE = new AbilityCore.Builder<>("Gear Fifth", AbilityCategory.DEVIL_FRUITS, TrueGearFifthAbility::new).setUnlockCheck(TrueGearFifthAbility::canUnlock)
+	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gear_fifth", new Pair[]{ImmutablePair.of("The absolute peak bringing joy and freedom to those around them.", (Object)null)});
+	public static final AbilityCore<TrueGearFifthAbility> INSTANCE = new AbilityCore.Builder<>("gear_fifth", "Gear Fifth", AbilityCategory.DEVIL_FRUITS, TrueGearFifthAbility::new).setUnlockCheck(TrueGearFifthAbility::canUnlock)
             .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, ChangeStatsComponent.getTooltip()).build();
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
@@ -51,7 +53,6 @@ public class TrueGearFifthAbility extends Ability {
 
 	public TrueGearFifthAbility(AbilityCore<TrueGearFifthAbility> core) {
 		super(core);
-		this.isNew = true;
 		overlayComponent = new SkinOverlayComponent(this, new AbilityOverlay.Builder().setColor("#ffffff30").setRenderType(ENERGY).build());
 		continuousComponent = new ContinuousComponent(this, true);
 		this.continuousComponent.addEndEvent(this::afterContinuityStop);
@@ -60,23 +61,23 @@ public class TrueGearFifthAbility extends Ability {
 		this.continuousComponent.addTickEvent(TrueGomuHelper.getSpeedEvent(0.875f));
 		statsComponent = new ChangeStatsComponent(this);
 		this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
-		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, DAMAGE_REDUCTION_MODIFIER);
+		this.statsComponent.addAttributeModifier(ModAttributes.TOUGHNESS, DAMAGE_REDUCTION_MODIFIER);
 		this.statsComponent.addAttributeModifier(ModAttributes.REGEN_RATE, REGEN);
 		this.statsComponent.addAttributeModifier(ForgeMod.ENTITY_GRAVITY, GRAVITY_REDUCTION_MODIFIER);
 		this.addComponents(continuousComponent, statsComponent, overlayComponent);
 	}
 
 	private void duringContinuity(LivingEntity entity, IAbility ability) {
-		if (entity.isOnGround() && !this.playJumpSound) {
+		if (!entity.isFallFlying() && !this.playJumpSound) {
 			this.playJumpSound = true;
-		} else if (!entity.isOnGround() && this.playJumpSound) {
+		} else if (entity.isFallFlying() && this.playJumpSound) {
 			SoundEvent sfx;
 			if (entity.getRandom().nextBoolean()) {
 				sfx = ModSounds.BOUNCE_2.get();
 			} else {
 				sfx = ModSounds.BOUNCE_1.get();
 			}
-			entity.level.playSound(null, entity.blockPosition(), sfx, SoundCategory.PLAYERS, 2.0F, 0.75F + entity.getRandom().nextFloat() / 2.0F);
+			entity.level().playSound(null, entity.blockPosition(), sfx, SoundSource.PLAYERS, 2.0F, 0.75F + entity.getRandom().nextFloat() / 2.0F);
 			this.playJumpSound = false;
 		}
 	}
@@ -86,16 +87,16 @@ public class TrueGearFifthAbility extends Ability {
 			this.continuousComponent.stopContinuity(player);
 			return;
 		}
-		if (!TrueGomuHelper.canActivateGear(AbilityDataCapability.get(player), this)) {
-			player.sendMessage(ModI18n.ABILITY_MESSAGE_GEAR_ACTIVE, Util.NIL_UUID);
+		if (!TrueGomuHelper.canActivateGear(AbilityCapability.get(player).get(), this)) {
+			player.sendSystemMessage(ModI18nAbilities.MESSAGE_GEAR_ACTIVE);
 			return;
 		}
-		IAbilityData props = AbilityDataCapability.get(player);
+		IAbilityData props = AbilityCapability.get(player).get();
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
 			morphs.updateModes(player);
-		if (player instanceof PlayerEntity && player.level.isClientSide) {
-			this.startPlayingDrums((ClientPlayerEntity) player, true);
+		if (player instanceof Player && player.level().isClientSide) {
+			this.startPlayingDrums((AbstractClientPlayer) player, true);
 		}
 		this.statsComponent.applyModifiers(player);
 		this.continuousComponent.startContinuity(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG5Length(), player, new HashMap<>()).getValue() * 20);
@@ -104,31 +105,32 @@ public class TrueGearFifthAbility extends Ability {
 
 	private void afterContinuityStop(LivingEntity player, IAbility abl) {
 		float time = (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG5Cooldown(), player, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue();
-		player.addEffect(new EffectInstance(ModEffects.UNCONSCIOUS.get(), (int) (time * 0.25f), 1, true, true));
+		player.addEffect(new MobEffectInstance(ModEffects.UNCONSCIOUS.get(), (int) (time * 0.25f), 1, true, true));
 		this.cooldownComponent.startCooldown(player, time * 0.75f);
-		IAbilityData props = AbilityDataCapability.get(player);
+		IAbilityData props = AbilityCapability.get(player).get();
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
 		if (morphs != null)
 			morphs.updateModes(player);
-		if (player instanceof PlayerEntity && player.level.isClientSide) {
-			this.startPlayingDrums((ClientPlayerEntity) player, false);
+		if (player instanceof Player && player.level().isClientSide) {
+			this.startPlayingDrums((AbstractClientPlayer) player, false);
 		}
 		this.statsComponent.removeModifiers(player);
 		this.overlayComponent.hideAll(player);
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		return DevilFruitCapability.get(user).hasAwakenedFruit() && DevilFruitCapability.get(user).hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
+		IDevilFruit fruit = DevilFruitCapability.get(user).get();
+		return fruit.hasAwakenedFruit() && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private void startPlayingDrums(ClientPlayerEntity player, boolean isStarting) {
+	private void startPlayingDrums(AbstractClientPlayer player, boolean isStarting) {
 		Minecraft mc = Minecraft.getInstance();
 		if (isStarting) {
-			mc.getSoundManager().play(new DrumsOfLiberation(ModSounds.DRUMS_OF_LIBERATION_1.get(), SoundCategory.PLAYERS, player, this));
+			mc.getSoundManager().play(new DrumsOfLiberation(ModSounds.DRUMS_OF_LIBERATION_1.get(), SoundSource.PLAYERS, player, this));
 		} else {
-			mc.getSoundManager().stop(ModSounds.DRUMS_OF_LIBERATION_1.get().getLocation(), SoundCategory.PLAYERS);
-			mc.getSoundManager().stop(ModSounds.DRUMS_OF_LIBERATION_2.get().getLocation(), SoundCategory.PLAYERS);
+			mc.getSoundManager().stop(ModSounds.DRUMS_OF_LIBERATION_1.get().getLocation(), SoundSource.PLAYERS);
+			mc.getSoundManager().stop(ModSounds.DRUMS_OF_LIBERATION_2.get().getLocation(), SoundSource.PLAYERS);
 		}
 	}
 
@@ -140,13 +142,13 @@ public class TrueGearFifthAbility extends Ability {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	static class DrumsOfLiberation extends TickableSound {
-		protected ClientPlayerEntity player;
+	static class DrumsOfLiberation extends AbstractTickableSoundInstance {
+		protected AbstractClientPlayer player;
 		protected TrueGearFifthAbility ability;
 
 
-		protected DrumsOfLiberation(SoundEvent event, SoundCategory category, ClientPlayerEntity player, TrueGearFifthAbility ability) {
-			super(event, category);
+		protected DrumsOfLiberation(SoundEvent event, SoundSource category, AbstractClientPlayer player, TrueGearFifthAbility ability) {
+			super(event, category, RandomSource.create());
 			this.player = player;
 			this.ability = ability;
 		}
@@ -154,12 +156,12 @@ public class TrueGearFifthAbility extends Ability {
 		@Override
 		public void tick() {
 			if (player.isAlive() && ability.isContinuous()) {
-				float continueTime = ability.getComponent(ModAbilityKeys.CONTINUOUS).map(ContinuousComponent::getContinueTime).orElse(0.0F);
+				float continueTime = ability.getComponent(ModAbilityComponents.CONTINUOUS.get()).map(ContinuousComponent::getContinueTime).orElse(0.0F);
 				if (continueTime > 60.0F) {
 					this.stop();
-					Minecraft.getInstance().getSoundManager().play(new DrumsOfLiberation(ModSounds.DRUMS_OF_LIBERATION_2.get(), SoundCategory.PLAYERS, player, ability));
+					Minecraft.getInstance().getSoundManager().play(new DrumsOfLiberation(ModSounds.DRUMS_OF_LIBERATION_2.get(), SoundSource.PLAYERS, player, ability));
 				} else {
-					this.volume = MathHelper.clamp(continueTime / 120.0F, 0.0F, 0.5F);
+					this.volume = Math.clamp(continueTime / 120.0F, 0.0F, 0.5F);
 				}
 			} else {
 				this.stop();

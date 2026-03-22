@@ -1,13 +1,12 @@
 package net.warcar.hito_hito_nika.entities.goals;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.warcar.hito_hito_nika.abilities.GomuBulletAbility;
-import net.warcar.hito_hito_nika.abilities.TrueGomuPistol;
-import xyz.pixelatedw.mineminenomi.api.entities.GoalUtil;
 import xyz.pixelatedw.mineminenomi.api.entities.ai.AbilityWrapperGoal;
+import xyz.pixelatedw.mineminenomi.api.helpers.GoalHelper;
 
-public class BulletWrapperGoal<E extends MobEntity> extends AbilityWrapperGoal<E, GomuBulletAbility> {
+public class BulletWrapperGoal<E extends Mob> extends AbilityWrapperGoal<E, GomuBulletAbility> {
     private LivingEntity target;
     public BulletWrapperGoal(E entity) {
         super(entity, GomuBulletAbility.INSTANCE);
@@ -15,11 +14,11 @@ public class BulletWrapperGoal<E extends MobEntity> extends AbilityWrapperGoal<E
 
     @Override
     public boolean canUseWrapper() {
-        if (!GoalUtil.hasAliveTarget(entity)) {
+        if (!GoalHelper.hasAliveTarget(entity)) {
             return false;
         }
         this.target = this.entity.getTarget();
-        return GoalUtil.canSee(entity, target);
+        return GoalHelper.canSee(entity, target);
     }
 
     @Override
@@ -29,16 +28,16 @@ public class BulletWrapperGoal<E extends MobEntity> extends AbilityWrapperGoal<E
 
     @Override
     public void startWrapper() {
-        GoalUtil.lookAtEntity(entity, target);
+        GoalHelper.lookAtEntity(entity, target);
     }
 
     @Override
     public void tickWrapper() {
-        GoalUtil.lookAtEntity(entity, target);
+        GoalHelper.lookAtEntity(entity, target);
     }
 
     @Override
     public void stopWrapper() {
-        GoalUtil.lookAtEntity(entity, target);
+        GoalHelper.lookAtEntity(entity, target);
     }
 }

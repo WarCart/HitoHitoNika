@@ -73,12 +73,6 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	private final ContinuousComponent continuousComponent;
 	private final ProjectileComponent projectileComponent;
 	private final AnimationComponent animationComponent;
-	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
-		@Override
-		public void setupDefaultScreams(IAbility ability) {
-			ability.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(chargeComponent -> chargeComponent.addStartEvent((entity, iAbility) -> this.scream(entity, ability.getDisplayName().getString())));
-		}
-	};
 	private final PoolComponent poolComponent = new PoolComponent(this, ModAbilityPools.GRAB_ABILITY);
 	private double leap = 3;
 	private float speed = 3;

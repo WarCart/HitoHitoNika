@@ -1,19 +1,22 @@
 package net.warcar.hito_hito_nika.init;
 
-import net.minecraft.util.ResourceLocation;
+import com.google.common.collect.Lists;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
-import xyz.pixelatedw.mineminenomi.api.ModRegistries;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
+import xyz.pixelatedw.mineminenomi.api.WyRegistry;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.enums.FruitType;
+import xyz.pixelatedw.mineminenomi.init.ModRegistry;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
-import xyz.pixelatedw.mineminenomi.wypi.WyRegistry;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class TrueGomuGomuNoMi {
@@ -21,25 +24,21 @@ public class TrueGomuGomuNoMi {
 	public static final AkumaNoMiItem HITO_HITO_NO_MI_NIKA;
 
 	private static <T extends AkumaNoMiItem> T registerFruit(T fruit) {
-		WyRegistry.registerItem(fruit.getDevilFruitName(), () -> fruit);
-		if (fruit.getAbilities() != null && fruit.getAbilities().length > 0) {
+		ModRegistry.registerItem(fruit.getDevilFruitName().getString(), () -> fruit);
+		if (fruit.getAbilities() != null && !fruit.getAbilities().isEmpty()) {
 			registerAbilities(fruit.getAbilities());
 		}
 		return fruit;
 	}
 
-	private static void registerAbilities(AbilityCore<?>[] abilities) {
-		Arrays.stream(abilities).filter(Objects::nonNull).forEach(TrueGomuGomuNoMi::registerAbility);
+	private static void registerAbilities(List<? extends AbilityCore<?>> abilities) {
+		abilities.stream().filter(Objects::nonNull).forEach(TrueGomuGomuNoMi::registerAbility);
 	}
 
 	public static <T extends IAbility> AbilityCore<T> registerAbility(AbilityCore<T> core) {
 		String resourceName = WyHelper.getResourceName(core.getId());
-		ResourceLocation key = new ResourceLocation(HitoHitoNoMiNikaMod.MOD_ID, resourceName);
 		HitoHitoNoMiNikaMod.getLangMap().put("ability."+ HitoHitoNoMiNikaMod.MOD_ID +"." + resourceName, core.getUnlocalizedName());
 		ABILITIES.register(resourceName, () -> core);
-		if (core.getIcon() == null) {
-			core.setIcon(new ResourceLocation(key.getNamespace(), "textures/abilities/" + key.getPath() + ".png"));
-		}
 
 		return core;
 	}
@@ -49,8 +48,8 @@ public class TrueGomuGomuNoMi {
 	}
 
 	static {
-		ABILITIES = DeferredRegister.create(ModRegistries.ABILITIES, HitoHitoNoMiNikaMod.MOD_ID);
-		AbilityCore<?>[] cores = new AbilityCore[]{TrueGomuPistol.INSTANCE, GomuBulletAbility.INSTANCE, TrueGomuGatling.INSTANCE,
+		ABILITIES = DeferredRegister.create(WyRegistry.Keys.ABILITIES, HitoHitoNoMiNikaMod.MOD_ID);
+		RegistryObject<AbilityCore<?>>[] cores = new RegistryObject<AbilityCore<?>>[]{TrueGomuPistol.INSTANCE, GomuBulletAbility.INSTANCE, TrueGomuGatling.INSTANCE,
 				TrueGomuBazooka.INSTANCE, GomuFusenAbility.INSTANCE, TrueGomuRocket.INSTANCE, TrueGearSecondAbility.INSTANCE,
 				TrueGearThirdAbility.INSTANCE, TrueGearFourthAbility.INSTANCE, TrueGearFifthAbility.INSTANCE, GomuUfoAbility.INSTANCE,
 				MoguraPistolAbility.INSTANCE, GomuGomuNoKaminariAbility.INSTANCE, GomuGomuNoCannonballAbility.INSTANCE,
@@ -60,6 +59,6 @@ public class TrueGomuGomuNoMi {
             cores = Arrays.copyOf(cores, cores.length + 1);
 			cores[cores.length-1] = GearSixthAbility.INSTANCE;
         }
-		HITO_HITO_NO_MI_NIKA = registerFruit(new AkumaNoMiItem("Gomu Gomu no Mi", 2, FruitType.PARAMECIA, cores));
+		HITO_HITO_NO_MI_NIKA = registerFruit(new AkumaNoMiItem(2, FruitType.PARAMECIA, cores));
 	}
 }

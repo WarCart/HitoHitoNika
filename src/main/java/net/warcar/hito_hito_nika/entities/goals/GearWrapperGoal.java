@@ -1,11 +1,10 @@
 package net.warcar.hito_hito_nika.entities.goals;
 
-import net.minecraft.entity.MobEntity;
 import net.warcar.hito_hito_nika.entities.LuffyBoss;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
-import xyz.pixelatedw.mineminenomi.api.entities.GoalUtil;
 import xyz.pixelatedw.mineminenomi.api.entities.ai.AbilityWrapperGoal;
+import xyz.pixelatedw.mineminenomi.api.helpers.GoalHelper;
 
 public class GearWrapperGoal<G extends Ability> extends AbilityWrapperGoal<LuffyBoss, G> {
     public GearWrapperGoal(LuffyBoss entity, AbilityCore<G> core) {
@@ -14,7 +13,7 @@ public class GearWrapperGoal<G extends Ability> extends AbilityWrapperGoal<Luffy
 
     @Override
     public boolean canUseWrapper() {
-        return GoalUtil.hasAliveTarget(this.entity);
+        return GoalHelper.hasAliveTarget(this.entity);
     }
 
     @Override

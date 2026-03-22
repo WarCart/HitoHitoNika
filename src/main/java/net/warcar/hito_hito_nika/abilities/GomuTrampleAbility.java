@@ -2,35 +2,38 @@ package net.warcar.hito_hito_nika.abilities;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueMorphs;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import xyz.pixelatedw.mineminenomi.api.NuWorld;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.DealDamageComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.RangeComponent;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.RequireMorphComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.RangeComponent.RangeType;
-import xyz.pixelatedw.mineminenomi.api.damagesource.SourceHakiNature;
-import xyz.pixelatedw.mineminenomi.api.damagesource.SourceType;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.api.helpers.MorphHelper;
-import xyz.pixelatedw.mineminenomi.api.protection.block.FoliageBlockProtectionRule;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
-import xyz.pixelatedw.mineminenomi.init.ModMorphs;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityTooltipsHelper;
+import xyz.pixelatedw.mineminenomi.api.helpers.MathHelper;
+import xyz.pixelatedw.mineminenomi.api.protection.DefaultProtectionRules;
+import xyz.pixelatedw.mineminenomi.api.util.Result;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
+import xyz.pixelatedw.mineminenomi.init.ModTags;
 import xyz.pixelatedw.mineminenomi.particles.effects.BreakingBlocksParticleEffect;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
-public class GomuTrampleAbility extends PassiveAbility2 {
-    private static final ITextComponent[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "deka_trample", ImmutablePair.of("Running speed increases with acceleration trampling any nearby entity.", null));
-    public static final AbilityCore<GomuTrampleAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new)
-            .addDescriptionLine(DESCRIPTION).addDescriptionLine(AbilityDescriptionLine.NEW_LINE, RequireMorphComponent.getTooltip())
+public class GomuTrampleAbility extends PassiveAbility {
+    private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gomu_trample", ImmutablePair.of("Running speed increases with acceleration trampling any nearby entity.", null));
+    public static final AbilityCore<GomuTrampleAbility> INSTANCE = new AbilityCore.Builder<>("gomu_trample", "Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new)
+            .addDescriptionLine(DESCRIPTION).addDescriptionLine(AbilityDescriptionLine.NEW_LINE, AbilityTooltipsHelper.getRequiredMorphTooltip(TrueMorphs.GIANT))
             .addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, RangeComponent.getTooltip(5.0F, RangeType.AOE), DealDamageComponent.getTooltip(8.0F))
             .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
     private final RangeComponent rangeComponent = new RangeComponent(this);
@@ -48,7 +51,7 @@ public class GomuTrampleAbility extends PassiveAbility2 {
     }
 
     public void duringPassiveEvent(LivingEntity entity) {
-        if (entity.isOnGround()) {
+        if (!entity.isFallFlying()) {
             if (!entity.isSprinting()) {
                 this.speed = 0.0F;
             } else {
@@ -59,18 +62,18 @@ public class GomuTrampleAbility extends PassiveAbility2 {
                     acceleration = -0.044999998F;
                 }
 
-                this.speed = MathHelper.clamp(this.speed + acceleration, acceleration > 0.0F ? 0.022499999F : 0.0F, 0.45F);
+                this.speed = clamp(this.speed + acceleration, acceleration > 0.0F ? 0.022499999F : 0.0F, 0.45F);
                 int d2 = entity.zza > 0.0F ? 1 : 0;
-                Vector3d vec = entity.getLookAngle();
+                Vec3 vec = entity.getLookAngle();
                 double x = vec.x * (double) this.speed * (double) d2;
                 double z = vec.z * (double) this.speed * (double) d2;
                 AbilityHelper.setDeltaMovement(entity, x, entity.getDeltaMovement().y, z);
-                if (!entity.level.isClientSide) {
-                    List<BlockPos> blocks = WyHelper.getNearbyBlocks(entity.blockPosition(), entity.level, 7, 7, 7, (state) -> !state.getMaterial().equals(Material.AIR) && FoliageBlockProtectionRule.INSTANCE.isApproved(state));
+                if (!entity.level().isClientSide) {
+                    List<BlockPos> blocks = WyHelper.getNearbyBlocks(entity.blockPosition(), entity.level(), 7, 7, 7, (state) -> !state.isAir() && state.is(ModTags.Blocks.BLOCK_PROT_FOLIAGE));
                     List<BlockPos> positions = new ArrayList<>();
 
                     for (BlockPos pos : blocks) {
-                        if (AbilityHelper.placeBlockIfAllowed(entity, pos, Blocks.AIR.defaultBlockState(), FoliageBlockProtectionRule.INSTANCE)) {
+                        if (NuWorld.setBlockState(entity, pos, Blocks.AIR.defaultBlockState(), 3, DefaultProtectionRules.FOLIAGE)) {
                             positions.add(pos);
                         }
                     }
@@ -82,7 +85,7 @@ public class GomuTrampleAbility extends PassiveAbility2 {
 
                     for (LivingEntity target : targets) {
                         if (this.dealDamageComponent.hurtTarget(entity, target, 8.0F)) {
-                            Vector3d speed = WyHelper.propulsion(entity, 2.0F, 2.0F);
+                            Vec3 speed = entity.getLookAngle().scale(2);
                             AbilityHelper.setDeltaMovement(target, speed.x, 0.2, speed.z);
                         }
                     }
@@ -92,10 +95,17 @@ public class GomuTrampleAbility extends PassiveAbility2 {
         }
     }
 
-    private AbilityUseResult canUse(LivingEntity entity, IAbility iAbility) {
-        if (TrueGomuHelper.hasGigantActive(AbilityDataCapability.get(entity))) {
-            return AbilityUseResult.success();
+    private float clamp(float v, float v1, float v2) {
+        if (v > v2) {
+            return v2;
         }
-        return AbilityUseResult.fail(null);
+        return Math.max(v, v1);
+    }
+
+    private Result canUse(LivingEntity entity, IAbility iAbility) {
+        if (TrueGomuHelper.hasGigantActive(AbilityCapability.get(entity).get())) {
+            return Result.success();
+        }
+        return Result.fail(null);
     }
 }

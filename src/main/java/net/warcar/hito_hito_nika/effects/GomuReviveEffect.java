@@ -1,29 +1,25 @@
 package net.warcar.hito_hito_nika.effects;
 
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
-import net.minecraft.util.SoundCategory;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.player.Player;
 import net.warcar.hito_hito_nika.abilities.TrueGearFifthAbility;
-import xyz.pixelatedw.mineminenomi.api.effects.ModEffect;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.config.CommonConfig;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.effects.BaseEffect;
+import xyz.pixelatedw.mineminenomi.init.ModNetwork;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 import xyz.pixelatedw.mineminenomi.packets.server.SSyncAbilityDataPacket;
 import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateEquippedAbilityPacket;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
-import xyz.pixelatedw.mineminenomi.wypi.WyNetwork;
-import xyz.pixelatedw.mineminenomi.wypi.WyRegistry;
 
-public class GomuReviveEffect extends ModEffect {
+public class GomuReviveEffect extends BaseEffect {
     public GomuReviveEffect() {
-        super(EffectType.HARMFUL, WyHelper.hexToRGB("#000000").getRGB());
+        super(MobEffectCategory.BENEFICIAL, WyHelper.hexToRGB("#000000").getRGB());
     }
 
     public boolean isBlockingRotations() {
@@ -39,26 +35,26 @@ public class GomuReviveEffect extends ModEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeModifierManager manager, int amp) {
+    public void removeAttributeModifiers(LivingEntity entity, AttributeMap manager, int amp) {
         super.removeAttributeModifiers(entity, manager, amp);
-        if (!entity.level.isClientSide) {
-            if (entity instanceof PlayerEntity) {
-                IAbilityData props = AbilityDataCapability.get(entity);
+        if (!entity.level().isClientSide) {
+            if (entity instanceof Player) {
+                IAbilityData props = AbilityCapability.get(entity).get();
                 if (!props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE)) {
                     TrueGearFifthAbility ability = TrueGearFifthAbility.INSTANCE.createAbility();
-                    for (int i = 0; i < CommonConfig.INSTANCE.getAbilityBars() * 8; i++) {
+                    for (int i = 0; i < 2 * 8; i++) {
                         if (props.getEquippedAbility(i) == null) {
                             props.setEquippedAbility(i, ability);
-                            WyNetwork.sendToAllTrackingAndSelf(new SSyncAbilityDataPacket(entity.getId(), AbilityDataCapability.get(entity)), entity);
-                            WyNetwork.sendToAllTrackingAndSelf(new SUpdateEquippedAbilityPacket(entity, ability), entity);
+                            ModNetwork.sendToAllTrackingAndSelf(new SSyncAbilityDataPacket(entity, AbilityCapability.get(entity)), entity);
+                            ModNetwork.sendToAllTrackingAndSelf(new SUpdateEquippedAbilityPacket(entity, ability), entity);
                         }
                     }
                 }
-                ((PlayerEntity) entity).closeContainer();
+                ((Player) entity).closeContainer();
                 if (props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE)) {
                     props.getEquippedAbility(TrueGearFifthAbility.INSTANCE).use(entity);
                 } else {
-                    entity.level.playSound(null, entity, ModSounds.DRUMS_OF_LIBERATION_1.get(), SoundCategory.PLAYERS, 0.5F, 1.0F);
+                    entity.level().playSound(null, entity, ModSounds.DRUMS_OF_LIBERATION_1.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
                 }
             }
         }

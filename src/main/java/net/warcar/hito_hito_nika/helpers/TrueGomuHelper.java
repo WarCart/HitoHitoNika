@@ -1,50 +1,46 @@
 package net.warcar.hito_hito_nika.helpers;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.IDataSerializer;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import org.apache.commons.lang3.tuple.Pair;
+import org.joml.Vector3d;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiEmissionAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiInternalDestructionAbility;
-import xyz.pixelatedw.mineminenomi.api.ReferenceTextComponent;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityUseConditions;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class TrueGomuHelper {
-	public static final TranslationTextComponent TOO_HEAVY = getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
+	public static final Component TOO_HEAVY = getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
 	private static final Object[] EMPTY_ARGS = new Object[0];
-	public static final IDataSerializer<Vector3d> VECTOR_SERIALIZER = new IDataSerializer<Vector3d>() {
+	public static final EntityDataSerializer<Vector3d> VECTOR_SERIALIZER = new EntityDataSerializer<Vector3d>() {
 		@Override
-		public void write(PacketBuffer buffer, Vector3d vector) {
+		public void write(FriendlyByteBuf buffer, Vector3d vector) {
 			buffer.writeDouble(vector.x);
 			buffer.writeDouble(vector.y);
 			buffer.writeDouble(vector.z);
 		}
 
 		@Override
-		public Vector3d read(PacketBuffer buffer) {
+		public Vector3d read(FriendlyByteBuf buffer) {
 			double x = buffer.readDouble();
 			double y = buffer.readDouble();
 			double z = buffer.readDouble();
@@ -137,8 +133,8 @@ public class TrueGomuHelper {
 		return hasAbilityActive(props, BusoshokuHakiEmissionAbility.INSTANCE) || hasAbilityActive(props, BusoshokuHakiInternalDestructionAbility.INSTANCE);
 	}
 
-	public static<A extends Ability> boolean hasAbilityActive(IAbilityData props, AbilityCore<A> ability) {
-		Ability abl = props.getEquippedAbility(ability);
+	public static<A extends Ability> boolean hasAbilityActive(IAbilityData props, RegistryObject<AbilityCore<A>> ability) {
+		Ability abl = props.getEquippedAbility(ability.get());
 		return abl != null && abl.isContinuous();
 	}
 
@@ -147,27 +143,27 @@ public class TrueGomuHelper {
 	}
 
 	public static ResourceLocation getIcon(String modId, String name) {
-		return new ResourceLocation(modId.toLowerCase(), "textures/abilities/" + WyHelper.getResourceName(name) + ".png");
+		return ResourceLocation.fromNamespaceAndPath(modId.toLowerCase(), "textures/abilities/" + WyHelper.getResourceName(name) + ".png");
 	}
 
-	public static TranslationTextComponent getName(String name, String resourceName) {
+	public static Component getName(String name, String resourceName) {
 		return getName(HitoHitoNoMiNikaMod.MOD_ID, name, resourceName);
 	}
 
-	public static TranslationTextComponent getName(String name) {
+	public static Component getName(String name) {
 		return getName(HitoHitoNoMiNikaMod.MOD_ID, name, WyHelper.getResourceName(name));
 	}
 
-	public static TranslationTextComponent getName(String modId, String name, String resourceName) {
+	public static Component getName(String modId, String name, String resourceName) {
 		String key = "ability." + modId + "." + resourceName;
 		HitoHitoNoMiNikaMod.getLangMap().put(key, name);
-		return new TranslationTextComponent(key, name);
+		return Component.translatable(key, name);
 	}
 
 	public static void stopGatling(LivingEntity entity) {
-		TrueGomuGatling abl = AbilityDataCapability.get(entity).getEquippedAbility(TrueGomuGatling.INSTANCE);
+		TrueGomuGatling abl = AbilityCapability.get(entity).get().getEquippedAbility(TrueGomuGatling.INSTANCE);
 		if (abl != null && abl.isContinuous()) {
-			abl.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(comp -> comp.stopContinuity(entity));
+			abl.getComponent(ModAbilityComponents.CONTINUOUS.get()).ifPresent(comp -> comp.stopContinuity(entity));
 		}
 	}
 
@@ -185,32 +181,19 @@ public class TrueGomuHelper {
 
 
     @SafeVarargs
-    public static IFormattableTextComponent[] registerDescriptionText(String abilityName, Pair<String, Object[]>... pairs) {
+    public static Component[] registerDescriptionText(String abilityName, Pair<String, Object[]>... pairs) {
         return registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, abilityName, pairs);
     }
 
     @SafeVarargs
-	public static IFormattableTextComponent[] registerDescriptionText(String modid, String abilityName, Pair<String, Object[]>... pairs) {
-		IFormattableTextComponent[] components = new IFormattableTextComponent[pairs.length];
+	public static Component[] registerDescriptionText(String modid, String abilityName, Pair<String, Object[]>... pairs) {
+		Component[] components = new Component[pairs.length];
 
 		for(int i = 0; i < pairs.length; ++i) {
 			String key = String.format("ability.%s.%s.description.%s", modid, abilityName, i);
 			key = registerName(key, pairs[i].getKey());
-			Object[] args = pairs[i].getValue();
-			if (args != null) {
-				for(int j = 0; j < args.length; ++j) {
-					Object o = args[j];
-					if (o instanceof RegistryObject) {
-						args[j] = new ReferenceTextComponent((RegistryObject)o);
-					} else if (o instanceof IForgeRegistryEntry) {
-						args[j] = mentionEntry((IForgeRegistryEntry)o);
-					}
-				}
-			} else {
-				args = EMPTY_ARGS;
-			}
 
-			TranslationTextComponent comp = new TranslationTextComponent(key, args);
+			Component comp = Component.translatable(key);
 			components[i] = comp;
 		}
 
@@ -222,27 +205,14 @@ public class TrueGomuHelper {
 		return key;
 	}
 
-
-	private static IFormattableTextComponent mentionEntry(IForgeRegistryEntry<?> entry) {
-		if (entry instanceof AbilityCore) {
-			return AbilityHelper.mentionAbility((AbilityCore)entry);
-		} else if (entry instanceof Item) {
-			return AbilityHelper.mentionItem((Item)entry);
-		} else if (entry instanceof Effect) {
-			return AbilityHelper.mentionEffect((Effect)entry);
-		} else {
-			return entry instanceof MorphInfo ? AbilityHelper.mentionMorph((MorphInfo)entry) : null;
-		}
-	}
-
 	public static ContinuousComponent.IDuringContinuousEvent getSpeedEvent(float speed) {
 		return (entity, ability) -> {
-			if (!AbilityHelper.canUseMomentumAbilities(entity) || !entity.isSprinting()) {
+			if (AbilityUseConditions.canUseMomentumAbilities(entity, ability).isFail() || !entity.isSprinting()) {
 				return;
 			}
-            Vector3d vec = entity.getLookAngle();
+            Vec3 vec = entity.getLookAngle();
 
-			if (entity.isOnGround()) {
+			if (!entity.isFallFlying()) {
 				AbilityHelper.setDeltaMovement(entity, (vec.x * speed), entity.getDeltaMovement().y, (vec.z * speed));
 			}
 			else {
@@ -253,6 +223,6 @@ public class TrueGomuHelper {
 
 	public static void init() {
 		getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
-		DataSerializers.registerSerializer(VECTOR_SERIALIZER);
+		EntityDataSerializers.registerSerializer(VECTOR_SERIALIZER);
 	}
 }

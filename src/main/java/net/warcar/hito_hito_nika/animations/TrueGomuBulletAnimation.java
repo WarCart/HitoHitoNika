@@ -1,21 +1,21 @@
 package net.warcar.hito_hito_nika.animations;
 
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.HandSide;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.hito_hito_nika.renderers.IModelRendererMixin;
 import xyz.pixelatedw.mineminenomi.api.animations.AnimationId;
 
-public class TrueGomuBulletAnimation extends TimedAnimation<LivingEntity, BipedModel<LivingEntity>> {
+public class TrueGomuBulletAnimation extends TimedAnimation<LivingEntity, HumanoidModel<LivingEntity>> {
     public TrueGomuBulletAnimation(AnimationId<TrueGomuBulletAnimation> animId) {
         super(animId);
         this.setAnimationAngles(this::angles);
     }
 
-    public void angles(LivingEntity player, BipedModel model, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        ModelRenderer mainHand;
-        if (player.getMainArm().equals(HandSide.RIGHT)) {
+    public void angles(LivingEntity player, HumanoidModel<LivingEntity> model, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        ModelPart mainHand;
+        if (player.getMainArm().equals(HumanoidArm.RIGHT)) {
             mainHand = model.rightArm;
         } else {
             mainHand = model.leftArm;

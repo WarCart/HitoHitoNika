@@ -1,7 +1,7 @@
 package net.warcar.hito_hito_nika.renderers;
 
 
-import net.minecraft.util.math.vector.Vector3f;
+import org.joml.Vector3f;
 
 public interface IModelRendererMixin {
     Vector3f getScale();

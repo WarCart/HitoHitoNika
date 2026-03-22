@@ -1,17 +1,10 @@
 package net.warcar.hito_hito_nika.projectiles;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.hito_hito_nika.abilities.MoguraPistolAbility;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
+import org.joml.Vector3d;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
 public class GomuGomuNoMoguraPistolProjectile extends AbilityProjectileEntity {

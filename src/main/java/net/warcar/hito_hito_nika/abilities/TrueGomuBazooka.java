@@ -28,6 +28,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
 import xyz.pixelatedw.mineminenomi.init.ModAnimations;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
@@ -65,8 +66,8 @@ public class TrueGomuBazooka extends Ability {
 	private final AnimationComponent animationComponent;
 	private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
 		@Override
-		public void setupDefaultScreams(IAbility ability) {
-			ability.getComponent(ModAbilityKeys.CHARGE).ifPresent(chargeComponent -> {
+		public void postInit(IAbility ability) {
+			ability.getComponent(ModAbilityComponents.CHARGE.get()).ifPresent(chargeComponent -> {
 				chargeComponent.addStartEvent((entity, iAbility) -> this.scream(entity, "Gomu gomu no..."));
 				chargeComponent.addEndEvent((entity, iAbility) -> this.scream(entity, ability.getDisplayName().getString().replace("Gomu Gomu no ", "")));
 			});
