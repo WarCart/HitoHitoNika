@@ -15,6 +15,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.entities.LuffyBoss;
+import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.init.ModMobs;
 import xyz.pixelatedw.mineminenomi.init.ModRegistry;
@@ -47,5 +48,6 @@ public class GomuEntities {
         Minecraft mc = Minecraft.getInstance();
         EntityRendererProvider.Context ctx = new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getBlockRenderer(), mc.gameRenderer.itemInHandRenderer, mc.getResourceManager(), mc.getEntityModels(), mc.font);
         event.registerEntityRenderer(LUFFY, new OPHumanoidRenderer.Factory<>(ctx));
+        NikaProjectiles.registerEntityRenderers(event, ctx);
     }
 }

@@ -2,10 +2,11 @@ package net.warcar.hito_hito_nika.morphs;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -21,8 +22,8 @@ import xyz.pixelatedw.mineminenomi.init.ModResources;
 import java.util.Map;
 
 public class GearFourthBoundmanMorph extends MorphInfo {
-    private static final EntitySize STANDING_SIZE = EntitySize.scalable(2.8F, 4.0F);
-    private static final EntitySize CROUCHING_SIZE = EntitySize.scalable(2.8F, 3.9F);
+    private static final EntityDimensions STANDING_SIZE = EntityDimensions.scalable(2.8F, 4.0F);
+    private static final EntityDimensions CROUCHING_SIZE = EntityDimensions.scalable(2.8F, 3.9F);
 
     @OnlyIn(Dist.CLIENT)
     public MorphModel getModel() {
@@ -55,7 +56,7 @@ public class GearFourthBoundmanMorph extends MorphInfo {
         return 1.2F;
     }
 
-    public Map<Pose, EntitySize> getSizes() {
-        return ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.CROUCHING, CROUCHING_SIZE).build();
+    public Map<Pose, EntityDimensions> getSizes() {
+        return ImmutableMap.<Pose, EntityDimensions>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.CROUCHING, CROUCHING_SIZE).build();
     }
 }

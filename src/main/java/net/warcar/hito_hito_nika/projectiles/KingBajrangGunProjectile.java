@@ -1,39 +1,38 @@
 package net.warcar.hito_hito_nika.projectiles;
 
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.EntityHitResult;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 
-import net.minecraft.world.World;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.block.Blocks;
-
-public class KingBajrangGunProjectile extends AbilityProjectileEntity {
-	public KingBajrangGunProjectile(EntityType type, World world) {
+public class KingBajrangGunProjectile extends NuProjectileEntity {
+	public KingBajrangGunProjectile(EntityType type, Level world) {
 		super(type, world);
 	}
 
-	public KingBajrangGunProjectile(World world, LivingEntity player, Ability ability) {
+	public KingBajrangGunProjectile(Level world, LivingEntity player, Ability ability) {
 		super(NikaProjectiles.GOMU_GOMU_NO_KING_BAJRANG_GUN.get(), world, player, ability);
 		this.setMaxLife(250);
 		this.setDamage(0F);
 		this.setEntityCollisionSize(5);
 		this.setPassThroughEntities();
 		this.setPassThroughBlocks();
-		this.setDamageSource(this.getDamageSource().getSource());
-		this.onTickEvent = this::onTickEvent;
-		this.onEntityImpactEvent = this::onEntityImpactEvent;
+		this.addTickEvent(100, this::onTickEvent);
+		this.addEntityHitEvent(100, this::onEntityImpactEvent);
 	}
 
 	private void onTickEvent() {
 		for (BlockPos pos : WyHelper.getNearbyBlocks(this, 5)) {
-			this.level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+			this.level().setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 		}
 	}
 
-	private void onEntityImpactEvent(LivingEntity hitEnt) {
-		hitEnt.remove();
+	private void onEntityImpactEvent(EntityHitResult hitEnt) {
+		hitEnt.getEntity().remove(RemovalReason.DISCARDED);
 	}
 }

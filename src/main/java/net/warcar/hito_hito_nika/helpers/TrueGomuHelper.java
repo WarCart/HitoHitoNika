@@ -31,25 +31,25 @@ import java.util.Map;
 public class TrueGomuHelper {
 	public static final Component TOO_HEAVY = getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
 	private static final Object[] EMPTY_ARGS = new Object[0];
-	public static final EntityDataSerializer<Vector3d> VECTOR_SERIALIZER = new EntityDataSerializer<Vector3d>() {
+	public static final EntityDataSerializer<Vec3> VECTOR_SERIALIZER = new EntityDataSerializer<Vec3>() {
 		@Override
-		public void write(FriendlyByteBuf buffer, Vector3d vector) {
+		public void write(FriendlyByteBuf buffer, Vec3 vector) {
 			buffer.writeDouble(vector.x);
 			buffer.writeDouble(vector.y);
 			buffer.writeDouble(vector.z);
 		}
 
 		@Override
-		public Vector3d read(FriendlyByteBuf buffer) {
+		public Vec3 read(FriendlyByteBuf buffer) {
 			double x = buffer.readDouble();
 			double y = buffer.readDouble();
 			double z = buffer.readDouble();
-			return new Vector3d(x, y, z);
+			return new Vec3(x, y, z);
 		}
 
 		@Override
-		public Vector3d copy(Vector3d vector) {
-			return new Vector3d(vector.x, vector.y, vector.z);
+		public Vec3 copy(Vec3 vector) {
+			return new Vec3(vector.x, vector.y, vector.z);
 		}
 	};
 

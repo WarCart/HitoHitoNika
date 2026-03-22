@@ -5,13 +5,13 @@ import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.LivingEntity;
 
 public class DawnPistolProjectile extends TruePistolProjectile {
 
-	public DawnPistolProjectile(World world, LivingEntity player, Ability ability) {
+	public DawnPistolProjectile(Level world, LivingEntity player, Ability ability) {
 		super(world, player, ability);
 		this.setMaxLife(6);
 		this.setDamage(25f);

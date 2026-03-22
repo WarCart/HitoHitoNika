@@ -2,7 +2,7 @@ package net.warcar.hito_hito_nika.projectiles.hand;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
@@ -10,7 +10,7 @@ import xyz.pixelatedw.mineminenomi.particles.effects.gomu.GearSecondParticleEffe
 
 public class GigantDawnPistolProjectile extends TrueElephantGunProjectile {
 
-    public GigantDawnPistolProjectile(World world, LivingEntity player, Ability ability) {
+    public GigantDawnPistolProjectile(Level world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setDamage(40f);
         this.setMaxLife(9);

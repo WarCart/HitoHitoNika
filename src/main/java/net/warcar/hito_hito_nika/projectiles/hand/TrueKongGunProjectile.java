@@ -10,7 +10,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 
-public class TrueKongGunProjectile extends AbilityProjectileEntity {
+public class TrueKongGunProjectile extends NuProjectileEntity {
     public TrueKongGunProjectile(EntityType type, World world) {
         super(type, world);
     }

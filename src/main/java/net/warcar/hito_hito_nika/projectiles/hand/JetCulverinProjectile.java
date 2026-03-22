@@ -2,17 +2,17 @@ package net.warcar.hito_hito_nika.projectiles.hand;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import net.warcar.hito_hito_nika.projectiles.PythonProjectile;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 
 public class JetCulverinProjectile extends PythonProjectile {
-	public JetCulverinProjectile(EntityType type, World world) {
+	public JetCulverinProjectile(EntityType type, Level world) {
 		super(type, world);
 	}
 
-	public JetCulverinProjectile(World world, LivingEntity player, Ability ability, float speed, int layer) {
+	public JetCulverinProjectile(Level world, LivingEntity player, Ability ability, float speed, int layer) {
 		super(NikaProjectiles.GOMU_GOMU_NO_JET_CULVERIN.get(), world, player, ability, speed, layer);
 		this.setMaxLife(3);
 		this.setDamage(20f);

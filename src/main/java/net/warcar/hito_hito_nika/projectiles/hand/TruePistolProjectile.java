@@ -7,7 +7,7 @@ import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 
-public class TruePistolProjectile extends AbilityProjectileEntity {
+public class TruePistolProjectile extends NuProjectileEntity {
     public TruePistolProjectile(EntityType type, World world) {
         super(type, world);
     }

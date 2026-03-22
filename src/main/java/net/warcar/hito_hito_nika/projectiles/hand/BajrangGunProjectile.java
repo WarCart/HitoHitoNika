@@ -1,14 +1,16 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
+import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModDamageSource;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.brawler.BrawlerProjectiles;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
+import xyz.pixelatedw.mineminenomi.entities.projectiles.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EntityType;
@@ -17,14 +19,14 @@ import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import java.util.Objects;
 
-public class BajrangGunProjectile extends AbilityProjectileEntity {
+public class BajrangGunProjectile extends NuProjectileEntity {
 	protected float size = 30f;
 
-	public BajrangGunProjectile(EntityType type, World world) {
+	public BajrangGunProjectile(EntityType type, Level world) {
 		super(type, world);
 	}
 
-	public BajrangGunProjectile(World world, LivingEntity player, Ability ability) {
+	public BajrangGunProjectile(Level world, LivingEntity player, Ability ability) {
 		super(NikaProjectiles.GOMU_GOMU_NO_BAJRANG_GUN.get(), world, player, ability);
 		this.setMaxLife(250);
 		this.setDamage(250F);
@@ -37,7 +39,7 @@ public class BajrangGunProjectile extends AbilityProjectileEntity {
 		//this.onEntityImpactEvent = this::onEntityImpactEvent;
 	}
 
-	public BajrangGunProjectile(World world, LivingEntity player, Ability ability, float size) {
+	public BajrangGunProjectile(Level world, LivingEntity player, Ability ability, float size) {
 		this(world, player, ability);
 		this.size = size;
 	}

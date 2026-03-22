@@ -12,7 +12,7 @@ import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import java.util.Objects;
 
-public class TrueGrizzlyMagnumProjectile extends AbilityProjectileEntity {
+public class TrueGrizzlyMagnumProjectile extends NuProjectileEntity {
     public TrueGrizzlyMagnumProjectile(EntityType type, World world) {
         super(type, world);
     }

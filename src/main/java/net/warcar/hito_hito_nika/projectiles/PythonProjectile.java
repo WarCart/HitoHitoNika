@@ -1,46 +1,43 @@
 package net.warcar.hito_hito_nika.projectiles;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
-import xyz.pixelatedw.mineminenomi.data.entity.projectilesextra.IProjectileExtras;
-import xyz.pixelatedw.mineminenomi.data.entity.projectilesextra.ProjectileExtrasCapability;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
-import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
+import xyz.pixelatedw.mineminenomi.data.entity.projectileextra.IProjectileExtras;
+import xyz.pixelatedw.mineminenomi.data.entity.projectileextra.ProjectileExtrasCapability;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModEntityPredicates;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Optional;
 
-public abstract class PythonProjectile extends AbilityProjectileEntity {
-    protected static final DataParameter<Integer> NEXT_ID = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> PREV_ID = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
-    protected static final DataParameter<Boolean> IS_STATIC = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Integer> LAYER = EntityDataManager.defineId(PythonProjectile.class, DataSerializers.INT);
+public abstract class PythonProjectile extends NuProjectileEntity {
+    protected static final EntityDataAccessor<Integer> NEXT_ID = SynchedEntityData.defineId(PythonProjectile.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> PREV_ID = SynchedEntityData.defineId(PythonProjectile.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> IS_STATIC = SynchedEntityData.defineId(PythonProjectile.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Integer> LAYER = SynchedEntityData.defineId(PythonProjectile.class, EntityDataSerializers.INT);
     protected Ability master;
     protected float speed = 0f;
     private boolean sneakyStatic;
 
-    public PythonProjectile(EntityType type, World world) {
+    public PythonProjectile(EntityType type, Level world) {
         super(type, world);
     }
 
-    public PythonProjectile(EntityType<?> type, World world, LivingEntity player, Ability ability, float speed, int layer) {
+    public PythonProjectile(EntityType<? extends PythonProjectile> type, Level world, LivingEntity player, Ability ability, float speed, int layer) {
         super(type, world, player, ability);
-        this.onEntityImpactEvent = this::onEntityImpactEvent;
+        this.addEntityHitEvent(100, this::onEntityImpactEvent);
         master = ability;
         this.setLayer(layer);
         this.setUnavoidable();
@@ -60,18 +57,18 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
         this.entityData.define(LAYER, 0);
     }
 
-    private void onEntityImpactEvent(LivingEntity hitEntity) {
+    private void onEntityImpactEvent(EntityHitResult hitEntity) {
         this.kill();
     }
 
     @Nullable
     public Entity getPrev() {
-        return this.level.getEntity(this.entityData.get(PREV_ID));
+        return this.level().getEntity(this.entityData.get(PREV_ID));
     }
 
     @Nullable
     public Entity getNext() {
-        return this.level.getEntity(this.entityData.get(NEXT_ID));
+        return this.level().getEntity(this.entityData.get(NEXT_ID));
     }
 
     public void setPrev(Entity ent) {
@@ -84,7 +81,7 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
 
     public abstract PythonProjectile getNew();
 
-    @Override
+    /*@Override
     public void onModHit(RayTraceResult hit) {
         if (this.isStatic()) {
             return;
@@ -93,7 +90,7 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
             return;
         }
         boolean wasInfused = false;
-        IProjectileExtras extras = ProjectileExtrasCapability.get(this);
+        IProjectileExtras extras = ProjectileExtrasCapability.get(this).get();
         if (extras.isProjectileHaoshokuInfused()) {
             wasInfused = true;
             extras.setProjectileHaoshokuInfused(false);
@@ -102,22 +99,22 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
         if (wasInfused) {
             extras.setProjectileHaoshokuInfused(true);
         }
-    }
+    }*/
 
     public void tick() {
-        if (!this.level.isClientSide() && this.master != null) {
-            Optional<ContinuousComponent> component = this.master.getComponent(ModAbilityKeys.CONTINUOUS);
+        if (!this.level().isClientSide() && this.master != null) {
+            Optional<ContinuousComponent> component = this.master.getComponent(ModAbilityComponents.CONTINUOUS.get());
             if (component.isPresent() && !component.get().isContinuous()) {
-                this.remove();
+                this.remove(RemovalReason.DISCARDED);
                 return;
             }
         }
-        if (this.getLife() <= 0 && !this.isStatic() && !this.level.isClientSide) {
-            if (this.getThrower() == null || this.getLayer() == 0) {
-                this.remove();
+        if (this.getLife() <= 0 && !this.isStatic() && !this.level().isClientSide) {
+            if (this.getOwner() == null || this.getLayer() == 0) {
+                this.remove(RemovalReason.DISCARDED);
                 return;
             }
-            Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getThrower().position(), this.level, 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getThrower())).stream().min(Comparator.comparing(this::distanceTo));
+            Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getOwner().position(), this.level(), 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getOwner())).stream().min(Comparator.comparing(this::distanceTo));
             if (!closest.isPresent() && this.getMaxLife() == 5) {
                 super.tick();
                 return;
@@ -131,20 +128,20 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
                 this.setMaxLife(100000000);
                 this.setPassThroughBlocks();
                 LivingEntity entity = closest.get();
-                Vector3d vec = this.position().vectorTo(entity.position());
+                Vec3 vec = this.position().vectorTo(entity.position());
                 projectile.setDamage(this.getDamage());
                 projectile.shootFromRotation(this, 0, 0, 0, 0, 0);
                 projectile.setDeltaMovement(vec.normalize().scale(this.speed));
-                this.level.addFreshEntity(projectile);
+                this.level().addFreshEntity(projectile);
                 this.setNext(projectile);
                 projectile.setPrev(this);
-                projectile.setPosAndOldPos(this.getX(), this.getY(), this.getZ());
+                projectile.setPos(this.getX(), this.getY(), this.getZ());
                 this.setDeltaMovement(0, 0, 0);
             }
         }
         if (this.isStatic()) {
             if ((this.getNext() == null || !this.getNext().isAlive())) {
-                this.remove();
+                this.remove(RemovalReason.DISCARDED);
             }
             return;
         }
@@ -152,14 +149,13 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
         if (this.getNext() != null && this.getNext().isAlive()) {
             Entity prev = this.getPrev();
             if (prev == null) {
-                prev = this.getThrower();
+                prev = this.getOwner();
             }
-            Vector3d vec = prev.position().vectorTo(this.position());
-            float f = MathHelper.sqrt(getHorizontalDistanceSqr(vec));
-            this.xRot = (float)(MathHelper.atan2(vec.y, f) * (double)(180F / (float)Math.PI));
-            this.xRotO = xRot;
-            this.yRot = (float)(MathHelper.atan2(vec.x, vec.z) * (double)(180F / (float)Math.PI));
-            this.yRotO = yRot;
+            Vec3 vec = prev.position().vectorTo(this.position());
+            double f = this.position().distanceTo(vec);
+            var xRot = (float)(Math.atan2(vec.y, f) * (double)(180F / (float)Math.PI));
+            var yRot = (float)(Math.atan2(vec.x, vec.z) * (double)(180F / (float)Math.PI));
+            this.setRot(yRot,  xRot);
         }
     }
 
@@ -178,9 +174,9 @@ public abstract class PythonProjectile extends AbilityProjectileEntity {
     }
 
     @Override
-    public void remove() {
+    public void remove(RemovalReason reason) {
         if (!this.isStatic() || this.getLayer() == 0 || this.getNext() == null) {
-            super.remove();
+            super.remove(reason);
         }
     }
 }

@@ -2,7 +2,7 @@ package net.warcar.hito_hito_nika.morphs;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.util.ResourceLocation;
@@ -20,8 +20,8 @@ import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 import java.util.Map;
 
 public class SmallMorph extends MorphInfo {
-    private static final EntitySize STANDING_SIZE_SMALL = EntitySize.scalable(0.2F, 1.1F);
-    private static final EntitySize CROUCHING_SIZE_SMALL = EntitySize.scalable(0.3F, 1F);
+    private static final EntityDimensions STANDING_SIZE_SMALL = EntityDimensions.scalable(0.2F, 1.1F);
+    private static final EntityDimensions CROUCHING_SIZE_SMALL = EntityDimensions.scalable(0.3F, 1F);
 
 
     public String getDisplayName() {
@@ -59,7 +59,7 @@ public class SmallMorph extends MorphInfo {
         return entity instanceof AbstractClientPlayerEntity ? ((AbstractClientPlayerEntity)entity).getSkinTextureLocation() : null;
     }
 
-    public Map<Pose, EntitySize> getSizes() {
-        return ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, STANDING_SIZE_SMALL).put(Pose.CROUCHING, CROUCHING_SIZE_SMALL).build();
+    public Map<Pose, EntityDimensions> getSizes() {
+        return ImmutableMap.<Pose, EntityDimensions>builder().put(Pose.STANDING, STANDING_SIZE_SMALL).put(Pose.CROUCHING, CROUCHING_SIZE_SMALL).build();
     }
 }

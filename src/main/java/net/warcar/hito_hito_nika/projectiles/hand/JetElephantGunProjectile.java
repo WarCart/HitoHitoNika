@@ -2,7 +2,7 @@ package net.warcar.hito_hito_nika.projectiles.hand;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
@@ -10,7 +10,7 @@ import xyz.pixelatedw.mineminenomi.particles.effects.gomu.GearSecondParticleEffe
 
 public class JetElephantGunProjectile extends TrueElephantGunProjectile {
 
-    public JetElephantGunProjectile(World world, LivingEntity player, Ability ability) {
+    public JetElephantGunProjectile(Level world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
         this.setDamage(60f);

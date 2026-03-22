@@ -2,7 +2,7 @@ package net.warcar.hito_hito_nika.morphs;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.util.ResourceLocation;
@@ -20,8 +20,8 @@ import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 import java.util.Map;
 
 public class GigantFusenMorph extends MorphInfo {
-    private static final EntitySize STANDING_SIZE = EntitySize.scalable(3.6F, 4.8F);
-    private static final EntitySize CROUCHING_SIZE = EntitySize.scalable(3.7F, 4.6F);
+    private static final EntityDimensions STANDING_SIZE = EntityDimensions.scalable(3.6F, 4.8F);
+    private static final EntityDimensions CROUCHING_SIZE = EntityDimensions.scalable(3.7F, 4.6F);
     public String getDisplayName() {
         return "Gomu Gomu no Gigant Fusen";
     }
@@ -57,7 +57,7 @@ public class GigantFusenMorph extends MorphInfo {
         return entity instanceof AbstractClientPlayerEntity ? ((AbstractClientPlayerEntity)entity).getSkinTextureLocation() : null;
     }
 
-    public Map<Pose, EntitySize> getSizes() {
-        return ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.CROUCHING, CROUCHING_SIZE).build();
+    public Map<Pose, EntityDimensions> getSizes() {
+        return ImmutableMap.<Pose, EntityDimensions>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.CROUCHING, CROUCHING_SIZE).build();
     }
 }

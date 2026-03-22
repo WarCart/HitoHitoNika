@@ -13,7 +13,7 @@ import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
 import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
-public class LeoRexBazookaProjectile extends AbilityProjectileEntity {
+public class LeoRexBazookaProjectile extends NuProjectileEntity {
     public LeoRexBazookaProjectile(EntityType type, World world) {
         super(type, world);
     }

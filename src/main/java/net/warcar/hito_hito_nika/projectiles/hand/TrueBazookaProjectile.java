@@ -11,7 +11,7 @@ import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import java.util.Objects;
 
-public class TrueBazookaProjectile extends AbilityProjectileEntity {
+public class TrueBazookaProjectile extends NuProjectileEntity {
     public TrueBazookaProjectile(EntityType type, World world) {
         super(type, world);
     }

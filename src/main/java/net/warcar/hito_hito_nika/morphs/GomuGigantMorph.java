@@ -2,7 +2,7 @@ package net.warcar.hito_hito_nika.morphs;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.util.ResourceLocation;
@@ -19,8 +19,8 @@ import xyz.pixelatedw.mineminenomi.renderers.morphs.MegaRenderer;
 import java.util.Map;
 
 public class GomuGigantMorph extends MorphInfo {
-    private static final EntitySize STANDING_SIZE = EntitySize.scalable(1.7F, 2.4F);
-    private static final EntitySize CROUCHING_SIZE = EntitySize.scalable(1.7F, 2.39F);
+    private static final EntityDimensions STANDING_SIZE = EntityDimensions.scalable(1.7F, 2.4F);
+    private static final EntityDimensions CROUCHING_SIZE = EntityDimensions.scalable(1.7F, 2.39F);
 
     public AkumaNoMiItem getDevilFruit() {
         return ModAbilities.GOMU_GOMU_NO_MI;
@@ -57,7 +57,7 @@ public class GomuGigantMorph extends MorphInfo {
         return 8.45D;
     }
 
-    public Map<Pose, EntitySize> getSizes() {
-        return ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.CROUCHING, CROUCHING_SIZE).build();
+    public Map<Pose, EntityDimensions> getSizes() {
+        return ImmutableMap.<Pose, EntityDimensions>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.CROUCHING, CROUCHING_SIZE).build();
     }
 }
