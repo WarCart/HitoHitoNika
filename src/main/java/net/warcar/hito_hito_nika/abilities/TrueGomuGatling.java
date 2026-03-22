@@ -1,11 +1,10 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
@@ -14,62 +13,61 @@ import net.warcar.hito_hito_nika.projectiles.leg.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.abilities.haki.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
-import xyz.pixelatedw.mineminenomi.api.damagesource.SourceHakiNature;
-import xyz.pixelatedw.mineminenomi.api.damagesource.SourceType;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
-import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
 import xyz.pixelatedw.mineminenomi.init.ModAnimations;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
 import java.util.Map;
 
-public class TrueGomuGatling extends Ability implements IExtraUpdateData {
-	private static final ITextComponent[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_gatling", new Pair[]{ImmutablePair.of("Rapidly punches enemies in front of the user.", (Object)null)});
-	public static final AbilityCore<TrueGomuGatling> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Gatling", AbilityCategory.DEVIL_FRUITS, TrueGomuGatling::new)
+public class TrueGomuGatling extends Ability {
+	private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_gatling", new Pair[]{ImmutablePair.of("Rapidly punches enemies in front of the user.", (Object)null)});
+	public static final AbilityCore<TrueGomuGatling> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_gatling", "Gomu Gomu no Gatling", AbilityCategory.DEVIL_FRUITS, TrueGomuGatling::new)
 			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
-	public static final TranslationTextComponent ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Roc Gatling");
-	public static final TranslationTextComponent JET_ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gatling");
-	public static final TranslationTextComponent JET_GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Gatling");
-	public static final TranslationTextComponent GIANT_DAWN_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Gatling");
-	public static final TranslationTextComponent HYDRA = TrueGomuHelper.getName("Gomu Gomu no Hydra");
-	public static final TranslationTextComponent BLACK_MAMBA = TrueGomuHelper.getName("Gomu Gomu no Black Mamba");
-	public static final TranslationTextComponent OVER_KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Over Kong Gatling");
-	public static final TranslationTextComponent KING_KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no King Kong Gatling");
-	public static final TranslationTextComponent KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Kong Gatling");
-	public static final TranslationTextComponent DAWN_GATLING = TrueGomuHelper.getName("Gomu Gomu no Dawn Gatling");
-	public static final TranslationTextComponent BAJRANG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Bajrang Gatling");
-	public static final TranslationTextComponent JET_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Gatling");
-	public static final TranslationTextComponent ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Elephant Gatling");
-	public static final TranslationTextComponent GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Gatling");
-	public static final TranslationTextComponent HAWK_GATLING = TrueGomuHelper.getName("Gomu Gomu no Hawk Gatling");
-	public static final TranslationTextComponent JET_STORM = TrueGomuHelper.getName("Gomu Gomu no Jet Storm");
-	public static final TranslationTextComponent STORM = TrueGomuHelper.getName("Gomu Gomu no Storm");
-	public static final TranslationTextComponent GATLING = TrueGomuHelper.getName("Gomu Gomu no Gatling");
+	public static final Component ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Roc Gatling");
+	public static final Component JET_ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gatling");
+	public static final Component JET_GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Gatling");
+	public static final Component GIANT_DAWN_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Gatling");
+	public static final Component HYDRA = TrueGomuHelper.getName("Gomu Gomu no Hydra");
+	public static final Component BLACK_MAMBA = TrueGomuHelper.getName("Gomu Gomu no Black Mamba");
+	public static final Component OVER_KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Over Kong Gatling");
+	public static final Component KING_KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no King Kong Gatling");
+	public static final Component KONG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Kong Gatling");
+	public static final Component DAWN_GATLING = TrueGomuHelper.getName("Gomu Gomu no Dawn Gatling");
+	public static final Component BAJRANG_GATLING = TrueGomuHelper.getName("Gomu Gomu no Bajrang Gatling");
+	public static final Component JET_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Gatling");
+	public static final Component ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Elephant Gatling");
+	public static final Component GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Gatling");
+	public static final Component HAWK_GATLING = TrueGomuHelper.getName("Gomu Gomu no Hawk Gatling");
+	public static final Component JET_STORM = TrueGomuHelper.getName("Gomu Gomu no Jet Storm");
+	public static final Component STORM = TrueGomuHelper.getName("Gomu Gomu no Storm");
+	public static final Component GATLING = TrueGomuHelper.getName("Gomu Gomu no Gatling");
 
-	public static final TranslationTextComponent STAMP_ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Stamp Roc Gatling");
-	public static final TranslationTextComponent JET_ELEPHANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Stamp Gatling");
-	public static final TranslationTextComponent JET_GIANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Stamp Gatling");
-	public static final TranslationTextComponent GIANT_DAWN_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Stamp Gatling");
-	public static final TranslationTextComponent STAMP_HYDRA = TrueGomuHelper.getName("Gomu Gomu no Stamp Hydra");
-	public static final TranslationTextComponent RHINO_STAMPEDE_GATLING = TrueGomuHelper.getName("Gomu Gomu no Rhino Stampede Gatling");
-	public static final TranslationTextComponent OVER_KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Over Kong Stamp Gatling");
-	public static final TranslationTextComponent KING_KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no King Kong Stamp Gatling");
-	public static final TranslationTextComponent KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Kong Stamp Gatling");
-	public static final TranslationTextComponent JET_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Stamp Gatling");
-	public static final TranslationTextComponent ELEPHANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Elephant Stamp Gatling");
-	public static final TranslationTextComponent GIANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Stamp Gatling");
-	public static final TranslationTextComponent DAWN_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Dawn Stamp Gatling");
-	public static final TranslationTextComponent BAJRANG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Bajrang Stamp Gatling");
-	public static final TranslationTextComponent TAKO_STAMP = TrueGomuHelper.getName("Gomu Gomu no Tako Stamp");
-	public static final TranslationTextComponent STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Stamp Gatling");
+	public static final Component STAMP_ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Stamp Roc Gatling");
+	public static final Component JET_ELEPHANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Stamp Gatling");
+	public static final Component JET_GIANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Stamp Gatling");
+	public static final Component GIANT_DAWN_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Stamp Gatling");
+	public static final Component STAMP_HYDRA = TrueGomuHelper.getName("Gomu Gomu no Stamp Hydra");
+	public static final Component RHINO_STAMPEDE_GATLING = TrueGomuHelper.getName("Gomu Gomu no Rhino Stampede Gatling");
+	public static final Component OVER_KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Over Kong Stamp Gatling");
+	public static final Component KING_KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no King Kong Stamp Gatling");
+	public static final Component KONG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Kong Stamp Gatling");
+	public static final Component JET_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Stamp Gatling");
+	public static final Component ELEPHANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Elephant Stamp Gatling");
+	public static final Component GIANT_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Giant Stamp Gatling");
+	public static final Component DAWN_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Dawn Stamp Gatling");
+	public static final Component BAJRANG_STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Bajrang Stamp Gatling");
+	public static final Component TAKO_STAMP = TrueGomuHelper.getName("Gomu Gomu no Tako Stamp");
+	public static final Component STAMP_GATLING = TrueGomuHelper.getName("Gomu Gomu no Stamp Gatling");
 	private final ContinuousComponent continuousComponent;
 	private final ProjectileComponent projectileComponent;
 	private final AnimationComponent animationComponent;
@@ -89,128 +87,127 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 		this.projectileComponent = new ProjectileComponent(this, this::createProjectile);
 		this.continuousComponent.addTickEvent(this::duringContinuityEvent);
 		this.continuousComponent.addEndEvent(this::onContinuityStopEvent);
-		this.isNew = true;
 		this.addComponents(continuousComponent, projectileComponent, trueScreamComponent, animationComponent, poolComponent);
 	}
 
-	private AbilityProjectileEntity createProjectile(LivingEntity entity) {
-		IAbilityData props = AbilityDataCapability.get(entity);
-		AbilityProjectileEntity projectile;
-		if (EntityStatsCapability.get(entity).isBlackLeg()) {
+	private NuProjectileEntity createProjectile(LivingEntity entity) {
+		IAbilityData props = AbilityCapability.get(entity).get();
+		NuProjectileEntity projectile;
+		if (EntityStatsCapability.get(entity).get().isBlackLeg()) {
 			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
-				projectile = new BajrangStampGunProjectile(entity.level, entity, this, 15f);
+				projectile = new BajrangStampGunProjectile(entity.level(), entity, this, 15f);
 				projectileSpace = 10;
 				projDamageReduction = 0f;
 				speed = 5f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
-				projectile = new GigantDawnStampProjectile(entity.level, entity, this);
+				projectile = new GigantDawnStampProjectile(entity.level(), entity, this);
 				projectileSpace = 9;
 				projDamageReduction = 0.6f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
-				projectile = new JetElephantStampProjectile(entity.level, entity, this);
+				projectile = new JetElephantStampProjectile(entity.level(), entity, this);
 				projectileSpace = 9;
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-				projectile = new DawnStampProjectile(entity.level, entity, this);
+				projectile = new DawnStampProjectile(entity.level(), entity, this);
 				speed = 4;
 				projDamageReduction = 0.4f;
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				projectile = new KingKongStampProjectile(entity.level, entity, this);
+				projectile = new KingKongStampProjectile(entity.level(), entity, this);
 				speed = 4;
 				projectileSpace = 6;
 				projDamageReduction = 0.6F;
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
-				projectile = new KongStampProjectile(entity.level, entity, this);
+				projectile = new KongStampProjectile(entity.level(), entity, this);
 				speed = 2.2F;
 				projectileSpace = 6;
 				projDamageReduction = 0.6F;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
-				projectile = new JetRhinoSchneiderProjectile(entity.level, entity, this, 7f, 5);
-				projectile.setKnockbackStrength(1);
+				projectile = new JetRhinoSchneiderProjectile(entity.level(), entity, this, 7f, 5);
+				projectile.setKnockback(1);
 				speed = 7F;
 				projectileSpace = 6;
 				projDamageReduction = 0.4F;
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				projectile = new ElephantStampProjectile(entity.level, entity, this);
+				projectile = new ElephantStampProjectile(entity.level(), entity, this);
 				speed = 2.4F;
 				projectileSpace = 9;
 				projDamageReduction = 0.6F;
 			} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
 				projDamageReduction = 0.4f;
 				speed = 3.6F;
-				projectile = new JetStampProjectile(entity.level, entity, this);
+				projectile = new JetStampProjectile(entity.level(), entity, this);
 				projectile.setMaxLife(6);
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
-				projectile = new JetStampProjectile(entity.level, entity, this);
+				projectile = new JetStampProjectile(entity.level(), entity, this);
 				speed = 3.6F;
 				projectile.setMaxLife(4);
 				projDamageReduction = 0.8f;
 			} else if (TrueGomuHelper.hasFusenActive(props)) {
-				projectile = new StampProjectile(entity.level, entity, this);
+				projectile = new StampProjectile(entity.level(), entity, this);
 				projectile.setMaxLife(6);
 				projDamageReduction = 0.4f;
 			} else {
-				projectile = new StampProjectile(entity.level, entity, this);
+				projectile = new StampProjectile(entity.level(), entity, this);
 				projectile.setMaxLife(6);
 				projDamageReduction = 0.8f;
 			}
 		} else {
 			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
-				projectile = new BajrangGunProjectile(entity.level, entity, this, 15f);
+				projectile = new BajrangGunProjectile(entity.level(), entity, this, 15f);
 				projDamageReduction = 0f;
 				projectileSpace = 7;
 				speed = 5f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
-				projectile = new GigantDawnPistolProjectile(entity.level, entity, this);
+				projectile = new GigantDawnPistolProjectile(entity.level(), entity, this);
 				projectileSpace = 3;
 				projDamageReduction = 0.6f;
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
-				projectile = new JetElephantGunProjectile(entity.level, entity, this);
+				projectile = new JetElephantGunProjectile(entity.level(), entity, this);
 				projDamageReduction = 0.6f;
 				projectileSpace = 3;
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
-				projectile = new DawnPistolProjectile(entity.level, entity, this);
+				projectile = new DawnPistolProjectile(entity.level(), entity, this);
 				this.projectileSpace = 2;
 				projDamageReduction = 0.4f;
 				speed = 2;
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-				projectile = new KingKongGunProjectile(entity.level, entity, this);
+				projectile = new KingKongGunProjectile(entity.level(), entity, this);
 				speed = 4;
 				projectileSpace = 5;
 				projDamageReduction = 0.6F;
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props) || TrueGomuHelper.hasPartialGearFourthActive(props)) {
-				projectile = new TrueKongGunProjectile(entity.level, entity, this);
+				projectile = new TrueKongGunProjectile(entity.level(), entity, this);
 				speed = 2.2F;
 				projectileSpace = 3;
 				projDamageReduction = 0.6F;
 			} else if (TrueGomuHelper.hasGearFourthSnakemanActive(props)) {
-				projectile = new JetCulverinProjectile(entity.level, entity, this, 7f, 5);
+				projectile = new JetCulverinProjectile(entity.level(), entity, this, 7f, 5);
 				speed = 7F;
 				projectileSpace = 2;
 				projDamageReduction = 0.4F;
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				projectile = new TrueElephantGunProjectile(entity.level, entity, this);
+				projectile = new TrueElephantGunProjectile(entity.level(), entity, this);
 				speed = 2.4F;
 				projectileSpace = 3;
 				projDamageReduction = 0.6F;
 			} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
 				projDamageReduction = 0.4f;
 				speed = 3.6F;
-				projectile = new TrueJetPistolProjectile(entity.level, entity, this);
+				projectile = new TrueJetPistolProjectile(entity.level(), entity, this);
 				projectile.setMaxLife(6);
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
-				projectile = new TrueJetPistolProjectile(entity.level, entity, this);
+				projectile = new TrueJetPistolProjectile(entity.level(), entity, this);
 				projectile.setMaxLife(4);
 				projDamageReduction = 0.8f;
 				speed = 3.6F;
 			} else if (TrueGomuHelper.hasFusenActive(props)) {
 				this.projectileSpace = 2;
 				projDamageReduction = 0.4f;
-				projectile = new TruePistolProjectile(entity.level, entity, this);
+				projectile = new TruePistolProjectile(entity.level(), entity, this);
 				projectile.setMaxLife(6);
 			} else {
 				this.projectileSpace = 2;
 				projDamageReduction = 0.8f;
-				projectile = new TruePistolProjectile(entity.level, entity, this);
+				projectile = new TruePistolProjectile(entity.level(), entity, this);
 				projectile.setMaxLife(6);
 			}
 		}
@@ -224,7 +221,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 			this.continuousComponent.stopContinuity(player);
 			return;
 		}
-		IAbilityData props = AbilityDataCapability.get(player);
+		IAbilityData props = AbilityCapability.get(player).get();
 		double dif;
 		if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
 			this.leap = 1;
@@ -279,10 +276,10 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	}
 
 	private void duringContinuityEvent(LivingEntity player, IAbility abl) {
-		if (TrueGomuHelper.hasGearThirdActive(AbilityDataCapability.get(player))) {
+		if (TrueGomuHelper.hasGearThirdActive(AbilityCapability.get(player).get())) {
 			AbilityHelper.slowEntityFall(player);
 		}
-		player.addEffect(new EffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), 5, 1, false, false));
+		player.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), 5, 1, false, false));
 		if (leap >= 1) {
 			if (this.continuousComponent.getContinueTime() % (int) leap == 0)
 				this.projectileComponent.shootWithSpread(player, this.speed, 0, this.projectileSpace);
@@ -294,8 +291,8 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	}
 
 	protected void updateModes(LivingEntity entity, IAbility abl) {
-		IAbilityData props = AbilityDataCapability.get(entity);
-		if (!EntityStatsCapability.get(entity).isBlackLeg()) {
+		IAbilityData props = AbilityCapability.get(entity).get();
+		if (!EntityStatsCapability.get(entity).get().isBlackLeg()) {
 			if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasHakiEmissionActive(props) && HakiHelper.hasInfusionActive(entity)) {
 				this.setDisplayName(ROC_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
@@ -309,7 +306,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 				this.setDisplayName(GIANT_DAWN_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityDataCapability.get(entity).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE);
 				if (g4.isSnakeman()) {
 					if (HakiHelper.hasInfusionActive(entity)) {
 						this.setDisplayName(HYDRA);
@@ -372,7 +369,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 				this.setDisplayName(GIANT_DAWN_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityDataCapability.get(entity).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE);
 				if (g4.isSnakeman()) {
 					if (HakiHelper.hasInfusionActive(entity)) {
 						this.setDisplayName(STAMP_HYDRA);
@@ -425,7 +422,7 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 	}
 
 	private void onContinuityStopEvent(LivingEntity player, IAbility abl) {
-		IAbilityData props = AbilityDataCapability.get(player);
+		IAbilityData props = AbilityCapability.get(player).get();
 		double dif;
 		if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
 			dif = 5;
@@ -458,14 +455,12 @@ public class TrueGomuGatling extends Ability implements IExtraUpdateData {
 		return data;
 	}
 
-	public void setExtraData(CompoundNBT tag) {
+	public void loadAdditional(CompoundTag tag) {
 		this.leap = tag.getDouble("leap");
 	}
 
-	public CompoundNBT getExtraData() {
-		CompoundNBT out = new CompoundNBT();
-		out.putDouble("leap", this.leap);
-		return out;
+	public void saveAdditional(CompoundTag tag) {
+		tag.putDouble("leap", this.leap);
 	}
 
 }

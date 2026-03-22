@@ -1,11 +1,9 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Level;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.particles.effects.gomu.GearSecondParticleEffect;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 import java.util.Objects;
 

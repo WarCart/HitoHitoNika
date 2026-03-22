@@ -1,23 +1,17 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
-import xyz.pixelatedw.mineminenomi.init.ModDamageSource;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.brawler.BrawlerProjectiles;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 
-import net.minecraft.world.Level;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.vector.Vector3d;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
-
-import java.util.Objects;
 
 public class BajrangGunProjectile extends NuProjectileEntity {
 	protected float size = 30f;
@@ -33,9 +27,7 @@ public class BajrangGunProjectile extends NuProjectileEntity {
 		this.setPhysical();
 		this.setEntityCollisionSize(15);
 		this.setPassThroughEntities();
-		this.setBlocksAffectedLimit(100000);
-		this.setDamageSource(this.getDamageSource().setPhysical());
-		this.onBlockImpactEvent = this::onBlockImpactEvent;
+		this.addBlockHitEvent(100, this::onBlockImpactEvent);
 		//this.onEntityImpactEvent = this::onEntityImpactEvent;
 	}
 
@@ -44,19 +36,19 @@ public class BajrangGunProjectile extends NuProjectileEntity {
 		this.size = size;
 	}
 
-	private void onBlockImpactEvent(BlockPos hit) {
-		ExplosionAbility explosion = AbilityHelper.newExplosion(this.getThrower(), this.level, this.getX(), this.getY(), this.getZ(), this.size);
+	private void onBlockImpactEvent(BlockHitResult hit) {
+		AbilityExplosion explosion = new AbilityExplosion(this.getOwner(), this.getParent().orElse(null), this.getX(), this.getY(), this.getZ(), this.size);
 		explosion.setStaticDamage(280.0F);
 		explosion.setExplosionSound(false);
 		explosion.setDamageOwner(false);
 		explosion.setDestroyBlocks(true);
 		explosion.setFireAfterExplosion(false);
 		explosion.setDamageEntities(false);
-		explosion.doExplosion();
+		explosion.explode();
 	}
 
-	private void onEntityImpactEvent(LivingEntity hitEnt) {
-		AbilityHelper.setDeltaMovement(hitEnt, hitEnt.getDeltaMovement().add(this.getLookAngle()));
+	private void onEntityImpactEvent(EntityHitResult hitEnt) {
+		AbilityHelper.setDeltaMovement(hitEnt.getEntity(), hitEnt.getEntity().getDeltaMovement().add(this.getLookAngle()));
 	}
 
 }

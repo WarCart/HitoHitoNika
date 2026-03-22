@@ -14,4 +14,6 @@ public class GomuAnimations {
     private static <A extends Animation<?, ?>> AnimationId<A> register(String name, AnimationId.IAnimationFactory<A> factory) {
         return new AnimationId<>(ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, name),  factory);
     }
+
+    public static void init() {}
 }

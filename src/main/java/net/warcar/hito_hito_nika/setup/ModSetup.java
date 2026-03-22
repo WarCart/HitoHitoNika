@@ -1,13 +1,15 @@
 package net.warcar.hito_hito_nika.setup;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.entity.EntityType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -21,20 +23,28 @@ import java.util.Map;
 public class ModSetup {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void clientInit(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            for (Map.Entry<EntityType<?>, EntityRenderer<?>> entry : Minecraft.getInstance().getEntityRenderDispatcher().renderers.entrySet()) {
-                EntityRenderer<?> entityRenderer = entry.getValue();
-                if (entityRenderer instanceof BipedRenderer) {
-                    ((BipedRenderer<?, ?>) entityRenderer).addLayer(new TrueGomuSmokeLayer((IEntityRenderer<?, ?>) entityRenderer));
-                }
+    public static void clientInit(EntityRenderersEvent.AddLayers event) {
+        Minecraft mc = Minecraft.getInstance();
+        EntityRendererProvider.Context ctx = event.getContext();
+        for (Map.Entry<EntityType<?>, EntityRenderer<?>> entry : mc.getEntityRenderDispatcher().renderers.entrySet()) {
+            EntityRenderer<?> entityRenderer = entry.getValue();
+            if (entityRenderer instanceof LivingEntityRenderer renderer) {
+                renderer.addLayer(new TrueGomuSmokeLayer<>(ctx, renderer));
             }
+        }
 
-            for (Map.Entry<String, PlayerRenderer> entry : Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().entrySet()) {
-                PlayerRenderer playerRenderer = entry.getValue();
-                playerRenderer.addLayer(new TrueGomuSmokeLayer<>(playerRenderer));
-            }
-            GomuAnimations.clientInit();
+        for (String skin : event.getSkins()) {
+            boolean isSlim = skin.equals("slim");
+            LivingEntityRenderer<Player, PlayerModel<Player>> renderer = event.getSkin(skin);
+            renderer.addLayer(new TrueGomuSmokeLayer<>(ctx, renderer));
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void modClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            GomuAnimations.init();
         });
     }
 }

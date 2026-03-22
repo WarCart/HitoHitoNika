@@ -1,36 +1,34 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 
 import java.util.Objects;
 
 public class TrueBazookaProjectile extends NuProjectileEntity {
-    public TrueBazookaProjectile(EntityType type, World world) {
+    public TrueBazookaProjectile(EntityType type, Level world) {
         super(type, world);
     }
 
-    public TrueBazookaProjectile(World world, LivingEntity player, Ability ability) {
+    public TrueBazookaProjectile(Level world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_BAZOOKA.get(), world, player, ability);
         this.setMaxLife(12);
-        this.setAffectedByHardening();
+        this.setPhysical();
         this.setDamage(30F);
         this.setEntityCollisionSize(2.5d);
         this.setPassThroughEntities();
         this.setPassThroughBlocks();
-        this.setDamageSource(this.getDamageSource().setPhysical());
-        this.onEntityImpactEvent = this::onEntityImpactEvent;
+        this.addEntityHitEvent(100, this::onEntityImpactEvent);
     }
 
-    private void onEntityImpactEvent(LivingEntity hitEntity) {
-        Vector3d speed = WyHelper.propulsion(Objects.requireNonNull(this.getThrower()), 4.0D, 4.0D);
-        hitEntity.setDeltaMovement(speed.x, 0.4D, speed.z);
-        hitEntity.hurtMarked = true;
+    private void onEntityImpactEvent(EntityHitResult hitEntity) {
+        var speed = this.getDeltaMovement().normalize().scale(4);
+        AbilityHelper.setDeltaMovement(hitEntity.getEntity(), speed.x, 0.4, speed.z);
     }
 }
