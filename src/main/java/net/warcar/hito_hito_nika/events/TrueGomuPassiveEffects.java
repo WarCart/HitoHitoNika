@@ -1,17 +1,17 @@
 package net.warcar.hito_hito_nika.events;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -29,25 +29,26 @@ import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuEffects;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
-import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
+import xyz.pixelatedw.mineminenomi.abilities.haki.HakiHelper;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
+import xyz.pixelatedw.mineminenomi.api.damagesources.BaseDamageSource;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.events.ability.AbilityUseEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.DorikiEvent;
 import xyz.pixelatedw.mineminenomi.api.events.stats.HakiExpEvent;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.api.helpers.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.ItemsHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.CannonBallProjectile;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.NormalBulletProjectile;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.extra.PopGreenProjectile;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.hitodaibutsu.ImpactBlastProjectile;
-import xyz.pixelatedw.mineminenomi.events.abilities.AbilityValidationEvents;
-import xyz.pixelatedw.mineminenomi.init.*;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
+import xyz.pixelatedw.mineminenomi.entities.projectiles.CannonBallProjectile;
+import xyz.pixelatedw.mineminenomi.entities.projectiles.NormalBulletProjectile;
+import xyz.pixelatedw.mineminenomi.entities.projectiles.PopGreenProjectile;
+import xyz.pixelatedw.mineminenomi.entities.projectiles.abilities.hitodaibutsu.ImpactBlastProjectile;
+import xyz.pixelatedw.mineminenomi.handlers.ability.ProgressionHandler;
+import xyz.pixelatedw.mineminenomi.init.ModEntityPredicates;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,34 +58,34 @@ import java.util.List;
 public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void onEntityHurt(LivingHurtEvent event) {
-		if (event.getEntityLiving().hasEffect(GomuEffects.GOMU_REVIVE.get())) {
+		if (event.getEntity().hasEffect(GomuEffects.GOMU_REVIVE.get())) {
 			event.setCanceled(true);
 			event.setAmount(0);
 			return;
 		}
-		if (event.getEntityLiving() instanceof LivingEntity) {
+		if (event.getEntity() != null) {
 			DamageSource source = event.getSource();
 			Entity instantSource = source.getDirectEntity();
 			Entity trueSource = source.getEntity();
-			LivingEntity attacked = event.getEntityLiving();
-			IDevilFruit props = DevilFruitCapability.get(attacked);
-			if (props.hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI) && !source.isMagic()) {
+			LivingEntity attacked = event.getEntity();
+			IDevilFruit props = DevilFruitCapability.get(attacked).get();
+			if (props.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA) && !source.is(DamageTypes.MAGIC)) {
 				float reduction = 0.0F;
 				ArrayList<String> instantSources = new ArrayList<>(Arrays.asList("mob", "player"));
 				boolean a = false;
 				if (instantSource instanceof LivingEntity) {
-					ItemStack mainhandGear = ((LivingEntity) instantSource).getItemBySlot(EquipmentSlotType.MAINHAND);
-					a = trueSource instanceof LivingEntity && !HakiHelper.hasHardeningActive((LivingEntity) instantSource) && instantSources.contains(source.getMsgId()) && !source.isProjectile()
+					ItemStack mainhandGear = ((LivingEntity) instantSource).getItemBySlot(EquipmentSlot.MAINHAND);
+					a = trueSource instanceof LivingEntity && !HakiHelper.hasHardeningActive((LivingEntity) instantSource) && instantSources.contains(source.getMsgId())
 							&& getGomuDamagingItems(mainhandGear.getItem()) && !ItemsHelper.isKairosekiWeapon(mainhandGear);
 				}
-				boolean b = source.isProjectile() && instantSource instanceof AbilityProjectileEntity && ((AbilityProjectileEntity) instantSource).isPhysical() && !((AbilityProjectileEntity) instantSource).isAffectedByHaki();
-				if ((a || b) && !source.isExplosion()) {
+				boolean b = instantSource instanceof NuProjectileEntity proj && proj.isPhysical();
+				if ((a || b) && !source.is(DamageTypes.EXPLOSION)) {
 					reduction = 0.75F;
 				}
-				if (source.getMsgId().equals(DamageSource.LIGHTNING_BOLT.getMsgId())) {
+				if (source.getMsgId().equals("lightning_bolt")) {
 					reduction = 1.0F;
 				}
-				if (source instanceof ModDamageSource && ((ModDamageSource) source).getElement() == SourceElement.LIGHTNING) {
+				if (source instanceof BaseDamageSource src && src.getElement() == SourceElement.LIGHTNING) {
 					reduction = 1.0F;
 				}
 				event.setAmount(event.getAmount() * (1.0F - reduction));
@@ -94,26 +95,24 @@ public class TrueGomuPassiveEffects {
 
 	@SubscribeEvent
 	public static void onEntityAttackEvent(LivingAttackEvent event) {
-		if (event.getEntityLiving() instanceof PlayerEntity) {
-			PlayerEntity attacked = (PlayerEntity) event.getEntityLiving();
-			IAbilityData props = AbilityDataCapability.get(attacked);
-			IDevilFruit devilFruitProps = DevilFruitCapability.get(attacked);
-			if (devilFruitProps.hasDevilFruit(ModAbilities.GOMU_GOMU_NO_MI)) {
+		if (event.getEntity() instanceof Player attacked) {
+			IAbilityData props = AbilityCapability.get(attacked).get();
+			IDevilFruit devilFruitProps = DevilFruitCapability.get(attacked).get();
+			if (devilFruitProps.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA)) {
 				DamageSource source = event.getSource();
 				Entity instantSource = source.getDirectEntity();
 				if (instantSource instanceof NormalBulletProjectile || (instantSource instanceof CannonBallProjectile && TrueGomuHelper.hasAbilityActive(props, GomuFusenAbility.INSTANCE)) || instantSource instanceof PopGreenProjectile
 						|| (instantSource instanceof ImpactBlastProjectile && TrueGomuHelper.hasAbilityActive(props, GomuFusenAbility.INSTANCE) && TrueGomuHelper.hasGearThirdActive(props))) {
-					AbilityProjectileEntity ablProj = (AbilityProjectileEntity) instantSource;
-					if (ablProj.getThrower() != null && ablProj.isAffectedByHaki()) {
-						LivingEntity thrower = ablProj.getThrower();
-						boolean isImbued = ablProj.isAffectedByImbuing() && HakiHelper.hasImbuingActive(thrower);
-						if (isImbued) {
+					NuProjectileEntity ablProj = (NuProjectileEntity) instantSource;
+					if (ablProj.getOwner() != null && ablProj.isAffectedByImbuing()) {
+						LivingEntity thrower = ablProj.getOwner();
+						if (HakiHelper.hasImbuingActive(thrower)) {
 							return;
 						}
 					}
 					event.setCanceled(true);
-					((AbilityProjectileEntity) instantSource).setThrower(attacked);
-					((AbilityProjectileEntity) instantSource).shoot(-instantSource.getDeltaMovement().x, -instantSource.getDeltaMovement().y, -instantSource.getDeltaMovement().z, 0.8F, 20.0F);
+					((NuProjectileEntity) instantSource).setOwner(attacked);
+					((NuProjectileEntity) instantSource).shoot(-instantSource.getDeltaMovement().x, -instantSource.getDeltaMovement().y, -instantSource.getDeltaMovement().z, 0.8F, 20.0F);
 				}
 			}
 		}
@@ -126,40 +125,40 @@ public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void onDeath(LivingDeathEvent event) {
 		if (!event.isCanceled()) {
-			TrueGearFourthAbility ability = AbilityDataCapability.get(event.getEntityLiving()).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+			TrueGearFourthAbility ability = AbilityCapability.get(event.getEntity()).get().getEquippedAbility(TrueGearFourthAbility.INSTANCE);
 			if (ability != null)
-				event.setCanceled(ability.onUserDeath(event.getEntityLiving()));
+				event.setCanceled(ability.onUserDeath(event.getEntity()));
 		}
 	}
 
 	@SubscribeEvent
 	public static void dorikiGain(DorikiEvent.Post event) {
-		AbilityValidationEvents.checkForPossibleFruitAbilities(event.getEntityLiving());
+		ProgressionHandler.checkForPossibleFruitAbilities(event.getEntity());
 	}
 
 	@SubscribeEvent
 	public static void hakiEvent(HakiExpEvent.Post event) {
-		AbilityValidationEvents.checkForPossibleFruitAbilities(event.getEntityLiving());
+		ProgressionHandler.checkForPossibleFruitAbilities(event.getEntity());
 	}
 
 	@SubscribeEvent
 	public static void usage(AbilityUseEvent.Pre event) {
 		if (Arrays.asList(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.getAbilities()).contains(event.getAbility().getCore())) {
-			GomuMorphsAbility morphs = AbilityDataCapability.get(event.getEntityLiving()).getPassiveAbility(GomuMorphsAbility.INSTANCE);
+			GomuMorphsAbility morphs = AbilityCapability.get(event.getEntity()).get().getPassiveAbility(GomuMorphsAbility.INSTANCE);
 			if (morphs != null)
-				morphs.updateModes(event.getEntityLiving());
+				morphs.updateModes(event.getEntity());
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onFall(LivingFallEvent event) {
-		LivingEntity entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntity();
 		if (event.getDistance() < 3) {
 			return;
 		}
-		List<LivingEntity> entities = WyHelper.getNearbyLiving(entity.position(), entity.level, 5, ModEntityPredicates.getFriendlyFactions(entity).and(ent -> ent instanceof LivingEntity && TrueGomuHelper.hasGearFifthActive(AbilityDataCapability.get((LivingEntity) ent))));
+		List<LivingEntity> entities = WyHelper.getNearbyLiving(entity.position(), entity.level(), 5, ModEntityPredicates.getFriendlyFactions(entity).and(ent -> ent instanceof LivingEntity && TrueGomuHelper.hasGearFifthActive(AbilityCapability.get((LivingEntity) ent).get())));
 		if (!entities.isEmpty()) {
-			Vector3d speed = new Vector3d(entity.getDeltaMovement().x, event.getDistance() / 15, entity.getDeltaMovement().z);
+			Vec3 speed = new Vec3(entity.getDeltaMovement().x, event.getDistance() / 15, entity.getDeltaMovement().z);
 			AbilityHelper.setDeltaMovement(entity, speed);
 			event.setCanceled(true);
 		}
@@ -171,13 +170,13 @@ public class TrueGomuPassiveEffects {
 		LivingEntity entity = event.getEntity();
 		if (entity.hasEffect(GomuEffects.SQUISHED.get())) {
 			entity.getPersistentData().putBoolean("GomuSquished", true);
-			MatrixStack stack = event.getMatrixStack();
+			PoseStack stack = event.getPoseStack();
 			stack.pushPose();
-			EffectInstance squishedEffect = entity.getEffect(GomuEffects.SQUISHED.get());
+			MobEffectInstance squishedEffect = entity.getEffect(GomuEffects.SQUISHED.get());
 			float angle = (float) (squishedEffect.getAmplifier() * Math.PI / 256);
-			stack.mulPose(Vector3f.YP.rotation(angle));
+			//stack.mulPose(Vector3f.YP.rotation(angle));
 			stack.scale(1, 1, 0.01f);
-			stack.mulPose(Vector3f.YN.rotation(angle));
+			//stack.mulPose(Vec3.YN.rotation(angle));
 		}
 	}
 
@@ -186,7 +185,7 @@ public class TrueGomuPassiveEffects {
 	public static void afterEntityRender(RenderLivingEvent.Post<LivingEntity, ?> event) {
 		LivingEntity entity = event.getEntity();
 		if (entity.getPersistentData().getBoolean("GomuSquished")) {
-			MatrixStack stack = event.getMatrixStack();
+			PoseStack stack = event.getPoseStack();
 			stack.popPose();
 			entity.getPersistentData().remove("GomuSquished");
 		}

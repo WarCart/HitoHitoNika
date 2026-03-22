@@ -8,16 +8,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.pixelatedw.mineminenomi.init.ModAbilities;
+import xyz.pixelatedw.mineminenomi.init.ModFruits;
+import xyz.pixelatedw.mineminenomi.init.ModRegistry;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
-@Mixin(ModAbilities.class)
+@Mixin(ModFruits.class)
 public abstract class ModAbilitiesMixin {
-    @Inject(method = "registerFruit", at = @At(value = "HEAD"), remap = false, cancellable = true)
+    /*@Inject(method = "registerFruit", at = @At(value = "HEAD"), remap = false, cancellable = true)
     private static <T extends AkumaNoMiItem> void notReg(T fruit, CallbackInfoReturnable<T> info) {
         if (fruit.getDevilFruitName().equals("Gomu Gomu no Mi")) {
             info.setReturnValue(fruit);
         }
-    }
+    }*/
 
     @Shadow
     @Final
