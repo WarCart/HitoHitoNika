@@ -67,7 +67,6 @@ public class GomuFusenModel<T extends LivingEntity> extends MorphModel<T> {
 		}
 	}
 
-	@ParametersAreNonnullByDefault
 	public void setupAnim(LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.RightArm.xRot = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * limbSwingAmount;
 		this.LeftLeg.xRot = MathHelper.cos(limbSwing) * -1.0F * limbSwingAmount;

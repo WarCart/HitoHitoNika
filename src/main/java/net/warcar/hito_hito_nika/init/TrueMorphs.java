@@ -2,7 +2,6 @@ package net.warcar.hito_hito_nika.init;
 
 import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.morphs.*;
-import xyz.pixelatedw.mineminenomi.api.WyRegistry;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.init.ModRegistry;
 
@@ -18,7 +17,7 @@ public class TrueMorphs {
 
     public static final RegistryObject<MorphInfo> SMALL = ModRegistry.registerMorph("small", SmallMorph::new);
 
-    public static final RegistryObject<MorphInfo> GIANT_FUSEN = ModRegistry.registerMorph("giant_fusen", GigantFusenMorph::new);
+    public static final RegistryObject<MorphInfo> GIANT_FUSEN = ModRegistry.registerMorph("giant_fusen", GiantFusenMorph::new);
 
     public static final RegistryObject<MorphInfo> GIANT = ModRegistry.registerMorph("giant", GomuGigantMorph::new);
 

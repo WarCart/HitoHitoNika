@@ -9,8 +9,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
-import net.warcar.hito_hito_nika.models.GomuFusenModel;
-import net.warcar.hito_hito_nika.renderers.morphs.GomuMorphRenderer;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
@@ -24,16 +22,6 @@ public class FusenMorph extends MorphInfo {
 
     public Component getDisplayName() {
         return Component.literal("Gomu Gomu no Fusen");
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public IRenderFactory getRendererFactory(LivingEntity entity) {
-        return new GomuMorphRenderer.Factory(this);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public MorphModel getModel() {
-        return new GomuFusenModel();
     }
 
     public AkumaNoMiItem getDevilFruit() {

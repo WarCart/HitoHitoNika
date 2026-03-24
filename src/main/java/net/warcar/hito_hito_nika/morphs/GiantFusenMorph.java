@@ -13,25 +13,23 @@ import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 
 import java.util.Map;
 
-public class SmallMorph extends MorphInfo {
-    private static final EntityDimensions STANDING_SIZE_SMALL = EntityDimensions.scalable(0.2F, 1.1F);
-    private static final EntityDimensions CROUCHING_SIZE_SMALL = EntityDimensions.scalable(0.3F, 1F);
-
-
+public class GiantFusenMorph extends MorphInfo {
+    private static final EntityDimensions STANDING_SIZE = EntityDimensions.scalable(3.6F, 4.8F);
+    private static final EntityDimensions CROUCHING_SIZE = EntityDimensions.scalable(3.7F, 4.6F);
     public Component getDisplayName() {
-        return Component.literal("Small Form");
+        return Component.literal("Gomu Gomu no Giant Fusen");
     }
 
     public String getForm() {
-        return "small";
+        return "giant_fusen";
     }
 
     public float getEyeHeight(LivingEntity entity) {
-        return 0.9f;
+        return 4.8f;
     }
 
     public float getShadowSize() {
-        return 0.2f;
+        return 2f;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -40,6 +38,6 @@ public class SmallMorph extends MorphInfo {
     }
 
     public Map<Pose, EntityDimensions> getSizes() {
-        return ImmutableMap.<Pose, EntityDimensions>builder().put(Pose.STANDING, STANDING_SIZE_SMALL).put(Pose.CROUCHING, CROUCHING_SIZE_SMALL).build();
+        return ImmutableMap.<Pose, EntityDimensions>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.CROUCHING, CROUCHING_SIZE).build();
     }
 }
