@@ -1,34 +1,32 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 public class RedHawkProjectile extends TruePistolProjectile {
 
-    public RedHawkProjectile(World world, LivingEntity player, Ability ability) {
+    public RedHawkProjectile(Level world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(9);
         this.setDamage(50f);
-        this.setDamageSource(this.getDamageSource().setPhysical());
-        this.setBlocksAffectedLimit(75);
-        this.onBlockImpactEvent = this::onBlockImpactEvent;
-        this.onTickEvent = this::onTickEvent;
+        this.addBlockHitEvent(100, this::onBlockImpactEvent);
+        this.addTickEvent(100, this::onTickEvent);
     }
-    private void onBlockImpactEvent(BlockPos pos) {
-        ExplosionAbility explosion = AbilityHelper.newExplosion(this.getThrower(), this.level, this.getX(), this.getY(), this.getZ(), 1F);
+    private void onBlockImpactEvent(BlockHitResult pos) {
+        AbilityExplosion explosion = new AbilityExplosion(this.getOwner(), this.getParent().orElse(null), this.getX(), this.getY(), this.getZ(), 1F);
         explosion.setStaticDamage(3.0F);
         explosion.setExplosionSound(false);
         explosion.setDamageOwner(false);
         explosion.setDestroyBlocks(true);
         explosion.setFireAfterExplosion(true);
         explosion.setDamageEntities(true);
-        explosion.doExplosion();
+        explosion.explode();
     }
     private void onTickEvent() {
         for (int i = 0; i < 5; i++) {

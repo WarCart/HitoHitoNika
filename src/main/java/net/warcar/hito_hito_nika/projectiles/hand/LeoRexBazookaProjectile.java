@@ -1,51 +1,49 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
-import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
 
 public class LeoRexBazookaProjectile extends NuProjectileEntity {
-    public LeoRexBazookaProjectile(EntityType type, World world) {
+    public LeoRexBazookaProjectile(EntityType type, Level world) {
         super(type, world);
     }
 
-    public LeoRexBazookaProjectile(World world, LivingEntity player, Ability ability) {
-        super(NikaProjectiles.GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), world, player, ability);
+    public LeoRexBazookaProjectile(Level world, LivingEntity player, Ability ability) {
+        super(NikaProjectiles.GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), world, player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.setDamage(120f);
         this.setMaxLife(10);
         this.setEntityCollisionSize(4d);
-        this.setAffectedByHardening();
         this.setPassThroughEntities();
-        this.setBlocksAffectedLimit(200);
-        this.setHurtTime(10);
-        this.setDamageSource(this.getDamageSource().setSourceElement(SourceElement.RUBBER));
-        this.onEntityImpactEvent = this::onEntityImpactEvent;
-        this.onBlockImpactEvent = this::onBlockImpactEvent;
+        this.addEntityHitEvent(100, this::onEntityImpactEvent);
+        this.addBlockHitEvent(100, this::onBlockImpactEvent);
     }
 
-    private void onEntityImpactEvent(LivingEntity hitEntity) {
-        Vector3d speed = WyHelper.propulsion(this.getThrower(), 15.0D, 15.0D);
-        hitEntity.setDeltaMovement(speed.x, 0.8D, speed.z);
-        hitEntity.hurtMarked = true;
+    private void onEntityImpactEvent(EntityHitResult hit) {
+        var hitEntity = hit.getEntity();
+        Vec3 speed = this.getDeltaMovement().normalize().scale(15);
+        AbilityHelper.setDeltaMovement(hitEntity, speed.x, 0.8, speed.z);
     }
 
-    private void onBlockImpactEvent(BlockPos hit) {
-        ExplosionAbility explosion = AbilityHelper.newExplosion(this.getThrower(), this.level, this.getX(), this.getY(), this.getZ(), 11F);
+    private void onBlockImpactEvent(BlockHitResult hit) {
+        AbilityExplosion explosion = new AbilityExplosion(this.getOwner(), this.getParent().orElse(null), this.getX(), this.getY(), this.getZ(), 11F);
         explosion.setStaticDamage(80.0F);
         explosion.setExplosionSound(false);
         explosion.setDamageOwner(false);
         explosion.setDestroyBlocks(true);
         explosion.setFireAfterExplosion(false);
         explosion.setDamageEntities(false);
-        explosion.doExplosion();
+        explosion.explode();
     }
 }

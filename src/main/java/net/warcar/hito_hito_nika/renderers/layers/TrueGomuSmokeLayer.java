@@ -13,21 +13,24 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.models.entities.AwakeningSmokeModel;
 
 public class TrueGomuSmokeLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
-    private GomuSmokeModel model = new GomuSmokeModel();
+    private AwakeningSmokeModel model;
 
-    private static final ResourceLocation[] SMOKE_ANIM = new ResourceLocation[] {new ResourceLocation("mineminenomi", "textures/models/zoanmorph/g5/smoke_0.png"),
-            new ResourceLocation("mineminenomi", "textures/models/zoanmorph/g5/smoke_1.png"), new ResourceLocation("mineminenomi", "textures/models/zoanmorph/g5/smoke_2.png"),
-            new ResourceLocation("mineminenomi", "textures/models/zoanmorph/g5/smoke_3.png")};
+    private static final ResourceLocation[] SMOKE_ANIM = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath("mineminenomi", "textures/models/morphs/awakening_smoke/smoke_0.png"),
+            ResourceLocation.fromNamespaceAndPath("mineminenomi", "textures/models/morphs/awakening_smoke/smoke_1.png"), ResourceLocation.fromNamespaceAndPath("mineminenomi", "textures/models/morphs/awakening_smoke/smoke_2.png"),
+            ResourceLocation.fromNamespaceAndPath("mineminenomi", "textures/models/morphs/awakening_smoke/smoke_3.png")};
 
     public TrueGomuSmokeLayer(EntityRendererProvider.Context ctx, RenderLayerParent<T, M> renderer) {
         super(renderer);
+        model = new AwakeningSmokeModel(ctx.bakeLayer(AwakeningSmokeModel.LAYER_LOCATION));
     }
 
     public void render(PoseStack matrixStack, MultiBufferSource buffer, int packedLight, T entity, float pLimbSwing, float pLimbSwingAmount, float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-        IAbilityData abilityData = AbilityDataCapability.get(entity);
+        IAbilityData abilityData = AbilityCapability.get(entity).get();
         if (TrueGomuHelper.hasGearFifthActive(abilityData) || TrueGomuHelper.hasGearFourthSnakemanActive(abilityData)) {
             float speed = 1000.0F;
             float anim = (float) Util.getMillis() % speed / (speed / (float)SMOKE_ANIM.length);

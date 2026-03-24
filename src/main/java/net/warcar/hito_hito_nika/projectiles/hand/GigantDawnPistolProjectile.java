@@ -1,12 +1,12 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Level;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
-import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.particles.effects.gomu.GearSecondParticleEffect;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
+import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 
 public class GigantDawnPistolProjectile extends TrueElephantGunProjectile {
 
@@ -14,24 +14,22 @@ public class GigantDawnPistolProjectile extends TrueElephantGunProjectile {
         super(world, player, ability);
         this.setDamage(40f);
         this.setMaxLife(9);
-        this.setBlocksAffectedLimit(200);
-        this.onBlockImpactEvent = this::onBlockImpactEvent;
-        this.setDamageSource(this.getDamageSource().setPhysical());
-        this.onTickEvent = this::onTickEvent;
+        this.addBlockHitEvent(100, this::onBlockImpactEvent);
+        this.addTickEvent(100, this::onTickEvent);
     }
 
-    private void onBlockImpactEvent(BlockPos pos) {
-        ExplosionAbility explosion = AbilityHelper.newExplosion(this.getThrower(), this.level, this.getX(), this.getY(), this.getZ(), 3.0F);
+    private void onBlockImpactEvent(BlockHitResult pos) {
+        AbilityExplosion explosion = new AbilityExplosion(this.getOwner(), this.getParent().orElse(null), this.getX(), this.getY(), this.getZ(), 3.0F);
         explosion.setStaticDamage(13F);
         explosion.setExplosionSound(false);
         explosion.setDamageOwner(true);
         explosion.setDestroyBlocks(true);
         explosion.setFireAfterExplosion(false);
         explosion.setDamageEntities(false);
-        explosion.doExplosion();
+        explosion.explode();
     }
 
     private void onTickEvent() {
-        new GearSecondParticleEffect().spawn(this.level, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+        WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), this, this.getX(), this.getY(), this.getZ());
     }
 }

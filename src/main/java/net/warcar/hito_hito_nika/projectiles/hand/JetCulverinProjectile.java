@@ -1,8 +1,8 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.world.Level;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import net.warcar.hito_hito_nika.projectiles.PythonProjectile;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
@@ -17,12 +17,9 @@ public class JetCulverinProjectile extends PythonProjectile {
 		this.setMaxLife(3);
 		this.setDamage(20f);
 		this.setEntityCollisionSize(2.5d);
-		this.setAffectedByHardening();
 		this.setPassThroughEntities();
-		this.setBlocksAffectedLimit(100000);
-		this.setDamageSource(this.getDamageSource().setPhysical());
 	}
 	public PythonProjectile getNew() {
-		return new JetCulverinProjectile(this.level, this.getThrower(), this.master, this.speed, this.getLayer() - 1);
+		return new JetCulverinProjectile(this.level(), this.getOwner(), this.master, this.speed, this.getLayer() - 1);
 	}
 }

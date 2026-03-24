@@ -1,38 +1,37 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.damagesource.SourceElement;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 
 import java.util.Objects;
 
 public class TrueGrizzlyMagnumProjectile extends NuProjectileEntity {
-    public TrueGrizzlyMagnumProjectile(EntityType type, World world) {
+    public TrueGrizzlyMagnumProjectile(EntityType type, Level world) {
         super(type, world);
     }
 
-    public TrueGrizzlyMagnumProjectile(World world, LivingEntity player, Ability ability) {
-        super(NikaProjectiles.GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), world, player, ability);
+    public TrueGrizzlyMagnumProjectile(Level world, LivingEntity player, Ability ability) {
+        super(NikaProjectiles.GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), world, player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.setDamage(80f);
         this.setMaxLife(10);
-        this.setAffectedByHardening();
         this.setPassThroughEntities();
         this.setPassThroughBlocks();
-        this.setHurtTime(10);
         this.setEntityCollisionSize(2.5D);
-        this.setDamageSource(this.getDamageSource().setSourceElement(SourceElement.RUBBER));
-        this.onEntityImpactEvent = this::onEntityImpactEvent;
+        this.addEntityHitEvent(100, this::onEntityImpactEvent);
     }
 
-    private void onEntityImpactEvent(LivingEntity hitEntity) {
-        Vector3d speed = WyHelper.propulsion(Objects.requireNonNull(this.getThrower()), 5.0D, 5.0D);
-        hitEntity.setDeltaMovement(speed.x, 0.5D, speed.z);
-        hitEntity.hurtMarked = true;
+    private void onEntityImpactEvent(EntityHitResult hit) {
+        Vec3 speed = this.getDeltaMovement().normalize().scale(5);
+        AbilityHelper.setDeltaMovement(hit.getEntity(), speed.x, 0.5, speed.z);
     }
 }

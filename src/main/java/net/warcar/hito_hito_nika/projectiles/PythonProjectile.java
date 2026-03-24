@@ -12,6 +12,9 @@ import net.minecraft.world.phys.Vec3;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.data.entity.projectileextra.IProjectileExtras;
 import xyz.pixelatedw.mineminenomi.data.entity.projectileextra.ProjectileExtrasCapability;
@@ -36,7 +39,7 @@ public abstract class PythonProjectile extends NuProjectileEntity {
     }
 
     public PythonProjectile(EntityType<? extends PythonProjectile> type, Level world, LivingEntity player, Ability ability, float speed, int layer) {
-        super(type, world, player, ability);
+        super(type, world, player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.addEntityHitEvent(100, this::onEntityImpactEvent);
         master = ability;
         this.setLayer(layer);

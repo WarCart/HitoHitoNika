@@ -1,13 +1,13 @@
 package net.warcar.hito_hito_nika.projectiles.hand;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Level;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.particles.effects.gomu.GearSecondParticleEffect;
-import xyz.pixelatedw.mineminenomi.wypi.WyHelper;
-
-import java.util.Objects;
+import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
+import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 
 public class GigantDawnBazookaProjectile extends TrueGrizzlyMagnumProjectile {
 
@@ -17,18 +17,16 @@ public class GigantDawnBazookaProjectile extends TrueGrizzlyMagnumProjectile {
         this.setDamage(120f);
         this.setPassThroughEntities();
         this.setPassThroughBlocks();
-        this.setDamageSource(this.getDamageSource().setPhysical());
-        this.onEntityImpactEvent = this::onEntityImpactEvent;
-        this.onTickEvent = this::onTickEvent;
+        this.addEntityHitEvent(100, this::onEntityImpactEvent);
+        this.addTickEvent(100, this::onTickEvent);
     }
 
-    private void onEntityImpactEvent(LivingEntity hitEntity) {
-        Vector3d speed = WyHelper.propulsion(Objects.requireNonNull(this.getThrower()), 15D, 15D);
-        hitEntity.setDeltaMovement(speed.x, 0.2D, speed.z);
-        hitEntity.hurtMarked = true;
+    private void onEntityImpactEvent(EntityHitResult hitEntity) {
+        Vec3 speed = this.getDeltaMovement().normalize().scale(15);
+        AbilityHelper.setDeltaMovement(hitEntity.getEntity(), speed.x, 0.2, speed.z);
     }
 
     private void onTickEvent() {
-        new GearSecondParticleEffect().spawn(this.level, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+        WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), this, this.getX(), this.getY(), this.getZ());
     }
 }

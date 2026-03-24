@@ -13,20 +13,18 @@ import net.warcar.hito_hito_nika.abilities.TrueGomuRocket;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 
 public class TrueGomuRocketProjectile extends NuProjectileEntity {
-	public Ability master;
 
 	public TrueGomuRocketProjectile(Level world, LivingEntity player, Ability ability) {
 		super(null, world, player, ability);
 		this.setPhysical();
 		this.setDamage(0f);
-		this.master = ability;
 		this.addEntityHitEvent(100, this::onEntityImpact);
 		this.addBlockHitEvent(100, this::onBlockHit);
 	}
 
 	private void onBlockImpact(BlockPos pos) {
 		var owner = this.getOwner();
-		((TrueGomuRocket) this.master).setFlying();
+		((TrueGomuRocket) this.getParent().get()).setFlying();
 
 		BlockPos distance = pos.subtract(owner.blockPosition());
 
