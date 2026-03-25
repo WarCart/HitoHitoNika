@@ -3,9 +3,7 @@
   "package": "net.warcar.hito_hito_nika.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "GomuHelperMixin",
     "ModAbilitiesMixin",
-    "RendererHelperMixin",
     "WyHelperMixin"
   ],
   "injectors": {
@@ -13,6 +11,5 @@
   },
   "refmap": "hito_hito_no_mi_nika.refmap.json",
   "client": [
-    "client.ModerRendererMixin"
   ]
 }

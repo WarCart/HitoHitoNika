@@ -4,7 +4,6 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.warcar.hito_hito_nika.renderers.IModelRendererMixin;
 import xyz.pixelatedw.mineminenomi.api.animations.AnimationId;
 
 public class TrueGomuBulletAnimation extends TimedAnimation<LivingEntity, HumanoidModel<LivingEntity>> {
@@ -25,9 +24,9 @@ public class TrueGomuBulletAnimation extends TimedAnimation<LivingEntity, Humano
         double percentage = getPercentage();
         double invPercent = 1.0D - percentage;
         if (percentage < 0.5D) {
-            ((IModelRendererMixin) mainHand).setYScale((float) percentage * 22);
+            mainHand.yScale = (float) percentage * 22;
         } else {
-            ((IModelRendererMixin) mainHand).setYScale((float) invPercent * 20 + 1);
+            mainHand.yScale = (float) invPercent * 20 + 1;
         }
     }
 }

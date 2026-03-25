@@ -1,104 +1,87 @@
-package net.warcar.hito_hito_nika.models;
+package net.warcar.hito_hito_nika.models;// Made with Blockbench 5.0.7
+// Exported for Minecraft version 1.17 or later with Mojang mappings
+// Paste this class into your mod and generate all required imports
 
-import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
 
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.HandSide;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.LivingEntity;
+public class SnakemanMorphModel<T extends Player> extends PlayerModel<T> {
+	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, "snakeman"), "main");
+	private final ModelPart Head;
+	private final ModelPart Body;
+	private final ModelPart RightArm;
+	private final ModelPart LeftArm;
+	private final ModelPart RightLeg;
+	private final ModelPart LeftLeg;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+	public SnakemanMorphModel(ModelPart root, boolean isSlim) {
+		super(root, isSlim);
+		this.Head = root.getChild("Head");
+		this.Body = root.getChild("Body");
+		this.RightArm = root.getChild("RightArm");
+		this.LeftArm = root.getChild("LeftArm");
+		this.RightLeg = root.getChild("RightLeg");
+		this.LeftLeg = root.getChild("LeftLeg");
+	}
 
-public class SnakemanMorphModel<T extends LivingEntity> extends MorphModel<T> {
-	private final ModelRenderer Head;
-	private final ModelRenderer Body;
-	private final ModelRenderer RightArm;
-	private final ModelRenderer LeftArm;
-	private final ModelRenderer RightLeg;
-	private final ModelRenderer LeftLeg;
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
 
-	public SnakemanMorphModel() {
-		super(0);
-		this.texHeight = 64;
-		this.texWidth = 64;
-		Head = new ModelRenderer(this);
-		Head.setPos(0.0F, 0.0F, 0.0F);
-		Head.texOffs(0, 0).addBox(-4.0F, -11.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, false);
-		Head.texOffs(32, 0).addBox(-4.0F, -11.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.5F, false);
-		Body = new ModelRenderer(this);
-		Body.setPos(0.0F, 0.0F, 0.0F);
-		Body.texOffs(0, 16).addBox(-6.0F, -3.0F, -3.0F, 2.0F, 7.0F, 6.0F, 0.0F, false);
-		Body.texOffs(0, 53).addBox(-4.0F, -3.0F, -3.0F, 8.0F, 1.0F, 6.0F, 0.0F, false);
-		Body.texOffs(48, 51).addBox(4.0F, -3.0F, -3.0F, 2.0F, 7.0F, 6.0F, 0.0F, false);
-		Body.texOffs(16, 16).addBox(-4.0F, -2.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.0F, false);
-		RightArm = new ModelRenderer(this);
-		RightArm.setPos(-5.0F, 2.0F, 0.0F);
-		RightArm.texOffs(16, 34).addBox(-5.0F, -5.0F, -2.0F, 4.0F, 15.0F, 4.0F, 0.0F, false);
-		LeftArm = new ModelRenderer(this);
-		LeftArm.setPos(5.0F, 2.0F, 0.0F);
-		LeftArm.texOffs(16, 34).addBox(1.0F, -5.0F, -2.0F, 4.0F, 15.0F, 4.0F, 0.0F, false);
-		RightLeg = new ModelRenderer(this);
-		RightLeg.setPos(-1.9F, 12.0F, 0.0F);
-		RightLeg.texOffs(32, 35).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 14.0F, 4.0F, 0.0F, false);
-		LeftLeg = new ModelRenderer(this);
-		LeftLeg.setPos(1.9F, 12.0F, 0.0F);
-		LeftLeg.texOffs(32, 35).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 14.0F, 4.0F, 0.0F, false);
+		PartDefinition Head = partdefinition.addOrReplaceChild("Head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -11.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+		.texOffs(32, 0).addBox(-4.0F, -11.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition Body = partdefinition.addOrReplaceChild("Body", CubeListBuilder.create().texOffs(0, 16).addBox(-6.0F, -3.0F, -3.0F, 2.0F, 7.0F, 6.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 53).addBox(-4.0F, -3.0F, -3.0F, 8.0F, 1.0F, 6.0F, new CubeDeformation(0.0F))
+		.texOffs(48, 51).addBox(4.0F, -3.0F, -3.0F, 2.0F, 7.0F, 6.0F, new CubeDeformation(0.0F))
+		.texOffs(16, 16).addBox(-4.0F, -2.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition RightArm = partdefinition.addOrReplaceChild("RightArm", CubeListBuilder.create().texOffs(16, 34).addBox(-5.0F, -5.0F, -2.0F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.0F, 2.0F, 0.0F));
+
+		PartDefinition LeftArm = partdefinition.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(16, 34).addBox(1.0F, -5.0F, -2.0F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(5.0F, 2.0F, 0.0F));
+
+		PartDefinition RightLeg = partdefinition.addOrReplaceChild("RightLeg", CubeListBuilder.create().texOffs(32, 35).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 14.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.9F, 12.0F, 0.0F));
+
+		PartDefinition LeftLeg = partdefinition.addOrReplaceChild("LeftLeg", CubeListBuilder.create().texOffs(32, 35).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 14.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(1.9F, 12.0F, 0.0F));
+
+		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
 	@Override
-	@ParametersAreNonnullByDefault
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		Head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		Body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		RightArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		LeftArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		RightLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		LeftLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+		copy(this.rightArm, RightArm);
+		copy(this.leftArm, LeftArm);
+		copy(this.rightLeg, RightLeg);
+		copy(this.leftLeg, LeftLeg);
+		copy(this.head, Head);
+		copy(this.body, Body);
 	}
 
-	public void setAngles(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.xRot = x;
-		modelRenderer.yRot = y;
-		modelRenderer.zRot = z;
+	private void copy(ModelPart from, ModelPart to) {
+		to.xRot = from.xRot;
+		to.yRot = from.yRot;
+		to.zRot = from.zRot;
 	}
 
-	public void renderFirstPersonArm(MatrixStack matrixStack, IVertexBuilder vertex, int packedLight, int overlay, float red, float green, float blue, float alpha, HandSide side) {
-		if (side == HandSide.RIGHT) {
-			matrixStack.translate(0.2D, 0.3D, 0.0D);
-			this.RightArm.render(matrixStack, vertex, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 0.7F, 0.0F, 1.0F);
-		} else {
-			matrixStack.translate(-0.2D, 0.3D, 0.0D);
-			this.LeftArm.render(matrixStack, vertex, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 0.7F, 0.0F, 1.0F);
-		}
-	}
-
-	@ParametersAreNonnullByDefault
-	public void setupAnim(LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.RightArm.xRot = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * limbSwingAmount;
-		this.LeftLeg.xRot = MathHelper.cos(limbSwing) * -1.0F * limbSwingAmount;
-		this.Head.yRot = netHeadYaw / (180F / (float) Math.PI);
-		this.Head.xRot = headPitch / (180F / (float) Math.PI);
-		this.LeftArm.xRot = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount;
-		this.RightLeg.xRot = MathHelper.cos(limbSwing) * 1.0F * limbSwingAmount;
-	}
-
-
-	public void renderFirstPersonLeg(MatrixStack matrixStack, IVertexBuilder vertex, int packedLight, int overlay, float red, float green, float blue, float alpha, HandSide side) {
-		if (side == HandSide.RIGHT) {
-			matrixStack.translate(0.0D, -1.2D, 0.3D);
-			matrixStack.scale(1.5F, 1.5F, 1.5F);
-			matrixStack.mulPose(Vector3f.YP.rotationDegrees(-60.0F));
-			this.RightLeg.render(matrixStack, vertex, packedLight, overlay, red, green, blue, alpha);
-		} else {
-			matrixStack.translate(0.0D, -1.2D, 0.3D);
-			matrixStack.scale(1.5F, 1.5F, 1.5F);
-			matrixStack.mulPose(Vector3f.YP.rotationDegrees(60.0F));
-			this.LeftLeg.render(matrixStack, vertex, packedLight, overlay, red, green, blue, alpha);
-		}
+	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		head.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+		Head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		Body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		RightArm.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		LeftArm.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		RightLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		LeftLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }

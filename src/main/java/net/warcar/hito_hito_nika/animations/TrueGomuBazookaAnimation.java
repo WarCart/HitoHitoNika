@@ -2,7 +2,6 @@ package net.warcar.hito_hito_nika.animations;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.LivingEntity;
-import net.warcar.hito_hito_nika.renderers.IModelRendererMixin;
 import xyz.pixelatedw.mineminenomi.api.animations.AnimationId;
 
 public class TrueGomuBazookaAnimation extends TimedAnimation<LivingEntity, HumanoidModel<LivingEntity>> {
@@ -19,11 +18,11 @@ public class TrueGomuBazookaAnimation extends TimedAnimation<LivingEntity, Human
         double percentage = getPercentage();
         double invPercent = 1.0D - percentage;
         if (percentage < 0.5D) {
-            ((IModelRendererMixin) model.rightArm).setYScale((float) percentage * 22);
-            ((IModelRendererMixin) model.leftArm).setYScale((float) percentage * 22);
+            model.rightArm.yScale = (float) percentage * 22;
+            model.leftArm.yScale = (float) percentage * 22;
         } else {
-            ((IModelRendererMixin) model.rightArm).setYScale((float) invPercent * 20 + 1);
-            ((IModelRendererMixin) model.leftArm).setYScale((float) invPercent * 20 + 1);
+            model.rightArm.yScale = (float) invPercent * 20 + 1;
+            model.leftArm.yScale = (float) invPercent * 20 + 1;
         }
     }
 }

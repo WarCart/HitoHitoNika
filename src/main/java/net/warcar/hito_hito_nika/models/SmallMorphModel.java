@@ -1,96 +1,45 @@
 package net.warcar.hito_hito_nika.models;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.MathHelper;
-import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.player.Player;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-public class SmallMorphModel <T extends LivingEntity> extends MorphModel<T> {
-    private final ModelRenderer Head;
-    private final ModelRenderer Body;
-    private final ModelRenderer RightArm;
-    private final ModelRenderer LeftArm;
-    private final ModelRenderer RightLeg;
-    private final ModelRenderer LeftLeg;
-    public SmallMorphModel() {
-        super(0);
-        texWidth = 64;
-        texHeight = 64;
-
-        Head = new ModelRenderer(this);
-        Head.setPos(0.0F, 4.0F, 0.0F);
-        Head.texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, false);
-        Head.texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.5F, false);
-
-        Body = new ModelRenderer(this);
-        Body.setPos(0.0F, 3.0F, 0.0F);
-        Body.texOffs(16, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, -1.0F, false);
-        Body.texOffs(16, 32).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, -0.75F, false);
-
-        RightArm = new ModelRenderer(this);
-        RightArm.setPos(-3.0F, 5.0F, 0.0F);
-        RightArm.texOffs(40, 16).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, -1.0F, false);
-        RightArm.texOffs(40, 32).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, -0.75F, false);
-
-        LeftArm = new ModelRenderer(this);
-        LeftArm.setPos(3.0F, 5.0F, 0.0F);
-        LeftArm.texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, -1.0F, false);
-        LeftArm.texOffs(48, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, -0.75F, false);
-
-        RightLeg = new ModelRenderer(this);
-        RightLeg.setPos(-1.9F, 13.0F, 0.0F);
-        RightLeg.texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, -1.0F, false);
-        RightLeg.texOffs(0, 32).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, -0.75F, false);
-
-        LeftLeg = new ModelRenderer(this);
-        LeftLeg.setPos(1.9F, 13.0F, 0.0F);
-        LeftLeg.texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, -1.0F, false);
-        LeftLeg.texOffs(0, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, -0.75F, false);
+public class SmallMorphModel <T extends Player> extends PlayerModel<T> {
+    public SmallMorphModel(ModelPart part, boolean isSlim) {
+        super(part, isSlim);
     }
 
-
-
     @Override
-    @ParametersAreNonnullByDefault
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.RightArm.xRot = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * limbSwingAmount;
-        this.LeftLeg.xRot = MathHelper.cos(limbSwing) * -1.0F * limbSwingAmount;
-        this.Head.yRot = netHeadYaw / (180F / (float) Math.PI);
-        this.LeftArm.xRot = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount;
-        this.Head.xRot = headPitch / (180F / (float) Math.PI);
-        this.RightLeg.xRot = MathHelper.cos(limbSwing) * 1.0F * limbSwingAmount;
+        super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
     }
 
     @Override
-    @ParametersAreNonnullByDefault
-    public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         matrixStack.pushPose();
         matrixStack.translate(0, 0.6, 0);
-        Head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        hat.render(matrixStack, buffer, packedLight, packedOverlay);
         matrixStack.popPose();
         matrixStack.pushPose();
         matrixStack.scale(0.7f, 0.5f, 0.7f);
         matrixStack.translate(0, 1.5, 0);
-        Body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        LeftArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        RightArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        LeftLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        RightLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        jacket.render(matrixStack, buffer, packedLight, packedOverlay);
+
+        leftArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        leftSleeve.render(matrixStack, buffer, packedLight, packedOverlay);
+
+        rightArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        rightSleeve.render(matrixStack, buffer, packedLight, packedOverlay);
+
+        leftLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        leftPants.render(matrixStack, buffer, packedLight, packedOverlay);
+
+        rightLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        rightPants.render(matrixStack, buffer, packedLight, packedOverlay);
         matrixStack.popPose();
-    }
-
-    @Override
-    public void renderFirstPersonArm(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3, HandSide handSide) {
-
-    }
-
-    @Override
-    public void renderFirstPersonLeg(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3, HandSide handSide) {
-
     }
 }
