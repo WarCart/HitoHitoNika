@@ -136,6 +136,9 @@ public class TrueGomuHelper {
 	}
 
 	public static<A extends Ability> boolean hasAbilityActive(IAbilityData props, RegistryObject<AbilityCore<A>> ability) {
+		if (ability == null) {
+			return false;
+		}
 		Ability abl = props.getEquippedAbility(ability.get());
 		return abl != null && abl.isContinuous();
 	}

@@ -13,7 +13,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 
 public class GearSixthAbility extends Ability {
-	public static final RegistryObject<AbilityCore<GearSixthAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gear_sixth", "Gear Sixth", AbilityCategory.DEVIL_FRUITS, GearSixthAbility::new));
+	public static final RegistryObject<AbilityCore<GearSixthAbility>> INSTANCE = TrueGomuGomuNoMi.registerSixthGear(new AbilityCore.Builder<>("gear_sixth", "Gear Sixth", AbilityCategory.DEVIL_FRUITS, GearSixthAbility::new));
 	public static final Component NAME = TrueGomuHelper.getName("Gomu Gomu no Strange Pistol", "gear_sixth");
 	private final ContinuousComponent continuousComponent;
 
@@ -23,7 +23,7 @@ public class GearSixthAbility extends Ability {
 		this.setDisplayName(NAME);
 		continuousComponent = new ContinuousComponent(this, true);
 		this.addUseEvent(this::onStartContinuity);
-		this.addComponents(continuousComponent/*, trueScreamComponent*/);
+		this.addComponents(continuousComponent);
 		continuousComponent.addStartEvent(TrueGomuHelper.basicGearStuff());
 	}
 

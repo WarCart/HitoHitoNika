@@ -27,6 +27,10 @@ public class TrueGomuGomuNoMi {
 		return ModRegistry.registerFruitItem(name, fruit);
 	}
 
+	public static <T extends IAbility> RegistryObject<AbilityCore<T>> registerSixthGear(AbilityCore.Builder<T> builder) {
+		return WyHelper.isAprilFirst() ? registerAbility(builder) : registerSixthGear(builder);
+	}
+
 	public static <T extends IAbility> RegistryObject<AbilityCore<T>> registerAbility(AbilityCore.Builder<T> builder) {
 		AbilityCore<T> core = builder.build(HitoHitoNoMiNikaMod.MOD_ID);
 		String resourceName = WyHelper.getResourceName(core.getId());

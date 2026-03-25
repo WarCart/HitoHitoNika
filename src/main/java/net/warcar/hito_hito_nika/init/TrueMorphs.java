@@ -52,13 +52,13 @@ public class TrueMorphs {
             ModelPart root = ctx.bakeLayer(isSlim ? ModelLayers.PLAYER_SLIM : ModelLayers.PLAYER);
             PlayerModel<LivingEntity> playerModel = new PlayerModel<>(root, isSlim);
             ModMorphs.Client.MORPH_RENDERERS.put(GIANT.get(), new PlayerMorphRenderer.Factory(GIANT.get(), playerModel, isSlim).create(ctx));
-            ModMorphs.Client.MORPH_RENDERERS.put(FUSEN.get(), new GomuMorphRenderer<>(ctx, FUSEN.get(), new GomuFusenModel<>(ctx.bakeLayer(GomuFusenModel.LAYER_LOCATION), isSlim)));
-            ModMorphs.Client.MORPH_RENDERERS.put(GIANT_FUSEN.get(), new GomuMorphRenderer<>(ctx, GIANT_FUSEN.get(), new GomuGiantFusenModel<>(ctx.bakeLayer(GomuGiantFusenModel.LAYER_LOCATION), isSlim)));
+            ModMorphs.Client.MORPH_RENDERERS.put(FUSEN.get(), new GomuMorphRenderer<>(ctx, FUSEN.get(), new GomuFusenModel<>(ctx.bakeLayer(GomuFusenModel.LAYER_LOCATION))));
+            ModMorphs.Client.MORPH_RENDERERS.put(GIANT_FUSEN.get(), new GomuMorphRenderer<>(ctx, GIANT_FUSEN.get(), new GomuGiantFusenModel<>(ctx.bakeLayer(GomuGiantFusenModel.LAYER_LOCATION))));
             ModMorphs.Client.MORPH_RENDERERS.put(SMALL.get(), new GomuMorphRenderer<>(ctx, SMALL.get(), new SmallMorphModel<>(root, isSlim)));
 
-            ModMorphs.Client.MORPH_RENDERERS.put(SNAKEMAN.get(), new GomuMorphRenderer<>(ctx, SNAKEMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION), isSlim)));
-            ModMorphs.Client.MORPH_RENDERERS.put(BOUNDMAN.get(), new GomuMorphRenderer<>(ctx, BOUNDMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION), isSlim)));
-            ModMorphs.Client.MORPH_RENDERERS.put(TANKMAN.get(), new GomuMorphRenderer<>(ctx, TANKMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION), isSlim)));
+            ModMorphs.Client.MORPH_RENDERERS.put(SNAKEMAN.get(), new GomuMorphRenderer<>(ctx, SNAKEMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION))));
+            ModMorphs.Client.MORPH_RENDERERS.put(BOUNDMAN.get(), new GomuMorphRenderer<>(ctx, BOUNDMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION))));
+            ModMorphs.Client.MORPH_RENDERERS.put(TANKMAN.get(), new GomuMorphRenderer<>(ctx, TANKMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION))));
         }
     }
 }
