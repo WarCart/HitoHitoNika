@@ -24,10 +24,6 @@ public class FusenMorph extends MorphInfo {
         return Component.literal("Gomu Gomu no Fusen");
     }
 
-    public AkumaNoMiItem getDevilFruit() {
-        return TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA;
-    }
-
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTexture(LivingEntity entity) {
         return entity instanceof AbstractClientPlayer player ? player.getSkinTextureLocation() : null;

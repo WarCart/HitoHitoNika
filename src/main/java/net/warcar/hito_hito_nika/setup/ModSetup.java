@@ -15,7 +15,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.init.GomuAnimations;
+import net.warcar.hito_hito_nika.init.TrueMorphs;
 import net.warcar.hito_hito_nika.renderers.layers.TrueGomuSmokeLayer;
+import xyz.pixelatedw.mineminenomi.init.ModArmors;
+import xyz.pixelatedw.mineminenomi.init.ModLayers;
+import xyz.pixelatedw.mineminenomi.init.ModMorphs;
 
 import java.util.Map;
 
@@ -46,5 +50,21 @@ public class ModSetup {
         event.enqueueWork(() -> {
             GomuAnimations.init();
         });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        TrueMorphs.registerLayers(event);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        // Modify renderers with new layers
+        Minecraft mc = Minecraft.getInstance();
+        EntityRendererProvider.Context ctx = new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getBlockRenderer(), mc.gameRenderer.itemInHandRenderer, mc.getResourceManager(), mc.getEntityModels(), mc.font);
+
+        TrueMorphs.addLayers(event, ctx);
     }
 }

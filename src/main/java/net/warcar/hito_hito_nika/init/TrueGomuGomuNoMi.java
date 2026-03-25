@@ -1,7 +1,9 @@
 package net.warcar.hito_hito_nika.init;
 
+import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
@@ -14,18 +16,19 @@ import xyz.pixelatedw.mineminenomi.init.ModRegistry;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class TrueGomuGomuNoMi {
 	public static final DeferredRegister<AbilityCore<?>> ABILITIES;
-	public static final AkumaNoMiItem HITO_HITO_NO_MI_NIKA;
+	public static final DeferredRegister<Item> ITEMS;
+	public static final RegistryObject<AkumaNoMiItem> HITO_HITO_NO_MI_NIKA;
 
-	private static <T extends AkumaNoMiItem> T registerFruit(T fruit) {
-		ModRegistry.registerFruitItem(fruit.getDevilFruitName().getString(), () -> fruit);
-		return fruit;
+	private static <T extends AkumaNoMiItem> RegistryObject<T> registerFruit(Supplier<T> fruit, String name) {
+		return ModRegistry.registerFruitItem(name, fruit);
 	}
 
 	public static <T extends IAbility> RegistryObject<AbilityCore<T>> registerAbility(AbilityCore.Builder<T> builder) {
-		AbilityCore<T> core = builder.build();
+		AbilityCore<T> core = builder.build(HitoHitoNoMiNikaMod.MOD_ID);
 		String resourceName = WyHelper.getResourceName(core.getId());
 		HitoHitoNoMiNikaMod.getLangMap().put("ability."+ HitoHitoNoMiNikaMod.MOD_ID +"." + resourceName, core.getUnlocalizedName());
 		return ABILITIES.register(resourceName, () -> core);
@@ -33,10 +36,12 @@ public class TrueGomuGomuNoMi {
 
 	public static void register(IEventBus bus) {
 		ABILITIES.register(bus);
+		ITEMS.register(bus);
 	}
 
 	static {
 		ABILITIES = DeferredRegister.create(WyRegistry.Keys.ABILITIES, HitoHitoNoMiNikaMod.MOD_ID);
+		ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, HitoHitoNoMiNikaMod.MOD_ID);
 		// Just... pretend they are abilities ok?
 		RegistryObject[] cores = new RegistryObject[]{TrueGomuPistol.INSTANCE, GomuBulletAbility.INSTANCE, TrueGomuGatling.INSTANCE,
 				TrueGomuBazooka.INSTANCE, GomuFusenAbility.INSTANCE, TrueGomuRocket.INSTANCE, TrueGearSecondAbility.INSTANCE,
@@ -48,6 +53,7 @@ public class TrueGomuGomuNoMi {
             cores = Arrays.copyOf(cores, cores.length + 1);
 			cores[cores.length-1] = GearSixthAbility.INSTANCE;
         }
-		HITO_HITO_NO_MI_NIKA = registerFruit(new AkumaNoMiItem(2, FruitType.PARAMECIA, cores));
+		RegistryObject[] finalCores = cores;
+		HITO_HITO_NO_MI_NIKA = registerFruit(() -> new AkumaNoMiItem(2, FruitType.PARAMECIA, finalCores), "Hito Hito no Mi, Model: Nika");
 	}
 }

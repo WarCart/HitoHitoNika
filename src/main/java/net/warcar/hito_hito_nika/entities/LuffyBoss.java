@@ -45,9 +45,9 @@ public class LuffyBoss extends OPBossEntity {
     private final NPCPhase<LuffyBoss> lastPhase = new SimplePhase<>("Last phase", this);
 
     public LuffyBoss(InProgressChallenge inProgressChallenge) {
-        super(GomuEntities.LUFFY, inProgressChallenge);
+        super(GomuEntities.LUFFY.get(), inProgressChallenge);
         this.setPostTs(!inProgressChallenge.isStandardDifficulty());
-        this.devilFruitData.setDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
+        this.devilFruitData.setDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.get());
         if (inProgressChallenge.isStandardDifficulty()) {
             this.entityStats.setDoriki(3500);
         } else if (inProgressChallenge.isHardDifficulty()) {

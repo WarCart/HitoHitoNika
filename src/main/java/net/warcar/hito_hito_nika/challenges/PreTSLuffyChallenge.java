@@ -32,7 +32,7 @@ public class PreTSLuffyChallenge extends Challenge {
     }
 
     public static LivingEntity createShowcase(Level level) {
-        LuffyBoss boss = GomuEntities.LUFFY.create(level);
+        LuffyBoss boss = GomuEntities.LUFFY.get().create(level);
         ItemStack item = new ItemStack(ModArmors.STRAW_HAT.get());
         boss.setItemSlot(EquipmentSlot.HEAD, item);
         return boss;

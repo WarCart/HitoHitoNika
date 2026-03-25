@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 
-public class GomuGigantFusenModel<T extends Player> extends PlayerModel<T> {
+public class GomuGiantFusenModel<T extends Player> extends PlayerModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, "gomugiantfusen"), "main");
 	private final ModelPart Head;
@@ -22,7 +22,7 @@ public class GomuGigantFusenModel<T extends Player> extends PlayerModel<T> {
 	private final ModelPart RightLeg;
 	private final ModelPart LeftLeg;
 
-	public GomuGigantFusenModel(ModelPart root, boolean isSlim) {
+	public GomuGiantFusenModel(ModelPart root, boolean isSlim) {
 		super(root, isSlim);
 		this.Head = root.getChild("Head");
 		this.Body = root.getChild("Body");

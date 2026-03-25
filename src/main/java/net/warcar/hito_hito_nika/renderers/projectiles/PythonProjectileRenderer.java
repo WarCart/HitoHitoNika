@@ -20,6 +20,8 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.init.ModRenderTypes;
 import xyz.pixelatedw.mineminenomi.init.ModResources;
 
+import java.util.function.Supplier;
+
 public class PythonProjectileRenderer<E extends PythonProjectile, M extends EntityModel<E>> extends NuProjectileRenderer<E, M> {
     protected M internalStretchingModel;
     public PythonProjectileRenderer(EntityRendererProvider.Context renderManager, M stretchModel) {
@@ -78,13 +80,13 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
         }
     }
 
-    public static class Factory extends NuProjectileRenderer.Factory {
-        protected EntityModel internalStretchingModel;
-        public Factory(EntityModel stretchModel) {
+    public static class Factory<T extends PythonProjectile> extends NuProjectileRenderer.Factory<T> {
+        protected Supplier<? extends EntityModel<T>> internalStretchingModel;
+        public Factory(Supplier<? extends EntityModel<T>> stretchModel) {
             this.internalStretchingModel = stretchModel;
         }
-        public EntityRenderer<? super NuProjectileEntity> createRenderFor(EntityRendererProvider.Context manager) {
-            PythonProjectileRenderer renderer = new PythonProjectileRenderer(manager, this.internalStretchingModel);
+        public EntityRenderer<T> create(EntityRendererProvider.Context manager) {
+            PythonProjectileRenderer<T, ? extends EntityModel<T>> renderer = new PythonProjectileRenderer<>(manager, this.internalStretchingModel.get());
             renderer.setScale(this.scaleX, this.scaleY, this.scaleZ);
             renderer.setColor(this.colour);
             return renderer;

@@ -74,29 +74,33 @@ public class NikaProjectiles {
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event, EntityRendererProvider.Context ctx) {
 		Supplier<TrueEntityLegModel<NuProjectileEntity>> leg = () -> new TrueEntityLegModel<>(ctx.bakeLayer(TrueEntityLegModel.LAYER_LOCATION));
 		Supplier<TrueEntityLegModel<NuProjectileEntity>> arm = () -> new TrueEntityLegModel<>(ctx.bakeLayer(TrueEntityLegModel.LAYER_LOCATION));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm.get())).setStretchScale(25D, 25D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm.get(), arm.get())).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg.get())).setStretchScale(25D, 25D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm.get())).setStretchScale(75D, 75D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg.get())).setStretchScale(75D, 75D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), (new GomuProjectileRenderer.Factory<>(leg.get(), leg.get())).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm.get(), arm.get())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), (new GomuProjectileRenderer.Factory<>(arm.get(), arm.get())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_PISTOL.get(), (new GomuProjectileRenderer.Factory<>(arm.get())).setStretchScale(3.1D, 3.1D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm.get())).setStretchScale(3.1D, 3.1D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm.get())).setStretchScale(4.5D, 4.5D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_JET_CULVERIN.get(), (new PythonProjectileRenderer.Factory(arm.get())).setScale(4.5D, 4.5D, 4.5));
-		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm.get())).setStretchScale(4.5D, 4.5D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm.get())).setStretchScale(25D, 25D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg.get(), leg.get())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_GIGANT_YARI.get(), (new GomuProjectileRenderer.Factory<>(leg.get(), leg.get())).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg.get())).setStretchScale(3.1D, 3.1D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_YARI.get(), (new GomuProjectileRenderer.Factory<>(leg.get())).setStretchScale(3.1D, 3.1D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg.get())).setStretchScale(4.5D, 4.5D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_JET_RHINO_SCHNEIDER.get(), (new PythonProjectileRenderer.Factory(leg.get())).setScale(4.5D, 4.5D, 4.5));
-		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory<>(leg.get())).setStretchScale(4.5D, 4.5D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory<>(leg.get())).setStretchScale(25D, 25D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(25D, 25D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm, arm)).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(25D, 25D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(75D, 75D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(75D, 75D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), (new GomuProjectileRenderer.Factory<>(leg, leg)).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm, arm)).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), (new GomuProjectileRenderer.Factory<>(arm, arm)).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_PISTOL.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(3.1D, 3.1D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(3.1D, 3.1D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(4.5D, 4.5D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(4.5D, 4.5D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(25D, 25D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg, leg)).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_GIGANT_YARI.get(), (new GomuProjectileRenderer.Factory<>(leg, leg)).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(3.1D, 3.1D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_YARI.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(3.1D, 3.1D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(4.5D, 4.5D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(4.5D, 4.5D));
+		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(25D, 25D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_MOLE_PISTOL.get(), MolePistolRenderer::new);
+
+
+		event.registerEntityRenderer(GOMU_GOMU_NO_JET_CULVERIN.get(), (new PythonProjectileRenderer.Factory<>(() -> new TrueEntityLegModel<>(ctx.bakeLayer(TrueEntityLegModel.LAYER_LOCATION)))).setScale(4.5D, 4.5D, 4.5));
+		event.registerEntityRenderer(GOMU_GOMU_NO_JET_RHINO_SCHNEIDER.get(), (new PythonProjectileRenderer.Factory<>(() -> new TrueEntityLegModel<>(ctx.bakeLayer(TrueEntityLegModel.LAYER_LOCATION)))).setScale(4.5D, 4.5D, 4.5));
+
+
 		if (WyHelper.isAprilFirst())
 			event.registerEntityRenderer(GOMU_GOMU_NO_KING_BAJRANG_GUN.get(), new NuProjectileRenderer.Factory<>().setModel(c -> new KingBajrangGunModel<>(c.bakeLayer(KingBajrangGunModel.LAYER_LOCATION))).setTexture(ResourceLocation.parse("hito_hito_no_mi_nika:textures/entities/king_bajrang_gun.png")));
 	}

@@ -1,4 +1,4 @@
-package net.warcar.hito_hito_nika.mixins;
+package net.warcar.hito_hito_nika.mixin;
 
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import org.spongepowered.asm.mixin.Mixin;

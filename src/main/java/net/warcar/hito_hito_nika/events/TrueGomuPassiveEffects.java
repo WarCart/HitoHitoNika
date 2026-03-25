@@ -143,7 +143,7 @@ public class TrueGomuPassiveEffects {
 
 	@SubscribeEvent
 	public static void usage(AbilityUseEvent.Pre event) {
-		if (Arrays.asList(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.getAbilities()).contains(event.getAbility().getCore())) {
+		if (Arrays.asList(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.get().getAbilities()).contains(event.getAbility().getCore())) {
 			GomuMorphsAbility morphs = AbilityCapability.get(event.getEntity()).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 			if (morphs != null)
 				morphs.updateModes(event.getEntity());

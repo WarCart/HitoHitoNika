@@ -29,7 +29,7 @@ public class DressrosaLuffyChallenge extends Challenge {
 
 
     public static LivingEntity createShowcase(Level level) {
-        LuffyBoss boss = GomuEntities.LUFFY.create(level);
+        LuffyBoss boss = GomuEntities.LUFFY.get().create(level);
         boss.setPostTs(true);
         Mod3DArmorItem hat = ModArmors.STRAW_HAT.get();
         ItemStack item = new ItemStack(hat);

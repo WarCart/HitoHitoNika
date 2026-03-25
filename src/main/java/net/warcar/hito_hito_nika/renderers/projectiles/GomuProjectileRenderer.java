@@ -19,6 +19,8 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.init.ModRenderTypes;
 import xyz.pixelatedw.mineminenomi.init.ModResources;
 
+import java.util.function.Supplier;
+
 public class GomuProjectileRenderer<E extends NuProjectileEntity, M extends EntityModel<E>> extends NuProjectileRenderer<E, M> {
     protected M internalStretchingModel;
     private float internalStretchScaleX = 1.0F;
@@ -82,16 +84,16 @@ public class GomuProjectileRenderer<E extends NuProjectileEntity, M extends Enti
     }
 
     public static class Factory<T extends NuProjectileEntity> extends NuProjectileRenderer.Factory<T> {
-        protected EntityModel<T> internalStretchingModel;
+        protected Supplier<? extends EntityModel<T>> internalStretchingModel;
         private double stretchScaleX;
         private double stretchScaleY;
         private double stretchScaleZ;
 
-        public Factory(EntityModel<T> stretchModel) {
+        public Factory(Supplier<? extends EntityModel<T>> stretchModel) {
             this(null, stretchModel);
         }
-        public Factory(EntityModel<T> tipModel, EntityModel stretchModel) {
-            this.setModel(() -> tipModel);
+        public Factory(Supplier<? extends EntityModel<T>> tipModel, Supplier<? extends EntityModel<T>> stretchModel) {
+            this.setModel(tipModel);
             this.internalStretchingModel = stretchModel;
         }
 
@@ -110,7 +112,13 @@ public class GomuProjectileRenderer<E extends NuProjectileEntity, M extends Enti
         }
         
         public EntityRenderer<T> create(Context manager) {
-            GomuProjectileRenderer<T, ?> renderer = new GomuProjectileRenderer<>(manager, this.model.apply(manager), this.internalStretchingModel);
+            EntityModel<T> model;
+            if (this.model == null) {
+                model = null;
+            } else {
+                model = this.model.apply(manager);
+            }
+            GomuProjectileRenderer<T, ?> renderer = new GomuProjectileRenderer<>(manager, model, this.internalStretchingModel.get());
             renderer.setStretchScale(this.stretchScaleX, this.stretchScaleY, this.stretchScaleZ);
             renderer.setScale(this.scaleX, this.scaleY, this.scaleZ);
             renderer.setColor(this.colour);
