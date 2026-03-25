@@ -9,7 +9,7 @@ import xyz.pixelatedw.mineminenomi.api.helpers.GoalHelper;
 public class PistolWrapperGoal<E extends Mob> extends AbilityWrapperGoal<E, TrueGomuPistol> {
     private LivingEntity target;
     public PistolWrapperGoal(E entity) {
-        super(entity, TrueGomuPistol.INSTANCE);
+        super(entity, TrueGomuPistol.INSTANCE.get());
     }
 
     @Override

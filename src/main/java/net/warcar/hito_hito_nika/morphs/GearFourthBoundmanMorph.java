@@ -20,7 +20,7 @@ public class GearFourthBoundmanMorph extends MorphInfo {
     }
 
     public Component getDisplayName() {
-        return TrueGearFourthAbility.INSTANCE.getLocalizedName();
+        return TrueGearFourthAbility.INSTANCE.get().getLocalizedName();
     }
 
     public float getEyeHeight(LivingEntity entity) {

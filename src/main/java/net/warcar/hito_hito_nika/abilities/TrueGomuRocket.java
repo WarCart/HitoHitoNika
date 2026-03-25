@@ -1,10 +1,11 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.projectiles.hand.TrueGomuRocketProjectile;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
@@ -14,8 +15,6 @@ import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.DealDamageComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.HitTrackerComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
-import xyz.pixelatedw.mineminenomi.api.damagesources.AbilityDamageSource;
-import xyz.pixelatedw.mineminenomi.api.damagesources.BaseDamageSource;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
@@ -29,9 +28,9 @@ public class TrueGomuRocket extends Ability {
 
 	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_rocket", ImmutablePair.of("Stretches towards a block, then launches the user on an arch depending on where they fist landed.", null),
 			ImmutablePair.of("Slamming into enemies will deal damage", null));
-	public static final AbilityCore<TrueGomuRocket> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_rocket", "Gomu Gomu no Rocket", AbilityCategory.DEVIL_FRUITS, TrueGomuRocket::new)
+	public static final RegistryObject<AbilityCore<TrueGomuRocket>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_rocket", "Gomu Gomu no Rocket", AbilityCategory.DEVIL_FRUITS, TrueGomuRocket::new)
 			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.PHYSICAL)
-			.addAdvancedDescriptionLine(DealDamageComponent.getTooltip(2, 100)).build();
+			.addAdvancedDescriptionLine(DealDamageComponent.getTooltip(2, 100)));
 	public static final Component JET_GIANT_SHELL = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Shell");
 	public static final Component DAWN_ROCKET = TrueGomuHelper.getName("Gomu Gomu no Dawn Rocket");
 	public static final Component GIANT_SHELL = TrueGomuHelper.getName("Gomu Gomu no Giant Shell");
@@ -116,7 +115,7 @@ public class TrueGomuRocket extends Ability {
 		this.readyToFly = false;
 		this.cooldownComponent.startCooldown(entity, this.cooldown);
 		this.trackerComponent.clearHits();
-		AbilityCapability.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE).updateModes(entity);
+		AbilityCapability.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get()).updateModes(entity);
 	}
 
 	public void setFlying() {

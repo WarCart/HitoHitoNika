@@ -9,7 +9,7 @@ import xyz.pixelatedw.mineminenomi.api.WyHelper;
 
 import java.util.Map;
 
-@Mixin(WyHelper.class)
+@Mixin(value = WyHelper.class, remap = false)
 public abstract class WyHelperMixin {
     @Shadow public static  <K extends Comparable, V extends Comparable> Map<K, V> sortAlphabetically(Map<K, V> map){
         throw new IllegalStateException("Mixin not mixin-ing");

@@ -5,10 +5,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
@@ -18,11 +18,9 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.SkinOverlayComponent;
-import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
@@ -37,9 +35,9 @@ import java.util.UUID;
 public class TrueGearSecondAbility extends Ability {
 	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gear_second",
 			ImmutablePair.of("By speeding up their blood flow, the user gains strength, speed and mobility.", null));
-	public static final AbilityCore<TrueGearSecondAbility> INSTANCE = new AbilityCore.Builder<>("gear_second", "Gear Second", AbilityCategory.DEVIL_FRUITS, TrueGearSecondAbility::new)
+	public static final RegistryObject<AbilityCore<TrueGearSecondAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gear_second", "Gear Second", AbilityCategory.DEVIL_FRUITS, TrueGearSecondAbility::new)
 			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, ChangeStatsComponent.getTooltip())
-			.setUnlockCheck(TrueGearSecondAbility::canUnlock).build();
+			.setUnlockCheck(TrueGearSecondAbility::canUnlock));
 	private static final AbilityAttributeModifier JUMP_HEIGHT = new AbilityAttributeModifier(UUID.fromString("a44a9644-369a-4e18-88d9-323727d3d85b"), INSTANCE, "Gear Second Jump Modifier", 5, Operation.ADDITION);
 	private static final AbilityAttributeModifier STRENGTH_MODIFIER = new AbilityAttributeModifier(UUID.fromString("a2337b58-7e6d-4361-a8ca-943feee4f906"), INSTANCE, "Gear Second Attack Damage Modifier", 4, Operation.ADDITION);
 	private static final AbilityAttributeModifier ATTACK_SPEED_MODIFIER = new AbilityAttributeModifier(UUID.fromString("c495cf01-f3ff-4933-9805-5bb1ed9d27b0"), INSTANCE, "Gear Second Attack Speed Modifier", 4, Operation.ADDITION);
@@ -81,7 +79,7 @@ public class TrueGearSecondAbility extends Ability {
 				player.level().playSound(null, player.blockPosition(), ModSounds.TELEPORT_SFX.get(), SoundSource.PLAYERS, 2.0F, 1.0F);
 			}
 			if (TrueGomuHelper.hasGearThirdActive(props)) {
-				props.getEquippedAbility(TrueGearThirdAbility.INSTANCE).setSecondGear(true);
+				props.getEquippedAbility(TrueGearThirdAbility.INSTANCE.get()).setSecondGear(true);
 				this.thirdGearWas = true;
 			}
 			this.overlayComponent.showAll(player);
@@ -111,7 +109,7 @@ public class TrueGearSecondAbility extends Ability {
 			player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 600, 3, true, true));
 			player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1, true, true));
 		}
-		TrueGearThirdAbility thirdGear = AbilityCapability.get(player).get().getEquippedAbility(TrueGearThirdAbility.INSTANCE);
+		TrueGearThirdAbility thirdGear = AbilityCapability.getEquippedAbility(player, TrueGearThirdAbility.INSTANCE.get());
 		if (thirdGear != null && thirdGear.isContinuous() && thirdGearWas) {
 			this.setThirdGear(false);
 			thirdGear.getComponent(ModAbilityComponents.CONTINUOUS.get()).ifPresent(c -> c.stopContinuity(player));

@@ -5,11 +5,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import xyz.pixelatedw.mineminenomi.api.WyHelper;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
-import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 
 public class StarCannonProjectile extends TrueKongGunProjectile {
     public StarCannonProjectile(Level world, LivingEntity player, Ability ability) {
@@ -17,7 +16,7 @@ public class StarCannonProjectile extends TrueKongGunProjectile {
         this.setMaxLife(300);
         this.setDamage(125f);
         this.addBlockHitEvent(100, this::onBlockImpactEvent);
-        this.addTickEvent(100, this::onTickEvent);
+        this.addTickEvent(100, TrueGomuHelper.getG2Tick(this));
         this.addEntityHitEvent(100, this::onEntityImpact);
     }
 
@@ -36,9 +35,5 @@ public class StarCannonProjectile extends TrueKongGunProjectile {
         explosion.setFireAfterExplosion(false);
         explosion.setDamageEntities(false);
         explosion.explode();
-    }
-
-    private void onTickEvent() {
-        WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), this, this.getX(), this.getY(), this.getZ());
     }
 }

@@ -5,9 +5,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -31,8 +33,8 @@ import java.util.Map;
 
 public class TrueGomuGatling extends Ability {
 	private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_gatling", new Pair[]{ImmutablePair.of("Rapidly punches enemies in front of the user.", (Object)null)});
-	public static final AbilityCore<TrueGomuGatling> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_gatling", "Gomu Gomu no Gatling", AbilityCategory.DEVIL_FRUITS, TrueGomuGatling::new)
-			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
+	public static final RegistryObject<AbilityCore<TrueGomuGatling>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_gatling", "Gomu Gomu no Gatling", AbilityCategory.DEVIL_FRUITS, TrueGomuGatling::new)
+			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST));
 	public static final Component ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Roc Gatling");
 	public static final Component JET_ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gatling");
 	public static final Component JET_GIANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Gatling");
@@ -87,7 +89,7 @@ public class TrueGomuGatling extends Ability {
 		this.projectileComponent = new ProjectileComponent(this, this::createProjectile);
 		this.continuousComponent.addTickEvent(this::duringContinuityEvent);
 		this.continuousComponent.addEndEvent(this::onContinuityStopEvent);
-		this.addComponents(continuousComponent, projectileComponent, trueScreamComponent, animationComponent, poolComponent);
+		this.addComponents(continuousComponent, projectileComponent, animationComponent, poolComponent);
 	}
 
 	private NuProjectileEntity createProjectile(LivingEntity entity) {
@@ -306,7 +308,7 @@ public class TrueGomuGatling extends Ability {
 				this.setDisplayName(GIANT_DAWN_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					if (HakiHelper.hasInfusionActive(entity)) {
 						this.setDisplayName(HYDRA);
@@ -352,7 +354,7 @@ public class TrueGomuGatling extends Ability {
 				this.setDisplayName(GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			}
-			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(ResourceLocation.parse("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			}
 		} else {
@@ -369,7 +371,7 @@ public class TrueGomuGatling extends Ability {
 				this.setDisplayName(GIANT_DAWN_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					if (HakiHelper.hasInfusionActive(entity)) {
 						this.setDisplayName(STAMP_HYDRA);
@@ -415,7 +417,7 @@ public class TrueGomuGatling extends Ability {
 				this.setDisplayName(STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
 			}
-			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(ResourceLocation.parse("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			}
 		}
@@ -441,7 +443,7 @@ public class TrueGomuGatling extends Ability {
 		} else {
 			dif = 5;
 		}
-		GomuFusenAbility ability = props.getEquippedAbility(GomuFusenAbility.INSTANCE);
+		GomuFusenAbility ability = props.getEquippedAbility(GomuFusenAbility.INSTANCE.get());
 		if (ability != null && ability.isContinuous()) {
 			ability.stopContinuity(player);
 		}

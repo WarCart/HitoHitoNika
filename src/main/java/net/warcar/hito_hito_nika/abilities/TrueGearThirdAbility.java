@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
@@ -37,8 +38,8 @@ import java.util.HashMap;
 
 public class TrueGearThirdAbility extends Ability {
 	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gear_third", new Pair[]{ImmutablePair.of("By blowing air and inflating their body, the user's attacks get bigger and gain incredible strength.", (Object)null)});
-	public static final AbilityCore<TrueGearThirdAbility> INSTANCE = (new AbilityCore.Builder<>("gear_third", "Gear Third", AbilityCategory.DEVIL_FRUITS, TrueGearThirdAbility::new))
-			.addDescriptionLine(DESCRIPTION).setUnlockCheck(TrueGearThirdAbility::canUnlock).build();
+	public static final RegistryObject<AbilityCore<TrueGearThirdAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gear_third", "Gear Third", AbilityCategory.DEVIL_FRUITS, TrueGearThirdAbility::new)
+			.addDescriptionLine(DESCRIPTION).setUnlockCheck(TrueGearThirdAbility::canUnlock));
 	private static final AbilityAttributeModifier SPEED_MODIFIER;
 	private static final AbilityAttributeModifier JUMP_MODIFIER;
 	private static final AbilityAttributeModifier ARMOR_MODIFIER;
@@ -75,7 +76,7 @@ public class TrueGearThirdAbility extends Ability {
     }
 
 	private void afterStart(LivingEntity entity, IAbility ability) {
-		GomuMorphsAbility morphs = AbilityCapability.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE);
+		GomuMorphsAbility morphs = AbilityCapability.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 		if (morphs != null) morphs.updateModes(entity);
 	}
 
@@ -105,7 +106,7 @@ public class TrueGearThirdAbility extends Ability {
 			} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
 				time /= 4;
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
-				props.getEquippedAbility(TrueGearSecondAbility.INSTANCE).setThirdGear(true);
+				props.getEquippedAbility(TrueGearSecondAbility.INSTANCE.get()).setThirdGear(true);
 				this.secondGearWas = true;
 			}
 			if (time >= 500) {
@@ -154,13 +155,13 @@ public class TrueGearThirdAbility extends Ability {
 			player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 1, true, true));
 			this.smallFormCooldown = 300;
 		}
-		TrueGearSecondAbility secondGear = props.getEquippedAbility(TrueGearSecondAbility.INSTANCE);
+		TrueGearSecondAbility secondGear = props.getEquippedAbility(TrueGearSecondAbility.INSTANCE.get());
 		if (secondGear != null && secondGear.isContinuous() && this.secondGearWas) {
 			this.setSecondGear(false);
 			secondGear.getComponent(ModAbilityComponents.CONTINUOUS.get()).ifPresent(c -> c.stopContinuity(player));
 		}
 		this.setSecondGear(false);
-		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
+		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 		if (morphs != null)
 			morphs.updateModes(player);
 	}
@@ -206,7 +207,7 @@ public class TrueGearThirdAbility extends Ability {
 
 	public void smallTick(LivingEntity player, IAbility abl) {
 		if (this.smallFormCooldown == 1 || this.smallFormCooldown >= 299)
-			AbilityCapability.get(player).get().getPassiveAbility(GomuMorphsAbility.INSTANCE).updateModes(player);
+			AbilityCapability.get(player).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get()).updateModes(player);
 		if (this.smallFormCooldown > 0) --this.smallFormCooldown;
 		else if (this.smallFormCooldown < 0) this.smallFormCooldown = 0;
 	}

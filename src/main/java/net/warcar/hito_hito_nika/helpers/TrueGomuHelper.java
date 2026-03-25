@@ -12,18 +12,20 @@ import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import org.apache.commons.lang3.tuple.Pair;
-import org.joml.Vector3d;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiEmissionAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiInternalDestructionAbility;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityUseConditions;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
+import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,57 +77,57 @@ public class TrueGomuHelper {
 	}
 
 	public static boolean hasFusenActive(IAbilityData props) {
-		Ability ability = props.getEquippedAbility(GomuFusenAbility.INSTANCE);
+		Ability ability = props.getEquippedAbility(GomuFusenAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
 	public static boolean hasGearSecondActive(IAbilityData props) {
-		Ability ability = props.getEquippedAbility(TrueGearSecondAbility.INSTANCE);
+		Ability ability = props.getEquippedAbility(TrueGearSecondAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
 	public static boolean hasGearThirdActive(IAbilityData props) {
-		Ability ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE);
+		Ability ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
 	public static boolean hasGigantActive(IAbilityData props) {
-		TrueGearThirdAbility ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE);
+		TrueGearThirdAbility ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isGiant();
 	}
 
 	public static boolean isSmall(IAbilityData props) {
-		TrueGearThirdAbility ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE);
+		TrueGearThirdAbility ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE.get());
 		return ability != null && ability.getSmallFormCooldown() > 1;
 	}
 
 	public static boolean hasGearFourthBoundmanActive(IAbilityData props) {
-		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isBoundman();
 	}
 
 	public static boolean hasGearFourthActive(IAbilityData props) {
-		Ability ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		Ability ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
 	public static boolean hasGearFourthSnakemanActive(IAbilityData props) {
-		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isSnakeman();
 	}
 
 	public static boolean hasGearFourthTankmanActive(IAbilityData props) {
-		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isTankman();
 	}
 
 	public static boolean hasPartialGearFourthActive(IAbilityData props) {
-		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isPartial();
 	}
 
 	public static boolean hasGearFifthActive(IAbilityData props) {
-		Ability ability = props.getEquippedAbility(TrueGearFifthAbility.INSTANCE);
+		Ability ability = props.getEquippedAbility(TrueGearFifthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
@@ -161,7 +163,7 @@ public class TrueGomuHelper {
 	}
 
 	public static void stopGatling(LivingEntity entity) {
-		TrueGomuGatling abl = AbilityCapability.get(entity).get().getEquippedAbility(TrueGomuGatling.INSTANCE);
+		TrueGomuGatling abl = AbilityCapability.getEquippedAbility(entity, TrueGomuGatling.INSTANCE.get());
 		if (abl != null && abl.isContinuous()) {
 			abl.getComponent(ModAbilityComponents.CONTINUOUS.get()).ifPresent(comp -> comp.stopContinuity(entity));
 		}
@@ -224,5 +226,51 @@ public class TrueGomuHelper {
 	public static void init() {
 		getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
 		EntityDataSerializers.registerSerializer(VECTOR_SERIALIZER);
+	}
+
+    public static NuProjectileEntity.IOnHitEntityEvent getBazookaOnEntityImpactEvent(NuProjectileEntity projectile, double power) {
+        return hit -> {
+            Vec3 speed = projectile.getDeltaMovement().normalize().scale(power);
+            AbilityHelper.setDeltaMovement(hit.getEntity(), speed.x, 0.5, speed.z);
+        };
+    }
+
+	public static NuProjectileEntity.IOnTickEvent getG2Tick(NuProjectileEntity entity) {
+		return () -> WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), entity, entity.getX(), entity.getY(), entity.getZ());
+	}
+
+	public static NuProjectileEntity.IOnTickEvent getG2Tick(NuProjectileEntity entity, int mod) {
+		return () -> {
+			if ((entity.getLife() + entity.getId()) % mod == 0)
+            	WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), entity, entity.getX(), entity.getY(), entity.getZ());
+        };
+	}
+
+	public static NuProjectileEntity.IOnTickEvent getFlameTick(NuProjectileEntity entity, int amount) {
+		return () -> {
+			for (int i = 0; i < amount; i++)
+				WyHelper.spawnParticleEffect(ModParticleEffects.DAI_ENKAI_1.get(), entity, entity.getX(), entity.getY(), entity.getZ());
+		};
+	}
+
+    public static NuProjectileEntity.IOnHitBlockEvent onBlockImpactEvent(NuProjectileEntity entity, float power, float staticDamage) {
+        return onBlockImpactEvent(entity, power, staticDamage, false);
+    }
+
+	public static NuProjectileEntity.IOnHitBlockEvent onFlamingBlockImpactEvent(NuProjectileEntity entity, float power, float staticDamage) {
+		return onBlockImpactEvent(entity, power, staticDamage, true);
+	}
+
+    public static NuProjectileEntity.IOnHitBlockEvent onBlockImpactEvent(NuProjectileEntity entity, float power, float staticDamage, boolean flame) {
+		return hit -> {
+			AbilityExplosion explosion = new AbilityExplosion(entity.getOwner(), entity.getParent().orElse(null), entity.getX(), entity.getY(), entity.getZ(), power);
+			explosion.setStaticDamage(staticDamage);
+			explosion.setExplosionSound(false);
+			explosion.setDamageOwner(false);
+			explosion.setDestroyBlocks(true);
+			explosion.setFireAfterExplosion(flame);
+			explosion.setDamageEntities(true);
+			explosion.explode();
+		};
 	}
 }

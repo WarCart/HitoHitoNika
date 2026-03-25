@@ -3,7 +3,9 @@ package net.warcar.hito_hito_nika.abilities;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.DamageTakenComponent;
@@ -14,8 +16,8 @@ import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 
 public class GomuGomuNoCannonballAbility extends PassiveAbility {
-    public static final AbilityCore<GomuGomuNoCannonballAbility> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_cannonball", "Gomu Gomu no Cannonball", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuGomuNoCannonballAbility::new)
-            .setUnlockCheck(GomuGomuNoCannonballAbility::canUnlock).build();
+    public static final RegistryObject<AbilityCore<GomuGomuNoCannonballAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_cannonball", "Gomu Gomu no Cannonball", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuGomuNoCannonballAbility::new)
+            .setUnlockCheck(GomuGomuNoCannonballAbility::canUnlock));
 
     private final ChargeComponent chargeComponent = new ChargeComponent(this).addEndEvent(this::onChargeEnd);
     private final GrabEntityComponent grabEntityComponent = new GrabEntityComponent(this, true, true, true, 3).addGrabEvent(this::onGrabStart);

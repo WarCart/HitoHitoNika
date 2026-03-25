@@ -5,7 +5,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.abilities.NoFallDamageAbility;
@@ -17,8 +19,8 @@ import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 
 public class TrueBouncyAbility extends NoFallDamageAbility {
     private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("bouncy", ImmutablePair.of("Makes the user bounce upon landing", null));
-    public static final AbilityCore<TrueBouncyAbility> INSTANCE = new AbilityCore.Builder<>("bouncy", "Bouncy", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, TrueBouncyAbility::new)
-            .addDescriptionLine(DESCRIPTION).build();
+    public static final RegistryObject<AbilityCore<TrueBouncyAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("bouncy", "Bouncy", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, TrueBouncyAbility::new)
+            .addDescriptionLine(DESCRIPTION));
     private boolean touchedGround = true;
     private double bounceValue = 0;
 

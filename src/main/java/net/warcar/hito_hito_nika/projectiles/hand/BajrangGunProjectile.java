@@ -4,7 +4,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
@@ -12,7 +11,6 @@ import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
-import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 
 
 public class BajrangGunProjectile extends NuProjectileEntity {
@@ -30,7 +28,6 @@ public class BajrangGunProjectile extends NuProjectileEntity {
 		this.setEntityCollisionSize(15);
 		this.setPassThroughEntities();
 		this.addBlockHitEvent(100, this::onBlockImpactEvent);
-		//this.onEntityImpactEvent = this::onEntityImpactEvent;
 	}
 
 	public BajrangGunProjectile(Level world, LivingEntity player, Ability ability, float size) {
@@ -48,9 +45,4 @@ public class BajrangGunProjectile extends NuProjectileEntity {
 		explosion.setDamageEntities(false);
 		explosion.explode();
 	}
-
-	private void onEntityImpactEvent(EntityHitResult hitEnt) {
-		AbilityHelper.setDeltaMovement(hitEnt.getEntity(), hitEnt.getEntity().getDeltaMovement().add(this.getDeltaMovement().normalize()));
-	}
-
 }

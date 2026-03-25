@@ -9,7 +9,7 @@ import xyz.pixelatedw.mineminenomi.api.helpers.GoalHelper;
 public class GatlingWrapperGoal<E extends Mob> extends AbilityWrapperGoal<E, TrueGomuGatling> {
     private LivingEntity target;
     public GatlingWrapperGoal(E entity) {
-        super(entity, TrueGomuGatling.INSTANCE);
+        super(entity, TrueGomuGatling.INSTANCE.get());
     }
 
     @Override

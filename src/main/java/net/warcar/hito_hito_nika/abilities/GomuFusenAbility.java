@@ -4,9 +4,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
@@ -21,8 +23,8 @@ import java.util.UUID;
 
 public class GomuFusenAbility extends Ability {
 	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_fusen", ImmutablePair.of("By inhaling a lot of air user inflates their chest to gain invulnerability to cannon balls", null));
- 	public static final AbilityCore<GomuFusenAbility> INSTANCE = new AbilityCore.Builder<>("Gomu Gomu no Fusen", AbilityCategory.DEVIL_FRUITS, GomuFusenAbility::new)
-			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(ChangeStatsComponent.getTooltip()).build();
+ 	public static final RegistryObject<AbilityCore<GomuFusenAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_fusen", "Gomu Gomu no Fusen", AbilityCategory.DEVIL_FRUITS, GomuFusenAbility::new)
+			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(ChangeStatsComponent.getTooltip()));
 	public static final Component NAME = TrueGomuHelper.getName(ModMain.PROJECT_ID, "Gomu Gomu no Fusen", "gomu_gomu_no_fusen");
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
@@ -44,10 +46,10 @@ public class GomuFusenAbility extends Ability {
 	private void afterContinuityStopEvent(LivingEntity entity, IAbility ability) {
 		this.cooldownComponent.startCooldown(entity, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getFusenCooldown(), entity, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue());
 		IAbilityData props = AbilityCapability.get(entity).get();
-		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
+		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 		if (morphs != null)
 			morphs.updateModes(entity);
-		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		if (g4 != null) {
 			g4.setBoundman(entity);
 			if (g4.isContinuous()) {
@@ -69,11 +71,11 @@ public class GomuFusenAbility extends Ability {
 
 	private void onStartContinuityEvent(LivingEntity player, IAbility ability) {
 		IAbilityData props = AbilityCapability.get(player).get();
-		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
-		this.statsComponent.addAttributeModifier(ModAttributes.DAMAGE_REDUCTION, new AbilityAttributeModifier(UUID.fromString("2a0bf464-0873-11ef-b635-325096b39f47"), INSTANCE, "Fusen Resistance Damage Modifier", TrueGomuHelper.hasGearThirdActive(props) ? 0.5 : 0.25, AttributeModifier.Operation.ADDITION));
+		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
+		this.statsComponent.addAttributeModifier(ModAttributes.TOUGHNESS, new AbilityAttributeModifier(UUID.fromString("2a0bf464-0873-11ef-b635-325096b39f47"), INSTANCE, "Fusen Resistance Damage Modifier", TrueGomuHelper.hasGearThirdActive(props) ? 10 : 3, AttributeModifier.Operation.ADDITION));
 		if (morphs != null)
 			morphs.updateModes(player);
-		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+		TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		if (g4 != null) {
 			g4.setTankman(player);
 		}
