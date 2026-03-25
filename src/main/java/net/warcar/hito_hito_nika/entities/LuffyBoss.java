@@ -67,7 +67,7 @@ public class LuffyBoss extends OPBossEntity {
         }
         MobsHelper.addBasicNPCGoals(this);
         this.goalSelector.addGoal(0, new LuffyPhaseSwitcherGoal(this));
-        this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, GomuMorphsAbility.INSTANCE));
+        this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, GomuMorphsAbility.INSTANCE.get()));
         this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, BrawlerPassiveBonusesAbility.INSTANCE.get()));
         this.goalSelector.addGoal(0, new AlwaysActiveAbilityWrapperGoal<>(this, BouncyAbility.INSTANCE.get()));
         this.goalSelector.addGoal(0, new JumpOutOfHoleGoal(this));
@@ -75,29 +75,29 @@ public class LuffyBoss extends OPBossEntity {
         this.goalSelector.addGoal(1, new ImprovedMeleeAttackGoal(this, 1, true));
         if (inProgressChallenge.isStandardDifficulty()) {
             this.secondPhase.addGoal(2, new BulletWrapperGoal<>(this));
-            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
-            this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
-            this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
+            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE.get()));
+            this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE.get()));
+            this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE.get()));
             this.thirdPhase.addGoal(2, new BulletWrapperGoal<>(this));
-            this.goalSelector.addGoal(3, new ActiveGuardAbilityWrapperGoal<>(this, GomuFusenAbility.INSTANCE));
+            this.goalSelector.addGoal(3, new ActiveGuardAbilityWrapperGoal<>(this, GomuFusenAbility.INSTANCE.get()));
         } else if (inProgressChallenge.isHardDifficulty()) {
             this.goalSelector.addGoal(0, new HakiAbilityWrapperGoal<>(this, BusoshokuHakiHardeningAbility.INSTANCE.get()));
             this.goalSelector.addGoal(2, new BulletWrapperGoal<>(this));
-            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
-            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
-            this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearFourthAbility.INSTANCE));
+            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE.get()));
+            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE.get()));
+            this.thirdPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearFourthAbility.INSTANCE.get()));
         } else {
             this.goalSelector.addGoal(0, new HakiAbilityWrapperGoal<>(this, BusoshokuHakiHardeningAbility.INSTANCE.get()));
             this.goalSelector.addGoal(0, new HakiAbilityWrapperGoal<>(this, BusoshokuHakiInternalDestructionAbility.INSTANCE.get()));
             this.goalSelector.addGoal(2, new BulletWrapperGoal<>(this));
-            this.firstPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
-            this.firstPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
+            this.firstPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE.get()));
+            this.firstPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE.get()));
             this.goalSelector.addGoal(0, new HakiAbilityWrapperGoal<>(this, HaoshokuHakiInfusionAbility.INSTANCE.get()));
-            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE));
-            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE));
+            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearSecondAbility.INSTANCE.get()));
+            this.secondPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearThirdAbility.INSTANCE.get()));
             this.secondPhase.addGoal(1, new GearFourthWrapperGoal(this, 0.75f));
             this.thirdPhase.addGoal(1, new GearFourthWrapperGoal(this, 0));
-            this.lastPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearFifthAbility.INSTANCE));
+            this.lastPhase.addGoal(1, new GearWrapperGoal<>(this, TrueGearFifthAbility.INSTANCE.get()));
         }
         this.goalSelector.addGoal(2, new PistolWrapperGoal<>(this));
         this.goalSelector.addGoal(2, new GatlingWrapperGoal<>(this));

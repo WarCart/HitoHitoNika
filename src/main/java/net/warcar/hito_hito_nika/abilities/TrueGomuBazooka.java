@@ -7,8 +7,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuAnimations;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -33,8 +35,8 @@ import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 public class TrueGomuBazooka extends Ability {
 	private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_bazooka", new Pair[]{ImmutablePair.of("Hits the enemy with both hands to launch them away.", (Object)null)});
-	public static final AbilityCore<TrueGomuBazooka> INSTANCE = (new AbilityCore.Builder<>("gomu_gomu_no_bazooka", "Gomu Gomu no Bazooka", AbilityCategory.DEVIL_FRUITS, TrueGomuBazooka::new))
-			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
+	public static final RegistryObject<AbilityCore<TrueGomuBazooka>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_bazooka", "Gomu Gomu no Bazooka", AbilityCategory.DEVIL_FRUITS, TrueGomuBazooka::new)
+			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST));
 	public static final Component JET_GRIZZLY_MAGNUM = TrueGomuHelper.getName("Gomu Gomu no Jet Grizzly Magnum");
 	public static final Component JET_GIANT_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Bazooka");
 	public static final Component GIANT_DAWN_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Giant Dawn Bazooka");
@@ -234,7 +236,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setDisplayName(JET_BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					this.setMaxCooldown(5D);
 					this.setMaxChargeTime(0D);
@@ -282,7 +284,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setDisplayName(BAZOOKA);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			}
-			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_bazooka.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(ResourceLocation.parse("mineminenomi:textures/abilities/gomu_gomu_no_bazooka.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Bazooka"));
 			}
 		} else {
@@ -302,7 +304,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setDisplayName(JET_GIANT_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					this.setMaxCooldown(5D);
 					this.setMaxChargeTime(0D);
@@ -345,7 +347,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setDisplayName(YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			}
-			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/yari.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(ResourceLocation.parse("mineminenomi:textures/abilities/yari.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Yari"));
 			}
 		}

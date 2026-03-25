@@ -125,7 +125,7 @@ public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void onDeath(LivingDeathEvent event) {
 		if (!event.isCanceled()) {
-			TrueGearFourthAbility ability = AbilityCapability.get(event.getEntity()).get().getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+			TrueGearFourthAbility ability = AbilityCapability.getEquippedAbility(event.getEntity(), TrueGearFourthAbility.INSTANCE.get());
 			if (ability != null)
 				event.setCanceled(ability.onUserDeath(event.getEntity()));
 		}
@@ -144,7 +144,7 @@ public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void usage(AbilityUseEvent.Pre event) {
 		if (Arrays.asList(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.getAbilities()).contains(event.getAbility().getCore())) {
-			GomuMorphsAbility morphs = AbilityCapability.get(event.getEntity()).get().getPassiveAbility(GomuMorphsAbility.INSTANCE);
+			GomuMorphsAbility morphs = AbilityCapability.get(event.getEntity()).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 			if (morphs != null)
 				morphs.updateModes(event.getEntity());
 		}

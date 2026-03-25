@@ -1,5 +1,6 @@
 package net.warcar.hito_hito_nika.challenges;
 
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -10,7 +11,6 @@ import xyz.pixelatedw.mineminenomi.api.challenges.*;
 import xyz.pixelatedw.mineminenomi.challenges.arenas.JungleClearingSimpleArena;
 import xyz.pixelatedw.mineminenomi.init.ModArmors;
 
-import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +34,7 @@ public class PreTSLuffyChallenge extends Challenge {
     public static LivingEntity createShowcase(Level level) {
         LuffyBoss boss = GomuEntities.LUFFY.create(level);
         ItemStack item = new ItemStack(ModArmors.STRAW_HAT.get());
-        boss.setItemSlot(EquipmentSlotType.HEAD, item);
+        boss.setItemSlot(EquipmentSlot.HEAD, item);
         return boss;
     }
 }

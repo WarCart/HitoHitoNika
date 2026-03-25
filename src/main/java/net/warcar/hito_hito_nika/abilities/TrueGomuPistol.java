@@ -9,7 +9,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -37,8 +39,8 @@ import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 public class TrueGomuPistol extends Ability {
 	private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_pistol", new Pair[]{ImmutablePair.of("The user stretches their arm to punch the opponent.", (Object)null)});
-	public static final AbilityCore<TrueGomuPistol> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_pistol", "Gomu Gomu no Pistol", AbilityCategory.DEVIL_FRUITS, TrueGomuPistol::new)
-			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
+	public static final RegistryObject<AbilityCore<TrueGomuPistol>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_pistol", "Gomu Gomu no Pistol", AbilityCategory.DEVIL_FRUITS, TrueGomuPistol::new)
+			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST));
 	public static final Component BAJRANG_GUN = TrueGomuHelper.getName("Gomu Gomu no Bajrang Gun");
 	public static final Component ROC_GUN = TrueGomuHelper.getName("Gomu Gomu no Roc Gun");
 	public static final Component JET_ELEPHANT_GUN = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gun");
@@ -243,7 +245,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(JET_PISTOL);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					this.setMaxCooldown(2);
 					this.setMaxChargeTime(0.0D);
@@ -296,7 +298,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(PISTOL);
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			}
-			if (this.getIcon(null).equals(new ResourceLocation("mineminenomi:textures/abilities/gomu_gomu_no_pistol.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(null).equals(ResourceLocation.parse("mineminenomi:textures/abilities/gomu_gomu_no_pistol.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Pistol"));
 			}
 		} else {
@@ -342,7 +344,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(ROC_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					this.setMaxCooldown(5.0D);
 					this.setMaxChargeTime(0.0D);
@@ -390,7 +392,7 @@ public class TrueGomuPistol extends Ability {
 				this.setDisplayName(STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Stamp"));
 			}
-			if (this.getIcon(entity).equals(new ResourceLocation("mineminenomi:textures/abilities/stamp.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
+			if (this.getIcon(entity).equals(ResourceLocation.parse("mineminenomi:textures/abilities/stamp.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Stamp"));
 			}
 		}

@@ -2,7 +2,9 @@ package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.MorphComponent;
@@ -16,8 +18,8 @@ import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateAbilityNBTPacke
 import javax.annotation.Nullable;
 
 public class GomuMorphsAbility extends PassiveAbility {
-	public static final AbilityCore<GomuMorphsAbility> INSTANCE = new AbilityCore.Builder<>("gomu_transformations", "Gomu Transformations", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuMorphsAbility::new)
-			.setHidden().build();
+	public static final RegistryObject<AbilityCore<GomuMorphsAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_transformations", "Gomu Transformations", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuMorphsAbility::new)
+			.setHidden());
 
 	private int needsUpdate = 0;
 
@@ -55,7 +57,7 @@ public class GomuMorphsAbility extends PassiveAbility {
 	public MorphInfo getTransformation(LivingEntity target) {
 		IAbilityData props = AbilityCapability.get(target).get();
 		if (TrueGomuHelper.hasGearFourthActive(props)) {
-			TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+			TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 			if (g4.isSnakeman()) {
 				return TrueMorphs.SNAKEMAN.get();
 			} else if (g4.isBoundman()) {

@@ -1,15 +1,16 @@
 {
   "required": true,
   "package": "net.warcar.hito_hito_nika.mixins",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
     "ModAbilitiesMixin",
     "WyHelperMixin"
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": -1
   },
   "refmap": "hito_hito_no_mi_nika.refmap.json",
-  "client": [
-  ]
+  "client": [],
+  "server": [],
+  "minVersion": "0.8"
 }

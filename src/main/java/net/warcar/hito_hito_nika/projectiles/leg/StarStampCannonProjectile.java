@@ -1,36 +1,26 @@
 package net.warcar.hito_hito_nika.projectiles.leg;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
-import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.particles.effects.gomu.GearSecondParticleEffect;
+import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
 public class StarStampCannonProjectile extends KongStampProjectile {
-    public StarStampCannonProjectile(World world, LivingEntity player, Ability ability) {
+    public StarStampCannonProjectile(Level world, LivingEntity player, Ability ability) {
         super(world, player, ability);
         this.setMaxLife(300);
         this.setDamage(125F);
-        this.setDamageSource(this.getDamageSource().setPhysical());
-        this.setBlocksAffectedLimit(250);
-        this.onBlockImpactEvent = this::onBlockImpactEvent;
-        this.onTickEvent = this::onTickEvent;
+        this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, 3, 15));
+        this.addTickEvent(100, TrueGomuHelper.getG2Tick(this));
+        this.addEntityHitEvent(100, this::onEntityImpact);
     }
 
-    private void onBlockImpactEvent(BlockPos hit) {
-        ExplosionAbility explosion = AbilityHelper.newExplosion(this.getThrower(), this.level, this.getX(), this.getY(), this.getZ(), 3F);
-        explosion.setStaticDamage(15F);
-        explosion.setExplosionSound(false);
-        explosion.setDamageOwner(false);
-        explosion.setDestroyBlocks(true);
-        explosion.setFireAfterExplosion(false);
-        explosion.setDamageEntities(false);
-        explosion.doExplosion();
-    }
-
-    private void onTickEvent() {
-        new GearSecondParticleEffect().spawn(this.level, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+    private void onEntityImpact(EntityHitResult hitResult) {
+        if (hitResult.getEntity() instanceof LivingEntity entity) {
+            entity.addEffect(new MobEffectInstance(ModEffects.DIZZY.get(), 60, 1));
+        }
     }
 }

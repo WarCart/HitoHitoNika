@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
@@ -49,9 +50,9 @@ public class TrueGearFourthAbility extends Ability {
 	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gear_fourth",
 			ImmutablePair.of("The user inflates their muscle structure to tremendously increase the power of their attacks and also allows flight", null),
 			ImmutablePair.of("§2Uses Haki§r", null));
-	public static final AbilityCore<TrueGearFourthAbility> INSTANCE = new AbilityCore.Builder<>("gear_fourth", "Gear Fourth", AbilityCategory.DEVIL_FRUITS, TrueGearFourthAbility::new)
+	public static final RegistryObject<AbilityCore<TrueGearFourthAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gear_fourth", "Gear Fourth", AbilityCategory.DEVIL_FRUITS, TrueGearFourthAbility::new)
 			.addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, ChangeStatsComponent.getTooltip())
-			.setUnlockCheck(TrueGearFourthAbility::canUnlock).build();
+			.setUnlockCheck(TrueGearFourthAbility::canUnlock));
 	private final AltModeComponent<Mode> modeComponent;
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
@@ -119,7 +120,7 @@ public class TrueGearFourthAbility extends Ability {
 	}
 
 	private void afterStart(LivingEntity entity, IAbility ability) {
-		GomuMorphsAbility morphs = AbilityCapability.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE);
+		GomuMorphsAbility morphs = AbilityCapability.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 		if (morphs != null) morphs.updateModes(entity);
 	}
 
@@ -204,7 +205,7 @@ public class TrueGearFourthAbility extends Ability {
 		if (this.isBoundman() && player instanceof Player) {
 			((Player) player).getAbilities().mayfly = ((Player) player).isCreative() || player.isSpectator();
 		}
-		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE);
+		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 		if (morphs != null)
 			morphs.updateModes(player);
 		if (this.targetedTime > 0 && this.continuousComponent.getContinueTime() >= this.continuousComponent.getThresholdTime() && !this.continuousComponent.isInfinite() && !this.isBonusTime && props.hasUnlockedAbility(HaoshokuHakiInfusionAbility.INSTANCE.get()) && this.isBoundman()) {

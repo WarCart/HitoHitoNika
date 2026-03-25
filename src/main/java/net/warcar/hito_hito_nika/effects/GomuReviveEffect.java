@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import net.warcar.hito_hito_nika.abilities.TrueGearFifthAbility;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
-import xyz.pixelatedw.mineminenomi.config.CommonConfig;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.effects.BaseEffect;
@@ -40,8 +39,8 @@ public class GomuReviveEffect extends BaseEffect {
         if (!entity.level().isClientSide) {
             if (entity instanceof Player) {
                 IAbilityData props = AbilityCapability.get(entity).get();
-                if (!props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE)) {
-                    TrueGearFifthAbility ability = TrueGearFifthAbility.INSTANCE.createAbility();
+                if (!props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE.get())) {
+                    TrueGearFifthAbility ability = TrueGearFifthAbility.INSTANCE.get().createAbility();
                     for (int i = 0; i < 2 * 8; i++) {
                         if (props.getEquippedAbility(i) == null) {
                             props.setEquippedAbility(i, ability);
@@ -51,8 +50,8 @@ public class GomuReviveEffect extends BaseEffect {
                     }
                 }
                 ((Player) entity).closeContainer();
-                if (props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE)) {
-                    props.getEquippedAbility(TrueGearFifthAbility.INSTANCE).use(entity);
+                if (props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE.get())) {
+                    props.getEquippedAbility(TrueGearFifthAbility.INSTANCE.get()).use(entity);
                 } else {
                     entity.level().playSound(null, entity, ModSounds.DRUMS_OF_LIBERATION_1.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
                 }

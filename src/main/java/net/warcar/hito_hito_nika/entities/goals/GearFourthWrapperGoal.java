@@ -2,13 +2,12 @@ package net.warcar.hito_hito_nika.entities.goals;
 
 import net.warcar.hito_hito_nika.abilities.TrueGearFourthAbility;
 import net.warcar.hito_hito_nika.entities.LuffyBoss;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
 public class GearFourthWrapperGoal extends GearWrapperGoal<TrueGearFourthAbility> {
     private final float snakemanChance;
 
     public GearFourthWrapperGoal(LuffyBoss entity, float snakemanChance) {
-        super(entity, TrueGearFourthAbility.INSTANCE);
+        super(entity, TrueGearFourthAbility.INSTANCE.get());
         this.snakemanChance = snakemanChance;
     }
 

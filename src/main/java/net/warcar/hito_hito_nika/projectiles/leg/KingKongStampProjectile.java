@@ -1,40 +1,25 @@
 package net.warcar.hito_hito_nika.projectiles.leg;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.ExplosionAbility;
-import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.entities.projectiles.AbilityProjectileEntity;
+import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 
-public class KingKongStampProjectile extends AbilityProjectileEntity {
-    public KingKongStampProjectile(EntityType type, World world) {
+public class KingKongStampProjectile extends NuProjectileEntity {
+    public KingKongStampProjectile(EntityType type, Level world) {
         super(type, world);
     }
 
-    public KingKongStampProjectile(World world, LivingEntity player, Ability ability) {
+    public KingKongStampProjectile(Level world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_KING_KONG_STAMP.get(), world, player, ability);
         this.setMaxLife(25);
         this.setPhysical();
         this.setDamage(85);
         this.setEntityCollisionSize(4d);
         this.setPassThroughEntities();
-        this.setCanGetStuckInGround();
-        this.setDamageSource(this.getDamageSource().getSource());
-        this.onBlockImpactEvent = this::onBlockImpactEvent;
-    }
-
-    private void onBlockImpactEvent(BlockPos hit) {
-        ExplosionAbility explosion = AbilityHelper.newExplosion(this.getThrower(), this.level, this.getX(), this.getY(), this.getZ(), 13F);
-        explosion.setExplosionSound(false);
-        explosion.setStaticDamage(80.0F);
-        explosion.setDamageOwner(false);
-        explosion.setDestroyBlocks(true);
-        explosion.setFireAfterExplosion(false);
-        explosion.setDamageEntities(false);
-        explosion.doExplosion();
+        this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, 13, 60));
     }
 }

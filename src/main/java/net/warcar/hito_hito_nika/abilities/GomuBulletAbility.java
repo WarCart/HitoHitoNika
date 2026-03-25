@@ -1,8 +1,8 @@
 package net.warcar.hito_hito_nika.abilities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -10,8 +10,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuAnimations;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.projectiles.KingBajrangGunProjectile;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
@@ -22,14 +24,19 @@ import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimationComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.PoolComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.RendererHelper;
+import xyz.pixelatedw.mineminenomi.api.ui.TexturedRectUI;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
@@ -38,8 +45,8 @@ import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 public class GomuBulletAbility extends Ability {
 	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_bullet", ImmutablePair.of("User stretches his hand far back to strike enemies with immense force", null));
-	public static final AbilityCore<GomuBulletAbility> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_bullet", "Gomu Gomu no Bullet", AbilityCategory.DEVIL_FRUITS, GomuBulletAbility::new)
-			.setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).addDescriptionLine(DESCRIPTION).build();
+	public static final RegistryObject<AbilityCore<GomuBulletAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_bullet", "Gomu Gomu no Bullet", AbilityCategory.DEVIL_FRUITS, GomuBulletAbility::new)
+			.setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).addDescriptionLine(DESCRIPTION));
 	public static final Component KING_BAJRANG_GUN = TrueGomuHelper.getName("Gomu Gomu no King Bajrang Gun");
 	public static final Component BAJRANG_GUN = TrueGomuHelper.getName("Gomu Gomu no Bajrang Gun");
 	public static final Component RED_ROC = TrueGomuHelper.getName("Gomu Gomu no Red Roc");
@@ -74,15 +81,6 @@ public class GomuBulletAbility extends Ability {
 	public static final Component ONO = TrueGomuHelper.getName("Gomu Gomu no Ono");
 	private final ChargeComponent chargeComponent;
 	private final ProjectileComponent projectileComponent;
-	/*private final AnimeScreamComponent trueScreamComponent = new AnimeScreamComponent(this) {
-		@Override
-		public void setupDefaultScreams(IAbility ability) {
-			ability.getComponent(ModAbilityComponents.CHARGE).ifPresent(chargeComponent -> {
-				chargeComponent.addStartEvent((entity, iAbility) -> this.scream(entity, "Gomu gomu no..."));
-				chargeComponent.addEndEvent((entity, iAbility) -> this.scream(entity, ability.getDisplayName().getString().replace("Gomu Gomu no ", "")));
-			});
-		}
-	};*/
 	private final PoolComponent poolComponent = new PoolComponent(this, ModAbilityPools.GRAB_ABILITY);
 	private final AnimationComponent animationComponent = new AnimationComponent(this);
 	private float chargeTime = 0;
@@ -122,7 +120,7 @@ public class GomuBulletAbility extends Ability {
 
 	private void start(LivingEntity entity, IAbility ability) {
 		if (TrueGomuHelper.hasGearFifthActive(AbilityCapability.get(entity).orElse(null)) && !HakiHelper.hasInfusionActive(entity)) {
-			entity.sendMessage(Component.translatable("text.mineminenomi.requires_infusion"), Util.NIL_UUID);
+			entity.sendSystemMessage(Component.translatable("text.mineminenomi.requires_infusion"));
 			return;
 		}
 		if (this.chargeTime == 0) {
@@ -134,7 +132,7 @@ public class GomuBulletAbility extends Ability {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private void hakiOverlay(LivingEntity entity, Minecraft client, PoseStack matrixStack, float x, float y, float partialTicks) {
+	private void hakiOverlay(LivingEntity entity, Minecraft client, PoseStack matrixStack, MultiBufferSource bufferSource, TexturedRectUI ui, float x, float y, float partialTicks) {
 		if (HakiHelper.hasInfusionActive(entity) && TrueGomuHelper.hasGearFourthBoundmanActive(AbilityCapability.get(entity).orElse(null))) {
 			RendererHelper.drawIcon(TrueGomuHelper.getIcon("Over Kong Gun Overlay"), matrixStack, x + 4, y + 4, 1.5f, 16, 16, HakiHelper.getHaoshokuColour(entity));
 		}
@@ -143,9 +141,9 @@ public class GomuBulletAbility extends Ability {
 	private void duringContinuityEvent(LivingEntity entity, IAbility i) {
 		IAbilityData props = AbilityCapability.get(entity).orElse(null);
 		if (TrueGomuHelper.hasGearFourthBoundmanActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
-			HakiDataCapability.get(entity).alterHakiOveruse(10);
+			HakiCapability.get(entity).get().alterHakiOveruse(10);
 		} else if (TrueGomuHelper.hasGearFourthBoundmanActive(props)) {
-			HakiDataCapability.get(entity).alterHakiOveruse(15);
+			HakiCapability.get(entity).get().alterHakiOveruse(15);
 		}
 		if (TrueGomuHelper.hasGearFifthActive(props)) {
 			AbilityHelper.slowEntityFall(entity);
@@ -285,7 +283,7 @@ public class GomuBulletAbility extends Ability {
 				this.setDisplayName(RED_HAWK);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Fire Pistol"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.get(entity).orElse(null).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					this.setMaxChargeTime(3D);
 					this.cooldown = 10;
@@ -370,7 +368,7 @@ public class GomuBulletAbility extends Ability {
 				this.setDisplayName(RED_HAWK_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Fire Stamp"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.get(entity).orElse(null).getEquippedAbility(TrueGearFourthAbility.INSTANCE);
+				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					this.setMaxChargeTime(3D);
 					this.cooldown = 10;

@@ -1,31 +1,23 @@
 package net.warcar.hito_hito_nika.models;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.model.IHasArm;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.warcar.hito_hito_nika.abilities.GomuBulletAbility;
-import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.config.CommonConfig;
-import xyz.pixelatedw.mineminenomi.api.morph.MorphModel;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityDataCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 
-public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> implements IHasArm {
-    private final ModelRenderer rightArm;
-    private final ModelRenderer rightLeg;
-    private final ModelRenderer head;
-    private final ModelRenderer body;
-    private final ModelRenderer leftArm;
-    private final ModelRenderer leftLeg;
+public class BoundmanMorphModel<T extends LivingEntity> extends PlayerModel<T> {
+    private final ModelPart rightArm;
+    private final ModelPart rightLeg;
+    private final ModelPart head;
+    private final ModelPart body;
+    private final ModelPart leftArm;
+    private final ModelPart leftLeg;
     private final boolean gomuAnimations;
     private boolean isFlying;
 
@@ -34,30 +26,43 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
         this.texWidth = 64;
         this.texHeight = 64;
         this.gomuAnimations = gomuAnimations;
-        this.rightArm = new ModelRenderer(this);
+        this.rightArm = new ModelPart(this);
         this.rightArm.setPos(0F, -2.0F, 0.0F);
         this.rightArm.texOffs(40, 16).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
-        this.rightLeg = new ModelRenderer(this);
+        this.rightLeg = new ModelPart(this);
         this.rightLeg.setPos(0F, 0.0F, 0.0F);
         this.rightLeg.texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
-        this.head = new ModelRenderer(this);
-        this.head.setPos(0.0F, -5.4F, 0.0F);
-        this.head.texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, false);
-        this.body = new ModelRenderer(this);
-        this.body.setPos(0.0F, -5.4F, 0.0F);
-        this.body.texOffs(16, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.0F, false);
-        this.leftArm = new ModelRenderer(this);
+        this.head = new ModelPart(this);
+        this.body = new ModelPart(this);
+        this.leftArm = new ModelPart(this);
         this.leftArm.setPos(9.5F, -2.0F, 0.0F);
         this.leftArm.texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
-        this.leftLeg = new ModelRenderer(this);
+        this.leftLeg = new ModelPart(this);
         this.leftLeg.setPos(3.2F, 15.0F, 0.0F);
         this.leftLeg.texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
-        super.body = this.body;
-        super.head = this.head;
-        super.rightArm = this.rightArm;
-        super.leftArm = this.leftArm;
-        super.rightLeg = this.rightLeg;
-        super.leftLeg = this.leftLeg;
+    }
+
+    public static LayerDefinition createBodyLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+
+        PartDefinition Head = partdefinition.addOrReplaceChild("Head", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, false),
+                PartPose.offset(0.0F, 0, 0.0F));
+
+        PartDefinition Body = partdefinition.addOrReplaceChild("Body", CubeListBuilder.create()
+                .texOffs(16, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0)),
+                PartPose.offset(0.0F, -5.4F, 0.0F));
+
+        PartDefinition RightArm = partdefinition.addOrReplaceChild("RightArm", CubeListBuilder.create().texOffs(40, 16).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-14.0F, -9.0F, 0.0F));
+
+        PartDefinition LeftArm = partdefinition.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(32, 48).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(14.0F, -9.0F, 0.0F));
+
+        PartDefinition RightLeg = partdefinition.addOrReplaceChild("RightLeg", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.9F, 12.0F, 0.0F));
+
+        PartDefinition LeftLeg = partdefinition.addOrReplaceChild("LeftLeg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(1.9F, 12.0F, 0.0F));
+
+        return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
     public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
@@ -79,7 +84,7 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
         matrixStack.scale(2.0F, 1.7F, 3.0F);
         this.body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
         matrixStack.popPose();
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if (this.gomuAnimations && !(EntityStatsCapability.get(player).isBlackLeg() && CommonConfig.INSTANCE.isLegAbilities())) {
             float time = 0.2F;
             GomuBulletAbility ability = AbilityDataCapability.get(player).getEquippedAbility(GomuBulletAbility.INSTANCE);
@@ -179,7 +184,7 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
                 speed = 0.7F;
             }
 
-            ModelRenderer var10000;
+            ModelPart var10000;
             if (!entity.getMainHandItem().isEmpty()) {
                 var10000 = this.rightArm;
                 var10000.xRot += -0.15F;
@@ -234,11 +239,5 @@ public class BoundmanMorphModel<T extends LivingEntity> extends MorphModel<T> im
             this.rightArm.zRot = (float)Math.toRadians(90.0D);
             this.leftArm.zRot = (float)Math.toRadians(-90.0D);
         }
-    }
-
-    public void renderFirstPersonArm(MatrixStack matrixStack, IVertexBuilder vertex, int packedLight, int overlay, float red, float green, float blue, float alpha, HandSide side) {
-    }
-
-    public void renderFirstPersonLeg(MatrixStack matrixStack, IVertexBuilder vertex, int packedLight, int overlay, float red, float green, float blue, float alpha, HandSide side) {
     }
 }

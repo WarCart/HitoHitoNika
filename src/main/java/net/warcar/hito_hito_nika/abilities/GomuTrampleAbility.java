@@ -1,15 +1,14 @@
 package net.warcar.hito_hito_nika.abilities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.api.NuWorld;
@@ -22,7 +21,6 @@ import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityTooltipsHelper;
-import xyz.pixelatedw.mineminenomi.api.helpers.MathHelper;
 import xyz.pixelatedw.mineminenomi.api.protection.DefaultProtectionRules;
 import xyz.pixelatedw.mineminenomi.api.util.Result;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
@@ -30,12 +28,15 @@ import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 import xyz.pixelatedw.mineminenomi.init.ModTags;
 import xyz.pixelatedw.mineminenomi.particles.effects.BreakingBlocksParticleEffect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GomuTrampleAbility extends PassiveAbility {
     private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gomu_trample", ImmutablePair.of("Running speed increases with acceleration trampling any nearby entity.", null));
-    public static final AbilityCore<GomuTrampleAbility> INSTANCE = new AbilityCore.Builder<>("gomu_trample", "Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new)
+    public static final RegistryObject<AbilityCore<GomuTrampleAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_trample", "Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new)
             .addDescriptionLine(DESCRIPTION).addDescriptionLine(AbilityDescriptionLine.NEW_LINE, AbilityTooltipsHelper.getRequiredMorphTooltip(TrueMorphs.GIANT))
             .addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, RangeComponent.getTooltip(5.0F, RangeType.AOE), DealDamageComponent.getTooltip(8.0F))
-            .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).build();
+            .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST));
     private final RangeComponent rangeComponent = new RangeComponent(this);
     private final DealDamageComponent dealDamageComponent = new DealDamageComponent(this);
     private final BreakingBlocksParticleEffect.Details details;

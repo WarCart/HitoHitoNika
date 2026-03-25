@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -39,9 +40,9 @@ public class GomuUfoAbility extends Ability {
     public static final Component UFO = TrueGomuHelper.getName("Gomu Gomu no Ufo");
     public static final Component JET_UFO = TrueGomuHelper.getName("Gomu Gomu no Jet Ufo");
     public static final Component DAWN_WHIP = TrueGomuHelper.getName("Gomu Gomu no Dawn Whip");
-    public static final AbilityCore<GomuUfoAbility> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_ufo", "Gomu Gomu no UFO", AbilityCategory.DEVIL_FRUITS, GomuUfoAbility::new)
+    public static final RegistryObject<AbilityCore<GomuUfoAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_ufo", "Gomu Gomu no UFO", AbilityCategory.DEVIL_FRUITS, GomuUfoAbility::new)
             .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ContinuousComponent.getTooltip(HOLD_TIME), RangeComponent.getTooltip(RANGE, RangeType.AOE), DealDamageComponent.getTooltip(DAMAGE, G5_DAMAGE))
-            .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.PHYSICAL).setUnlockCheck(GomuUfoAbility::canUnlock).build();
+            .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.PHYSICAL).setUnlockCheck(GomuUfoAbility::canUnlock));
     private final ContinuousComponent continuousComponent = (new ContinuousComponent(this)).addStartEvent(this::startContinuityEvent).addTickEvent(this::duringContinuityEvent).addEndEvent(this::endContinuityEvent);
     private final HitTrackerComponent hitTrackerComponent = new HitTrackerComponent(this);
     private final AnimationComponent animationComponent = new AnimationComponent(this);

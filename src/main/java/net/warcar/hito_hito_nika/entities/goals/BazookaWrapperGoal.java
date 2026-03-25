@@ -9,7 +9,7 @@ import xyz.pixelatedw.mineminenomi.api.helpers.GoalHelper;
 public class BazookaWrapperGoal<E extends Mob> extends AbilityWrapperGoal<E, TrueGomuBazooka> {
     private LivingEntity target;
     public BazookaWrapperGoal(E entity) {
-        super(entity, TrueGomuBazooka.INSTANCE);
+        super(entity, TrueGomuBazooka.INSTANCE.get());
     }
 
     @Override

@@ -4,8 +4,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuEffects;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
@@ -20,10 +22,10 @@ import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
 public class GomuGomuNoCymbalAbility extends Ability {
     private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_cymbal", ImmutablePair.of("User grabs enemy, stretches their hands back and then forcefully slams them into opponent flattening them into thin disc", null),
             ImmutablePair.of("Requires Gear 5 and Giant form", null));
-    public static final AbilityCore<GomuGomuNoCymbalAbility> INSTANCE = new AbilityCore.Builder<>("gomu_gomu_no_cymbal", "Gomu Gomu no Cymbal", AbilityCategory.DEVIL_FRUITS, GomuGomuNoCymbalAbility::new)
+    public static final RegistryObject<AbilityCore<GomuGomuNoCymbalAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_cymbal", "Gomu Gomu no Cymbal", AbilityCategory.DEVIL_FRUITS, GomuGomuNoCymbalAbility::new)
             .setSourceType(SourceType.FIST).setSourceElement(SourceElement.RUBBER).addDescriptionLine(DESCRIPTION)
             .addAdvancedDescriptionLine(ChargeComponent.getTooltip(30), CooldownComponent.getTooltip(300), DealDamageComponent.getTooltip(15))
-            .setSourceHakiNature(SourceHakiNature.HARDENING).setUnlockCheck(TrueGearFifthAbility::canUnlock).build();
+            .setSourceHakiNature(SourceHakiNature.HARDENING).setUnlockCheck(TrueGearFifthAbility::canUnlock));
 
     private final GrabEntityComponent grabComponent = new GrabEntityComponent(this, true, false, 0);
     private final ChargeComponent chargeComponent = new ChargeComponent(this).addTickEvent(this::duringCharging).addEndEvent(this::endCharging);

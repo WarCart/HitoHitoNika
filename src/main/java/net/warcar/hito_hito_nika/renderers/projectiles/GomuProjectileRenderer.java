@@ -83,9 +83,9 @@ public class GomuProjectileRenderer<E extends NuProjectileEntity, M extends Enti
 
     public static class Factory<T extends NuProjectileEntity> extends NuProjectileRenderer.Factory<T> {
         protected EntityModel<T> internalStretchingModel;
-        private float stretchScaleX;
-        private float stretchScaleY;
-        private float stretchScaleZ;
+        private double stretchScaleX;
+        private double stretchScaleY;
+        private double stretchScaleZ;
 
         public Factory(EntityModel<T> stretchModel) {
             this(null, stretchModel);
@@ -94,8 +94,15 @@ public class GomuProjectileRenderer<E extends NuProjectileEntity, M extends Enti
             this.setModel(() -> tipModel);
             this.internalStretchingModel = stretchModel;
         }
+
+        public Factory setStretchScale(double xy, double z) {
+            this.stretchScaleX = xy;
+            this.stretchScaleY = xy;
+            this.stretchScaleZ = z;
+            return this;
+        }
         
-        public Factory setStretchSize(float x, float y, float z) {
+        public Factory setStretchScale(double x, double y, double z) {
             this.stretchScaleX = x;
             this.stretchScaleY = y;
             this.stretchScaleZ = z;
