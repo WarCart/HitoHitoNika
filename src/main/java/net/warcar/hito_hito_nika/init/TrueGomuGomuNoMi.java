@@ -7,6 +7,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
+import xyz.pixelatedw.mineminenomi.ModMain;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.WyRegistry;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -24,7 +25,8 @@ public class TrueGomuGomuNoMi {
 	public static final RegistryObject<AkumaNoMiItem> HITO_HITO_NO_MI_NIKA;
 
 	private static <T extends AkumaNoMiItem> RegistryObject<T> registerFruit(Supplier<T> fruit, String name) {
-		return ModRegistry.registerFruitItem(name, fruit);
+		String resourceName = WyHelper.getResourceName(name);
+		return ITEMS.register(resourceName, fruit);
 	}
 
 	public static <T extends IAbility> RegistryObject<AbilityCore<T>> registerSixthGear(AbilityCore.Builder<T> builder) {
@@ -45,7 +47,7 @@ public class TrueGomuGomuNoMi {
 
 	static {
 		ABILITIES = DeferredRegister.create(WyRegistry.Keys.ABILITIES, HitoHitoNoMiNikaMod.MOD_ID);
-		ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, HitoHitoNoMiNikaMod.MOD_ID);
+		ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ModMain.PROJECT_ID);
 		// Just... pretend they are abilities ok?
 		RegistryObject[] cores = new RegistryObject[]{TrueGomuPistol.INSTANCE, GomuBulletAbility.INSTANCE, TrueGomuGatling.INSTANCE,
 				TrueGomuBazooka.INSTANCE, GomuFusenAbility.INSTANCE, TrueGomuRocket.INSTANCE, TrueGearSecondAbility.INSTANCE,
@@ -58,6 +60,6 @@ public class TrueGomuGomuNoMi {
 			cores[cores.length-1] = GearSixthAbility.INSTANCE;
         }
 		RegistryObject[] finalCores = cores;
-		HITO_HITO_NO_MI_NIKA = registerFruit(() -> new AkumaNoMiItem(2, FruitType.PARAMECIA, finalCores), "Hito Hito no Mi, Model: Nika");
+		HITO_HITO_NO_MI_NIKA = registerFruit(() -> new AkumaNoMiItem(2, FruitType.PARAMECIA, finalCores), "Gomu Gomu no Mi");
 	}
 }
