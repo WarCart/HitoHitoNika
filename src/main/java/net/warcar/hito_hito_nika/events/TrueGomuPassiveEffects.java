@@ -1,6 +1,7 @@
 package net.warcar.hito_hito_nika.events;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -174,9 +175,9 @@ public class TrueGomuPassiveEffects {
 			stack.pushPose();
 			MobEffectInstance squishedEffect = entity.getEffect(GomuEffects.SQUISHED.get());
 			float angle = (float) (squishedEffect.getAmplifier() * Math.PI / 256);
-			//stack.mulPose(Vector3f.YP.rotation(angle));
+			stack.mulPose(Axis.YP.rotation(angle));
 			stack.scale(1, 1, 0.01f);
-			//stack.mulPose(Vec3.YN.rotation(angle));
+			stack.mulPose(Axis.YN.rotation(angle));
 		}
 	}
 

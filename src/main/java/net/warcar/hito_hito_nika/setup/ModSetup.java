@@ -17,9 +17,6 @@ import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import net.warcar.hito_hito_nika.renderers.layers.TrueGomuSmokeLayer;
-import xyz.pixelatedw.mineminenomi.init.ModArmors;
-import xyz.pixelatedw.mineminenomi.init.ModLayers;
-import xyz.pixelatedw.mineminenomi.init.ModMorphs;
 
 import java.util.Map;
 
