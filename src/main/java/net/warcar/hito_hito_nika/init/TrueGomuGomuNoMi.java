@@ -30,7 +30,7 @@ public class TrueGomuGomuNoMi {
 	}
 
 	public static <T extends IAbility> RegistryObject<AbilityCore<T>> registerSixthGear(AbilityCore.Builder<T> builder) {
-		return WyHelper.isAprilFirst() ? registerAbility(builder) : registerSixthGear(builder);
+		return WyHelper.isAprilFirst() ? registerAbility(builder) : null;
 	}
 
 	public static <T extends IAbility> RegistryObject<AbilityCore<T>> registerAbility(AbilityCore.Builder<T> builder) {

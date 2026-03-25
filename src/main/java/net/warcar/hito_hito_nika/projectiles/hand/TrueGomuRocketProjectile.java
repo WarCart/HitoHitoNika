@@ -2,10 +2,12 @@ package net.warcar.hito_hito_nika.projectiles.hand;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 
@@ -13,9 +15,12 @@ import net.warcar.hito_hito_nika.abilities.TrueGomuRocket;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 
 public class TrueGomuRocketProjectile extends NuProjectileEntity {
+	public TrueGomuRocketProjectile(EntityType<TrueGomuRocketProjectile> entityType, Level world) {
+		super(entityType, world);
+	}
 
 	public TrueGomuRocketProjectile(Level world, LivingEntity player, Ability ability) {
-		super(null, world, player, ability);
+		super(NikaProjectiles.GOMU_GOMU_NO_ROCKET.get(), world, player, ability);
 		this.setPhysical();
 		this.setDamage(0f);
 		this.addEntityHitEvent(100, this::onEntityImpact);

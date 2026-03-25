@@ -23,6 +23,8 @@ import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class NikaProjectiles {
+	public static final RegistryObject<EntityType<TrueGomuRocketProjectile>> GOMU_GOMU_NO_ROCKET = createType("Gomu Gomu no True Rocket", TrueGomuRocketProjectile::new, .5f, .5F);
+
 	public static final RegistryObject<EntityType<KingKongGunProjectile>> GOMU_GOMU_NO_KING_KONG_GUN = createType("Gomu Gomu no True King Kong Gun", KingKongGunProjectile::new, 8F, 8F);
 
 	public static final RegistryObject<EntityType<King3KongGunProjectile>> GOMU_GOMU_NO_KING_3_KONG_GUN = createType("Gomu Gomu no King King King Kong Gun", King3KongGunProjectile::new, 12, 12);
@@ -74,6 +76,7 @@ public class NikaProjectiles {
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event, EntityRendererProvider.Context ctx) {
 		Supplier<TrueEntityLegModel<NuProjectileEntity>> leg = () -> new TrueEntityLegModel<>(ctx.bakeLayer(TrueEntityLegModel.LAYER_LOCATION));
 		Supplier<TrueEntityLegModel<NuProjectileEntity>> arm = () -> new TrueEntityLegModel<>(ctx.bakeLayer(TrueEntityLegModel.LAYER_LOCATION));
+		event.registerEntityRenderer(GOMU_GOMU_NO_ROCKET.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(3.1D, 3.1D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(25D, 25D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm, arm)).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(25D, 25D, 10D));
