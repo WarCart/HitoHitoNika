@@ -73,7 +73,7 @@ public class MoguraPistolAbility extends Ability {
     }
 
     private GomuGomuNoMoguraPistolProjectile createProjectile(LivingEntity entity) {
-        GomuGomuNoMoguraPistolProjectile projectile = new GomuGomuNoMoguraPistolProjectile(entity.level(), entity);
+        GomuGomuNoMoguraPistolProjectile projectile = new GomuGomuNoMoguraPistolProjectile(entity.level(), entity, this);
         projectile.setTargetPos(this.targetPos);
         return projectile;
     }

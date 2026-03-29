@@ -3,11 +3,14 @@ package net.warcar.hito_hito_nika.renderers.projectiles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -15,18 +18,20 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.warcar.hito_hito_nika.projectiles.PythonProjectile;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HakiHelper;
-import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileRenderer;
+import xyz.pixelatedw.mineminenomi.api.helpers.RendererHelper;
 import xyz.pixelatedw.mineminenomi.init.ModRenderTypes;
 import xyz.pixelatedw.mineminenomi.init.ModResources;
 
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PythonProjectileRenderer<E extends PythonProjectile, M extends EntityModel<E>> extends NuProjectileRenderer<E, M> {
-    protected M internalStretchingModel;
-    public PythonProjectileRenderer(EntityRendererProvider.Context renderManager, M stretchModel) {
+public class PythonProjectileRenderer<E extends PythonProjectile> extends NuProjectileRenderer<E, EntityModel<E>> {
+    private final boolean leg;
+    private LivingEntityRenderer<? super LivingEntity, ?> ownerRenderer;
+    public PythonProjectileRenderer(EntityRendererProvider.Context renderManager, boolean leg) {
         super(renderManager, null);
-        this.internalStretchingModel = stretchModel;
+        this.leg = leg;
     }
 
     @Override
@@ -40,7 +45,16 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
             }
             Vec3 entityPos = new Vec3(Mth.lerp(partialTicks, entity.xo, entity.getX()), Mth.lerp(partialTicks, entity.yo, entity.getY()), Mth.lerp(partialTicks, entity.zo, entity.getZ()));
             Vec3 stretchVec = entityPos.subtract(originPos);
-            if (this.internalStretchingModel != null) {
+            if (this.ownerRenderer == null) {
+                this.ownerRenderer = (LivingEntityRenderer<? super LivingEntity, ?>) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity.getOwner());
+            }
+            List<ModelPart> stretchParts = new ArrayList<>();
+            if (leg) {
+                stretchParts.addAll(RendererHelper.getLegPartsFrom(ownerRenderer.getModel()));
+            } else {
+                stretchParts.addAll(RendererHelper.getArmPartsFrom(ownerRenderer.getModel()));
+            }
+            if (!stretchParts.isEmpty()) {
                 matrixStack.pushPose();
                 matrixStack.mulPose(Axis.YP.rotationDegrees(entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks - 180.0F));
                 matrixStack.mulPose(Axis.XP.rotationDegrees(entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTicks));
@@ -64,14 +78,14 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
                     type = RenderType.entityTranslucent(finalTexture);
                 }
 
-                VertexConsumer ivertexbuilder = buffer.getBuffer(type);
-                this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, (float) this.getColor().getRed() / 255.0F, (float) this.getColor().getGreen() / 255.0F, (float) this.getColor().getBlue() / 255.0F, (float) this.getColor().getAlpha() / 255.0F);
+                VertexConsumer solid = buffer.getBuffer(type);
+                renderToBuffer(stretchParts, matrixStack, solid, packedLight, 1, 1, 1, 1);
                 if (owner != null && (entity.isAffectedByHardening() || entity.isAffectedByImbuing())) {
                     if (HakiHelper.hasAdvancedBusoActive(owner)) {
                         matrixStack.pushPose();
                         matrixStack.scale(1.2f, 1.2f, 1.02f);
-                        ivertexbuilder = buffer.getBuffer(ModRenderTypes.TRANSPARENT_COLOR);
-                        this.internalStretchingModel.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 0.886f, 0.5f, 0.1f, 0.4f);
+                        VertexConsumer glow = buffer.getBuffer(ModRenderTypes.TRANSPARENT_COLOR);
+                        renderToBuffer(stretchParts, matrixStack, glow, packedLight, 0.886f, 0.5f, 0.1f, 0.4f);
                         matrixStack.popPose();
                     }
                 }
@@ -80,13 +94,23 @@ public class PythonProjectileRenderer<E extends PythonProjectile, M extends Enti
         }
     }
 
+    private void renderToBuffer(List<ModelPart> limbs, PoseStack matrixStack, VertexConsumer skinVertex, int packedLight, float red, float green, float blue, float alpha) {
+        for (ModelPart limb : limbs) {
+            limb.resetPose();
+            matrixStack.pushPose();
+            limb.render(matrixStack, skinVertex, packedLight, OverlayTexture.NO_OVERLAY, red, green, blue, alpha);
+            matrixStack.popPose();
+        }
+    }
+
     public static class Factory<T extends PythonProjectile> extends NuProjectileRenderer.Factory<T> {
-        protected Supplier<? extends EntityModel<T>> internalStretchingModel;
-        public Factory(Supplier<? extends EntityModel<T>> stretchModel) {
-            this.internalStretchingModel = stretchModel;
+        private final boolean leg;
+
+        public Factory(boolean leg) {
+            this.leg = leg;
         }
         public EntityRenderer<T> create(EntityRendererProvider.Context manager) {
-            PythonProjectileRenderer<T, ? extends EntityModel<T>> renderer = new PythonProjectileRenderer<>(manager, this.internalStretchingModel.get());
+            PythonProjectileRenderer<T> renderer = new PythonProjectileRenderer<>(manager, leg);
             renderer.setScale(this.scaleX, this.scaleY, this.scaleZ);
             renderer.setColor(this.colour);
             return renderer;

@@ -33,6 +33,6 @@ public class KingBajrangGunProjectile extends NuProjectileEntity {
 	}
 
 	private void onEntityImpactEvent(EntityHitResult hitEnt) {
-		hitEnt.getEntity().remove(RemovalReason.DISCARDED);
+		hitEnt.getEntity().remove(RemovalReason.KILLED);
 	}
 }

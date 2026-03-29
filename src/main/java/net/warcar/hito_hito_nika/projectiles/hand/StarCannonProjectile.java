@@ -3,11 +3,9 @@ package net.warcar.hito_hito_nika.projectiles.hand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
 public class StarCannonProjectile extends TrueKongGunProjectile {
@@ -15,7 +13,7 @@ public class StarCannonProjectile extends TrueKongGunProjectile {
         super(world, player, ability);
         this.setMaxLife(300);
         this.setDamage(125f);
-        this.addBlockHitEvent(100, this::onBlockImpactEvent);
+        this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, 3, 15));
         this.addTickEvent(100, TrueGomuHelper.getG2Tick(this));
         this.addEntityHitEvent(100, this::onEntityImpact);
     }
@@ -24,16 +22,5 @@ public class StarCannonProjectile extends TrueKongGunProjectile {
         if (hitResult.getEntity() instanceof LivingEntity entity) {
             entity.addEffect(new MobEffectInstance(ModEffects.DIZZY.get(), 60, 1));
         }
-    }
-
-    private void onBlockImpactEvent(BlockHitResult hit) {
-        AbilityExplosion explosion = new AbilityExplosion(this.getOwner(), this.getParent().orElse(null), this.getX(), this.getY(), this.getZ(), 3F);
-        explosion.setStaticDamage(15F);
-        explosion.setDamageOwner(false);
-        explosion.setExplosionSound(false);
-        explosion.setDestroyBlocks(true);
-        explosion.setFireAfterExplosion(false);
-        explosion.setDamageEntities(false);
-        explosion.explode();
     }
 }

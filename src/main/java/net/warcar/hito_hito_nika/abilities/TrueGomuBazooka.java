@@ -24,6 +24,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
+import xyz.pixelatedw.mineminenomi.api.entities.NuLightningEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
@@ -186,6 +187,8 @@ public class TrueGomuBazooka extends Ability {
 				speed = 2F;
 			}
 		}
+		if (projectile instanceof NuLightningEntity beam)
+			beam.setTravelSpeed(speed);
 		return projectile;
 	}
 

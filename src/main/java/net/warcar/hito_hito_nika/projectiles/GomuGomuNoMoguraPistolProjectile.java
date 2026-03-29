@@ -13,6 +13,9 @@ import net.minecraft.world.phys.Vec3;
 import net.warcar.hito_hito_nika.abilities.MoguraPistolAbility;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import org.joml.Vector3d;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
@@ -23,8 +26,8 @@ public class GomuGomuNoMoguraPistolProjectile extends NuProjectileEntity {
         super(type, Level);
     }
 
-    public GomuGomuNoMoguraPistolProjectile(Level Level, LivingEntity player) {
-        super(NikaProjectiles.GOMU_GOMU_NO_MOLE_PISTOL.get(), Level, player);
+    public GomuGomuNoMoguraPistolProjectile(Level level, LivingEntity player, MoguraPistolAbility ability) {
+        super(NikaProjectiles.GOMU_GOMU_NO_MOLE_PISTOL.get(), level, player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.setDamage(50.0F);
         this.setMaxLife(8);
         this.setArmorPiercing(0.3f);

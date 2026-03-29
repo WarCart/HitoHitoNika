@@ -6,6 +6,9 @@ import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 
 public class BajrangStampGunProjectile extends NuProjectileEntity {
@@ -17,7 +20,7 @@ public class BajrangStampGunProjectile extends NuProjectileEntity {
     }
 
     public BajrangStampGunProjectile(Level world, LivingEntity player, Ability ability, float size) {
-        super(NikaProjectiles.GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), world, player, ability);
+        super(NikaProjectiles.GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), world, player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.setMaxLife(250);
         this.setDamage(250F);
         this.setPhysical();

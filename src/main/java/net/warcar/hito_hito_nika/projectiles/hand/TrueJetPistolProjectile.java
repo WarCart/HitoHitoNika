@@ -2,10 +2,8 @@ package net.warcar.hito_hito_nika.projectiles.hand;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
 
 public class TrueJetPistolProjectile extends TruePistolProjectile {
     public TrueJetPistolProjectile(Level world, LivingEntity player, Ability ability) {
@@ -13,18 +11,7 @@ public class TrueJetPistolProjectile extends TruePistolProjectile {
         this.setMaxLife(9);
         this.setDamage(30f);
         this.setPhysical();
-        this.addBlockHitEvent(100, this::onBlockImpactEvent);
+        this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, .3f, 1));
         this.addTickEvent(100, TrueGomuHelper.getG2Tick(this, 2));
-    }
-
-    private void onBlockImpactEvent(BlockHitResult hit) {
-        AbilityExplosion explosion = new AbilityExplosion(this.getOwner(), this.getParent().orElse(null), this.getX(), this.getY(), this.getZ(), .3F);
-        explosion.setStaticDamage(1F);
-        explosion.setExplosionSound(false);
-        explosion.setDamageOwner(false);
-        explosion.setDestroyBlocks(true);
-        explosion.setFireAfterExplosion(false);
-        explosion.setDamageEntities(false);
-        explosion.explode();
     }
 }

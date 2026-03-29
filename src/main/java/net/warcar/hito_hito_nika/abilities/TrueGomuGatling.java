@@ -20,6 +20,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.*;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
+import xyz.pixelatedw.mineminenomi.api.entities.NuLightningEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
@@ -215,6 +216,8 @@ public class TrueGomuGatling extends Ability {
 		}
 		projectile.setDamage(projectile.getDamage() * (1.0F - projDamageReduction));
 		projectile.setMaxLife((int) ((double) projectile.getMaxLife() * 0.75D));
+		if (projectile instanceof NuLightningEntity beam)
+			beam.setTravelSpeed(speed);
 		return projectile;
 	}
 

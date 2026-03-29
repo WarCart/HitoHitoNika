@@ -36,7 +36,7 @@ public class GomuTrampleAbility extends PassiveAbility {
     public static final RegistryObject<AbilityCore<GomuTrampleAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_trample", "Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new)
             .addDescriptionLine(DESCRIPTION).addDescriptionLine(AbilityDescriptionLine.NEW_LINE, AbilityTooltipsHelper.getRequiredMorphTooltip(TrueMorphs.GIANT))
             .addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, RangeComponent.getTooltip(5.0F, RangeType.AOE), DealDamageComponent.getTooltip(8.0F))
-            .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST));
+            .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).setUnlockCheck(TrueGearFifthAbility::canUnlock));
     private final RangeComponent rangeComponent = new RangeComponent(this);
     private final DealDamageComponent dealDamageComponent = new DealDamageComponent(this);
     private final BreakingBlocksParticleEffect.Details details;

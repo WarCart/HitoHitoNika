@@ -11,6 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
 import net.warcar.hito_hito_nika.config.CommonConfig;
+import net.warcar.hito_hito_nika.projectiles.TrueGomuProjectile;
 import org.apache.commons.lang3.tuple.Pair;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiEmissionAbility;
 import xyz.pixelatedw.mineminenomi.abilities.haki.BusoshokuHakiInternalDestructionAbility;
@@ -19,6 +20,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.api.entities.NuLightningEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityUseConditions;
@@ -72,8 +74,8 @@ public class TrueGomuHelper {
 		AbilityCore<?> core = gear.getCore();
 		return !(
 				(core.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
-				|| (core.equals(TrueGearThirdAbility.INSTANCE) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
-				|| (core.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
+						|| (core.equals(TrueGearThirdAbility.INSTANCE) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
+						|| (core.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
 	}
 
 	public static boolean hasFusenActive(IAbilityData props) {
@@ -135,7 +137,7 @@ public class TrueGomuHelper {
 		return hasAbilityActive(props, BusoshokuHakiEmissionAbility.INSTANCE) || hasAbilityActive(props, BusoshokuHakiInternalDestructionAbility.INSTANCE);
 	}
 
-	public static<A extends Ability> boolean hasAbilityActive(IAbilityData props, RegistryObject<AbilityCore<A>> ability) {
+	public static <A extends Ability> boolean hasAbilityActive(IAbilityData props, RegistryObject<AbilityCore<A>> ability) {
 		if (ability == null) {
 			return false;
 		}
@@ -185,16 +187,16 @@ public class TrueGomuHelper {
 	}
 
 
-    @SafeVarargs
-    public static Component[] registerDescriptionText(String abilityName, Pair<String, Object[]>... pairs) {
-        return registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, abilityName, pairs);
-    }
+	@SafeVarargs
+	public static Component[] registerDescriptionText(String abilityName, Pair<String, Object[]>... pairs) {
+		return registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, abilityName, pairs);
+	}
 
-    @SafeVarargs
+	@SafeVarargs
 	public static Component[] registerDescriptionText(String modid, String abilityName, Pair<String, Object[]>... pairs) {
 		Component[] components = new Component[pairs.length];
 
-		for(int i = 0; i < pairs.length; ++i) {
+		for (int i = 0; i < pairs.length; ++i) {
 			String key = String.format("ability.%s.%s.description.%s", modid, abilityName, i);
 			key = registerName(key, pairs[i].getKey());
 
@@ -215,12 +217,11 @@ public class TrueGomuHelper {
 			if (AbilityUseConditions.canUseMomentumAbilities(entity, ability).isFail() || !entity.isSprinting()) {
 				return;
 			}
-            Vec3 vec = entity.getLookAngle();
+			Vec3 vec = entity.getLookAngle();
 
 			if (!entity.isFallFlying()) {
 				AbilityHelper.setDeltaMovement(entity, (vec.x * speed), entity.getDeltaMovement().y, (vec.z * speed));
-			}
-			else {
+			} else {
 				AbilityHelper.setDeltaMovement(entity, (vec.x * speed * 0.5F), entity.getDeltaMovement().y, (vec.z * speed * 0.5F));
 			}
 		};
@@ -231,42 +232,67 @@ public class TrueGomuHelper {
 		EntityDataSerializers.registerSerializer(VECTOR_SERIALIZER);
 	}
 
-    public static NuProjectileEntity.IOnHitEntityEvent getBazookaOnEntityImpactEvent(NuProjectileEntity projectile, double power) {
-        return hit -> {
-            Vec3 speed = projectile.getDeltaMovement().normalize().scale(power);
-            AbilityHelper.setDeltaMovement(hit.getEntity(), speed.x, 0.5, speed.z);
-        };
-    }
+	public static NuProjectileEntity.IOnHitEntityEvent getBazookaOnEntityImpactEvent(NuProjectileEntity projectile, double power) {
+		if (projectile instanceof TrueGomuProjectile entity) {
+			return hit -> {
+				Vec3 speed = entity.getMovement().normalize().scale(power);
+				AbilityHelper.setDeltaMovement(hit.getEntity(), speed.x, 0.5, speed.z);
+			};
+		}
+		return hit -> {
+			Vec3 speed = projectile.getDeltaMovement().normalize().scale(power);
+			AbilityHelper.setDeltaMovement(hit.getEntity(), speed.x, 0.5, speed.z);
+		};
+	}
 
 	public static NuProjectileEntity.IOnTickEvent getG2Tick(NuProjectileEntity entity) {
-		return () -> WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), entity, entity.getX(), entity.getY(), entity.getZ());
+		if (entity instanceof NuLightningEntity lightning)
+			return () -> {
+				WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), lightning, lightning.getPreciseCurrentX(),
+						lightning.getPreciseCurrentY(), lightning.getPreciseCurrentZ());
+			};
+		return () -> {
+			WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), entity, entity.getX(), entity.getY(), entity.getZ());
+		};
 	}
 
 	public static NuProjectileEntity.IOnTickEvent getG2Tick(NuProjectileEntity entity, int mod) {
+		if (entity instanceof NuLightningEntity lightning)
+			return () -> {
+				if ((entity.getLife() + entity.getId()) % mod == 0)
+					WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), lightning, lightning.getPreciseCurrentX(),
+							lightning.getPreciseCurrentY(), lightning.getPreciseCurrentZ());
+			};
 		return () -> {
 			if ((entity.getLife() + entity.getId()) % mod == 0)
-            	WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), entity, entity.getX(), entity.getY(), entity.getZ());
-        };
+				WyHelper.spawnParticleEffect(ModParticleEffects.GEAR_SECOND.get(), entity, entity.getX(), entity.getY(), entity.getZ());
+		};
 	}
 
 	public static NuProjectileEntity.IOnTickEvent getFlameTick(NuProjectileEntity entity, int amount) {
+		if (entity instanceof NuLightningEntity lightning)
+			return () -> {
+				for (int i = 0; i < amount; i++)
+					WyHelper.spawnParticleEffect(ModParticleEffects.DAI_ENKAI_1.get(), lightning, lightning.getPreciseCurrentX(),
+							lightning.getPreciseCurrentY(), lightning.getPreciseCurrentZ());
+			};
 		return () -> {
 			for (int i = 0; i < amount; i++)
 				WyHelper.spawnParticleEffect(ModParticleEffects.DAI_ENKAI_1.get(), entity, entity.getX(), entity.getY(), entity.getZ());
 		};
 	}
 
-    public static NuProjectileEntity.IOnHitBlockEvent onBlockImpactEvent(NuProjectileEntity entity, float power, float staticDamage) {
-        return onBlockImpactEvent(entity, power, staticDamage, false);
-    }
+	public static NuProjectileEntity.IOnHitBlockEvent onBlockImpactEvent(NuProjectileEntity entity, float power, float staticDamage) {
+		return onBlockImpactEvent(entity, power, staticDamage, false);
+	}
 
 	public static NuProjectileEntity.IOnHitBlockEvent onFlamingBlockImpactEvent(NuProjectileEntity entity, float power, float staticDamage) {
 		return onBlockImpactEvent(entity, power, staticDamage, true);
 	}
 
-    public static NuProjectileEntity.IOnHitBlockEvent onBlockImpactEvent(NuProjectileEntity entity, float power, float staticDamage, boolean flame) {
+	public static NuProjectileEntity.IOnHitBlockEvent onBlockImpactEvent(NuProjectileEntity entity, float power, float staticDamage, boolean flame) {
 		return hit -> {
-			AbilityExplosion explosion = new AbilityExplosion(entity.getOwner(), entity.getParent().orElse(null), entity.getX(), entity.getY(), entity.getZ(), power);
+			AbilityExplosion explosion = new AbilityExplosion(entity.getOwner(), entity.getParent().orElse(null), hit.getLocation().x(), hit.getLocation().y(), hit.getLocation().z(), power);
 			explosion.setStaticDamage(staticDamage);
 			explosion.setExplosionSound(false);
 			explosion.setDamageOwner(false);

@@ -13,10 +13,6 @@ import net.warcar.hito_hito_nika.renderers.morphs.GomuMorphRenderer;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import xyz.pixelatedw.mineminenomi.init.ModMorphs;
 import xyz.pixelatedw.mineminenomi.init.ModRegistry;
-import xyz.pixelatedw.mineminenomi.models.morphs.DaibutsuModel;
-import xyz.pixelatedw.mineminenomi.models.morphs.partials.HanaCalendulaModel;
-import xyz.pixelatedw.mineminenomi.models.morphs.partials.HanaWingsModel;
-import xyz.pixelatedw.mineminenomi.models.morphs.partials.SparClawModel;
 import xyz.pixelatedw.mineminenomi.renderers.morphs.PlayerMorphRenderer;
 
 public class TrueMorphs {
@@ -43,7 +39,6 @@ public class TrueMorphs {
         event.registerLayerDefinition(GomuGiantFusenModel.LAYER_LOCATION, GomuGiantFusenModel::createBodyLayer);
         event.registerLayerDefinition(KingBajrangGunModel.LAYER_LOCATION, KingBajrangGunModel::createBodyLayer);
         event.registerLayerDefinition(SnakemanMorphModel.LAYER_LOCATION,  SnakemanMorphModel::createBodyLayer);
-        event.registerLayerDefinition(TrueEntityLegModel.LAYER_LOCATION, TrueEntityLegModel::createBodyLayer);
     }
 
     public static void addLayers(EntityRenderersEvent.AddLayers event, EntityRendererProvider.Context ctx) {

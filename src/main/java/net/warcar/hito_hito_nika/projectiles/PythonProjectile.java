@@ -16,8 +16,6 @@ import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
-import xyz.pixelatedw.mineminenomi.data.entity.projectileextra.IProjectileExtras;
-import xyz.pixelatedw.mineminenomi.data.entity.projectileextra.ProjectileExtrasCapability;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModEntityPredicates;
 

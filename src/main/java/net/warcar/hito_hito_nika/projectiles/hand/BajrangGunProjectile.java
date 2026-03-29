@@ -3,10 +3,9 @@ package net.warcar.hito_hito_nika.projectiles.hand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityExplosion;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
@@ -27,22 +26,11 @@ public class BajrangGunProjectile extends NuProjectileEntity {
 		this.setPhysical();
 		this.setEntityCollisionSize(15);
 		this.setPassThroughEntities();
-		this.addBlockHitEvent(100, this::onBlockImpactEvent);
+		this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, size, 200));
 	}
 
 	public BajrangGunProjectile(Level world, LivingEntity player, Ability ability, float size) {
 		this(world, player, ability);
 		this.size = size;
-	}
-
-	private void onBlockImpactEvent(BlockHitResult hit) {
-		AbilityExplosion explosion = new AbilityExplosion(this.getOwner(), this.getParent().orElse(null), this.getX(), this.getY(), this.getZ(), this.size);
-		explosion.setStaticDamage(280.0F);
-		explosion.setExplosionSound(false);
-		explosion.setDamageOwner(false);
-		explosion.setDestroyBlocks(true);
-		explosion.setFireAfterExplosion(false);
-		explosion.setDamageEntities(false);
-		explosion.explode();
 	}
 }

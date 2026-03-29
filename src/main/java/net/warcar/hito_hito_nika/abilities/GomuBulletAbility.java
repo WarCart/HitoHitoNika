@@ -30,6 +30,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.components.PoolComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
+import xyz.pixelatedw.mineminenomi.api.entities.NuLightningEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.RendererHelper;
@@ -244,6 +245,8 @@ public class GomuBulletAbility extends Ability {
 				projectile.setDamage(projectile.getDamage() * 1.5f);
 			}
 		}
+		if (projectile instanceof NuLightningEntity beam)
+			beam.setTravelSpeed(speed);
 		return projectile;
 	}
 

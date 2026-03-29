@@ -6,6 +6,9 @@ import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
+import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 
 public class GigantYariProjectile extends NuProjectileEntity {
@@ -14,7 +17,7 @@ public class GigantYariProjectile extends NuProjectileEntity {
     }
 
     public GigantYariProjectile(Level world, LivingEntity player, Ability ability) {
-        super(NikaProjectiles.GOMU_GOMU_NO_GIGANT_YARI.get(), world, player, ability);
+        super(NikaProjectiles.GOMU_GOMU_NO_GIGANT_YARI.get(), world, player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.setDamage(75f);
         this.setMaxLife(10);
         this.setPassThroughEntities();
