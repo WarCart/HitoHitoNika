@@ -71,9 +71,9 @@ public class TrueGearFifthAbility extends Ability {
 	}
 
 	private void duringContinuity(LivingEntity entity, IAbility ability) {
-		if (!entity.isFallFlying() && !this.playJumpSound) {
+		if (entity.onGround() && !this.playJumpSound) {
 			this.playJumpSound = true;
-		} else if (entity.isFallFlying() && this.playJumpSound) {
+		} else if (!entity.onGround() && this.playJumpSound) {
 			SoundEvent sfx;
 			if (entity.getRandom().nextBoolean()) {
 				sfx = ModSounds.BOUNCE_2.get();

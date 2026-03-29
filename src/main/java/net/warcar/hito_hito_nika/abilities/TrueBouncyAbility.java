@@ -34,11 +34,11 @@ public class TrueBouncyAbility extends NoFallDamageAbility {
     protected void duringPassiveEvent(LivingEntity entity) {
         if (entity.fallDistance > 12 || !this.touchedGround) {
             this.touchedGround = false;
-            if (entity.isFallFlying()) {
+            if (!entity.onGround()) {
                 this.bounceValue = entity.getDeltaMovement().y;
             }
 
-            if (!entity.isFallFlying() && this.bounceValue < 0) {
+            if (entity.onGround() && this.bounceValue < 0) {
                 this.touchedGround = true;
                 Vec3 reverse = new Vec3(entity.getDeltaMovement().x, -bounceValue / 3, entity.getDeltaMovement().z);
                 AbilityHelper.setDeltaMovement(entity, reverse);

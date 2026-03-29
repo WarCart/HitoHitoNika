@@ -167,7 +167,7 @@ public class TrueGearFourthAbility extends Ability {
 		if (!TrueGomuHelper.hasGearFifthActive(AbilityCapability.get(player).get())) {
 			HakiCapability.get(player).get().alterHakiOveruse(5);
 		}
-		if (!player.isFallFlying() && !TrueGomuHelper.hasGearFifthActive(AbilityCapability.get(player).get()) && this.isBoundman()) {
+		if (player.onGround() && !TrueGomuHelper.hasGearFifthActive(AbilityCapability.get(player).get()) && this.isBoundman()) {
 			player.push(0, 1, 0);
 			player.level().playSound(null, player.blockPosition(), ModSounds.BOUNCE_2.get(), SoundSource.PLAYERS, 1, 0.5f);
 		}

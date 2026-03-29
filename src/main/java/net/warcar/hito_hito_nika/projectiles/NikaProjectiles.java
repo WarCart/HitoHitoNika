@@ -29,12 +29,6 @@ public class NikaProjectiles {
 
 	public static final RegistryObject<EntityType<BajrangGunProjectile>> GOMU_GOMU_NO_BAJRANG_GUN = createType("Gomu Gomu no True Bajrang Gun", BajrangGunProjectile::new,  20F, 20F);
 
-	public static final RegistryObject<EntityType<KingKongStampProjectile>> GOMU_GOMU_NO_KING_KONG_STAMP = createType("Gomu Gomu no King Kong Stamp", KingKongStampProjectile::new,  8F, 8F);
-
-	public static final RegistryObject<EntityType<King3KongStampProjectile>> GOMU_GOMU_NO_KING_3_KONG_STAMP = createType("Gomu Gomu no King King King Kong Stamp", King3KongStampProjectile::new,  12F, 12F);
-
-	public static final RegistryObject<EntityType<BajrangGunProjectile>> GOMU_GOMU_NO_BAJRANG_STAMP_GUN = createType("Gomu Gomu no Bajrang Stamp Gun", BajrangGunProjectile::new,  20F, 20F);
-
 	public static final RegistryObject<EntityType<TruePistolProjectile>> GOMU_GOMU_NO_PISTOL = createType("Gomu Gomu no True Pistol", TruePistolProjectile::new,  .5F, .5F);
 
 	public static final RegistryObject<EntityType<TrueBazookaProjectile>> GOMU_GOMU_NO_BAZOOKA = createType("Gomu Gomu no True Bazooka", TrueBazookaProjectile::new,  .5F, .5F);
@@ -50,6 +44,12 @@ public class NikaProjectiles {
 	public static final RegistryObject<EntityType<TrueLeoBazookaProjectile>> GOMU_GOMU_NO_LEO_BAZOOKA = createType("Gomu Gomu no True Leo Bazooka", TrueLeoBazookaProjectile::new,  5F, 5F);
 
 	public static final RegistryObject<EntityType<LeoRexBazookaProjectile>> GOMU_GOMU_NO_LEO_REX_BAZOOKA = createType("Gomu Gomu no Leo Rex Bazooka", LeoRexBazookaProjectile::new,  5F, 5F);
+
+	public static final RegistryObject<EntityType<BajrangGunProjectile>> GOMU_GOMU_NO_BAJRANG_STAMP_GUN = createType("Gomu Gomu no Bajrang Stamp Gun", BajrangGunProjectile::new,  20F, 20F);
+
+	public static final RegistryObject<EntityType<KingKongStampProjectile>> GOMU_GOMU_NO_KING_KONG_STAMP = createType("Gomu Gomu no King Kong Stamp", KingKongStampProjectile::new,  8F, 8F);
+
+	public static final RegistryObject<EntityType<King3KongStampProjectile>> GOMU_GOMU_NO_KING_3_KONG_STAMP = createType("Gomu Gomu no King King King Kong Stamp", King3KongStampProjectile::new,  12F, 12F);
 
 	public static final RegistryObject<EntityType<StampProjectile>> GOMU_GOMU_NO_STAMP = createType("Gomu Gomu no Stamp", StampProjectile::new,  .5F, .5F);
 
@@ -75,19 +75,12 @@ public class NikaProjectiles {
 		GomuProjectileRenderer.Model arm = new GomuProjectileRenderer.Model(false);
 		GomuProjectileRenderer.Model leg = new GomuProjectileRenderer.Model(true);
 		event.registerEntityRenderer(GOMU_GOMU_NO_ROCKET.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(3.1D, 3.1D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(25D, 25D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm, arm)).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(25D, 25D, 10D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(75D, 75D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(75D, 75D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), (new GomuProjectileRenderer.Factory<>(leg, leg)).setStretchScale(4.5D, 4.5D).setScale(150D, 150D, 150D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm, arm)).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), (new GomuProjectileRenderer.Factory<>(arm, arm)).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
-		//event.registerEntityRenderer(GOMU_GOMU_NO_PISTOL.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(3.1D, 3.1D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(3.1D, 3.1D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_GUN.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(4.5D, 4.5D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(4.5D, 4.5D));
-		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), (new GomuProjectileRenderer.Factory<>(arm)).setStretchScale(25D, 25D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg, leg)).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_GIGANT_YARI.get(), (new GomuProjectileRenderer.Factory<>(leg, leg)).setStretchScale(3.1D, 3.1D).setScale(20D, 20D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_STAMP.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(3.1D, 3.1D));
@@ -97,7 +90,17 @@ public class NikaProjectiles {
 		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), (new GomuProjectileRenderer.Factory<>(leg)).setStretchScale(25D, 25D, 10D));
 		event.registerEntityRenderer(GOMU_GOMU_NO_MOLE_PISTOL.get(), MolePistolRenderer::new);
 
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_GUN.get(), new GomuLightningProjectileRenderer.Factory(false));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_GUN.get(), new GomuLightningProjectileRenderer.Factory(false));
+		//BAJRANG
 		event.registerEntityRenderer(GOMU_GOMU_NO_PISTOL.get(), new GomuLightningProjectileRenderer.Factory(false));
+		event.registerEntityRenderer(GOMU_GOMU_NO_BAZOOKA.get(), new GomuLightningProjectileRenderer.Factory(false));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_GUN.get(), new GomuLightningProjectileRenderer.Factory(false));
+		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_BAZOOKA.get(), new GomuLightningProjectileRenderer.Factory(false));
+		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), new GomuLightningProjectileRenderer.Factory(false));
+		//giant variations
+
+		//FEET
 
 		event.registerEntityRenderer(GOMU_GOMU_NO_JET_CULVERIN.get(), new PythonProjectileRenderer.Factory<>(false).setScale(4.5D, 4.5D, 4.5));
 		event.registerEntityRenderer(GOMU_GOMU_NO_JET_RHINO_SCHNEIDER.get(), new PythonProjectileRenderer.Factory<>(true).setScale(4.5D, 4.5D, 4.5));

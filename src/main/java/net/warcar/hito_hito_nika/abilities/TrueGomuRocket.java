@@ -79,7 +79,7 @@ public class TrueGomuRocket extends Ability {
 
 	private void duringContinuityEvent(LivingEntity player, IAbility abl) {
 		IAbilityData props = AbilityCapability.get(player).get();
-		if (this.readyToFly && player.isFallFlying()) {
+		if (this.readyToFly && !player.onGround()) {
 			this.readyToFly = false;
 			this.isFlying = true;
 		}
@@ -105,7 +105,7 @@ public class TrueGomuRocket extends Ability {
 				}
 			});
 		}
-		if (this.continuousComponent.getContinueTime() > 24 && !player.isFallFlying()) {
+		if (this.continuousComponent.getContinueTime() > 24 && player.onGround()) {
 			this.continuousComponent.stopContinuity(player);
 		}
 	}

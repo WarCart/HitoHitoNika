@@ -32,7 +32,7 @@ import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TrueGomuHelper {
+public final class TrueGomuHelper {
 	public static final Component TOO_HEAVY = getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
 	private static final Object[] EMPTY_ARGS = new Object[0];
 	public static final EntityDataSerializer<Vec3> VECTOR_SERIALIZER = new EntityDataSerializer<Vec3>() {
@@ -219,7 +219,7 @@ public class TrueGomuHelper {
 			}
 			Vec3 vec = entity.getLookAngle();
 
-			if (!entity.isFallFlying()) {
+			if (entity.onGround()) {
 				AbilityHelper.setDeltaMovement(entity, (vec.x * speed), entity.getDeltaMovement().y, (vec.z * speed));
 			} else {
 				AbilityHelper.setDeltaMovement(entity, (vec.x * speed * 0.5F), entity.getDeltaMovement().y, (vec.z * speed * 0.5F));

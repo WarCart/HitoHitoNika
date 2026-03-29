@@ -52,7 +52,7 @@ public class GomuTrampleAbility extends PassiveAbility {
     }
 
     public void duringPassiveEvent(LivingEntity entity) {
-        if (!entity.isFallFlying()) {
+        if (entity.onGround()) {
             if (!entity.isSprinting()) {
                 this.speed = 0.0F;
             } else {
