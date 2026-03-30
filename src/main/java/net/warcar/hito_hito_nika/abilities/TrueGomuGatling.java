@@ -79,6 +79,7 @@ public class TrueGomuGatling extends Ability {
 	private float speed = 3;
 	private float projDamageReduction = 0.8F;
 	private int projectileSpace = 2;
+	private boolean basic = false;
 
 	public TrueGomuGatling(AbilityCore<TrueGomuGatling> core) {
 		super(core);
@@ -228,6 +229,7 @@ public class TrueGomuGatling extends Ability {
 		}
 		IAbilityData props = AbilityCapability.get(player).get();
 		double dif;
+		this.basic = false;
 		if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
 			this.leap = 1;
 			dif = 1;
@@ -270,6 +272,7 @@ public class TrueGomuGatling extends Ability {
 		} else {
 			dif = 1;
 			this.leap = 0.5;
+			this.basic = true;
 		}
 		double time = EquationHelper.parseEquation(CommonConfig.INSTANCE.getGatlingLength(), player, getBonusData(dif)).getValue();
 		this.animationComponent.start(player, ModAnimations.PUNCH_RUSH);
@@ -284,7 +287,8 @@ public class TrueGomuGatling extends Ability {
 		if (TrueGomuHelper.hasGearThirdActive(AbilityCapability.get(player).get())) {
 			AbilityHelper.slowEntityFall(player);
 		}
-		player.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), 5, 1, false, false));
+		if (!this.basic)
+			player.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), 5, 1, false, false));
 		if (leap >= 1) {
 			if (this.continuousComponent.getContinueTime() % (int) leap == 0)
 				this.projectileComponent.shootWithSpread(player, this.speed, 0, this.projectileSpace);

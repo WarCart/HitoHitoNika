@@ -22,11 +22,12 @@ public class TrueGomuRocketProjectile extends TrueGomuProjectile {
 
 	public TrueGomuRocketProjectile(Level world, LivingEntity player, Ability ability) {
 		super(NikaProjectiles.GOMU_GOMU_NO_ROCKET.get(), player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.FRIENDLY, SourceType.PHYSICAL);
-		this.setPhysical();
 		this.setDamage(0f);
+		this.setMaxLife(24);
 		this.setSize(3.1f);
 		this.addEntityHitEvent(100, this::onEntityImpact);
 		this.addBlockHitEvent(100, this::onBlockHit);
+		this.setTravelSpeed(3);
 	}
 
 	private void flying(BlockPos pos) {
@@ -39,11 +40,11 @@ public class TrueGomuRocketProjectile extends TrueGomuProjectile {
 	}
 
 	private void onBlockHit(BlockHitResult result) {
-		this.onBlockImpact(result.getBlockPos());
+		this.flying(result.getBlockPos());
 	}
 
 	private void onEntityImpact(EntityHitResult result) {
 		var ent = result.getEntity();
-		this.onBlockImpact(new BlockPos(ent.getBlockX(), Math.round(ent.getBlockY() + ent.getEyeHeight() / 2), ent.getBlockZ()));
+		this.flying(new BlockPos(ent.getBlockX(), Math.round(ent.getBlockY() + ent.getEyeHeight() / 2), ent.getBlockZ()));
 	}
 }

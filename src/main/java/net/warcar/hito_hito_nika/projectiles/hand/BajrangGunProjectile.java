@@ -25,7 +25,7 @@ public class BajrangGunProjectile extends TrueGomuProjectile {
 		this.setMaxLife(250);
 		this.setDamage(250F);
 		this.setEntityCollisionSize(15);
-		this.setSize(size*5);
+		this.setSize(size * 5);
 		this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, size, 200));
 		this.size = size;
 	}

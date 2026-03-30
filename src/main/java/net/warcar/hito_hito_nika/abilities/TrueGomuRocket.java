@@ -86,21 +86,23 @@ public class TrueGomuRocket extends Ability {
 		if (this.isFlying) {
 			List<LivingEntity> targets = WyHelper.getNearbyLiving(player.position(), player.level(), player.getBbWidth() * 4, player.getBbHeight() * 4, player.getBbWidth() * 4, ModEntityPredicates.getEnemyFactions(player));
 			targets.removeIf(target -> target == player);
+			float damage = 1;
+			if (TrueGomuHelper.hasGearSecondActive(props))
+				damage *= 5;
+			if (TrueGomuHelper.hasGigantActive(props))
+				damage *= 25;
+			else if (TrueGomuHelper.hasGearThirdActive(props))
+				damage *= 10;
+			if (TrueGomuHelper.hasGearFourthBoundmanActive(props))
+				damage *= 15;
+			if (TrueGomuHelper.hasGearFourthSnakemanActive(props))
+				damage *= 7.5f;
+			if (TrueGomuHelper.hasGearFifthActive(props))
+				damage *= 100;
+			float effectiveDamage = damage;
 			targets.forEach(target -> {
-				float damage = 2;
-				if (TrueGomuHelper.hasGearSecondActive(props))
-					damage *= 5;
-				if (TrueGomuHelper.hasGigantActive(props))
-					damage *= 25;
-				else if (TrueGomuHelper.hasGearThirdActive(props))
-					damage *= 10;
-				if (TrueGomuHelper.hasGearFourthBoundmanActive(props))
-					damage *= 15;
-				if (TrueGomuHelper.hasGearFourthSnakemanActive(props))
-					damage *= 7.5f;
-				if (TrueGomuHelper.hasGearFifthActive(props))
-					damage *= 100;
-				if (this.trackerComponent.canHit(target) && dealDamageComponent.hurtTarget(player, target, damage)) {
+				float delta = (float) player.getDeltaMovement().subtract(target.getDeltaMovement()).length();
+				if (this.trackerComponent.canHit(target) && dealDamageComponent.hurtTarget(player, target, effectiveDamage * delta)) {
 					target.push(player.getDeltaMovement().x(), player.getDeltaMovement().y(), player.getDeltaMovement().z());
 				}
 			});

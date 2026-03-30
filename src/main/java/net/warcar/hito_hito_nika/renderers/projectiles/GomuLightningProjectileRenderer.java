@@ -31,6 +31,7 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
     private static final float V_ARM_SIDE_MIN = 0.317f;
     private static final float V_ARM_SIDE_MAX = 0.5f;
     private static final float V_ARM_SIDE_DIFF = V_ARM_SIDE_MAX - V_ARM_SIDE_MIN;
+
     private static final float U_ARM_BACK_CAP_MIN = 0.687f;
     private static final float U_ARM_BACK_CAP_MAX = 0.718f;
     private static final float U_ARM_FRONT_CAP_MIN = 0.734f;
@@ -38,6 +39,21 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
     private static final float V_ARM_CAP_MIN = 0.25f;
     private static final float V_ARM_CAP_MAX = 0.312f;
     private static final float V_ARM_CAP_DIFF = V_ARM_CAP_MAX - V_ARM_CAP_MIN;
+
+
+    private static final float U_LEG_SIDE_MIN = 0;
+    private static final float U_LEG_SIDE_MAX = 0.0469f;
+    private static final float V_LEG_SIDE_MIN = 0.317f;
+    private static final float V_LEG_SIDE_MAX = 0.5f;
+    private static final float V_LEG_SIDE_DIFF = V_LEG_SIDE_MAX - V_LEG_SIDE_MIN;
+
+    private static final float U_LEG_BACK_CAP_MIN = 0.0625f;
+    private static final float U_LEG_BACK_CAP_MAX = 0.109f;
+    private static final float U_LEG_FRONT_CAP_MIN = 0.125f;
+    private static final float U_LEG_FRONT_CAP_MAX = 0.781f;
+    private static final float V_LEG_CAP_MIN = 0.25f;
+    private static final float V_LEG_CAP_MAX = 0.172f;
+    private static final float V_LEG_CAP_DIFF = V_LEG_CAP_MAX - V_LEG_CAP_MIN;
 
     public GomuLightningProjectileRenderer(EntityRendererProvider.Context renderManager, boolean leg, Deformation deformation) {
         super(renderManager);
@@ -127,15 +143,15 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
             float sizeMod = getSizeMod(((float) segmentIndex / segments));
 
             for (int layer = 0; layer < layerAmount; layer++) {
-                float depth = (MAX_DEPTH - 2 * layer - 1) * size;
+                float depth = (MAX_DEPTH - layer * layer - 1) * size;
 
                 float endY = ((segmentIndex == segments - 1) ? y : offsetsY[segmentIndex + 1]);
                 float endX = ((segmentIndex == segments - 1) ? x : offsetsX[segmentIndex + 1]);
 
                 if (segmentIndex <= targetNumber) {
-                    float addon = layer / 2 * size * segmentIndex;
+                    float addon = layer * size * segmentIndex;
                             //layer;
-                    float addon2 = layer / 2 * size * (segmentIndex - 1);
+                    float addon2 = layer * size * (segmentIndex - 1);
                             //layer;
                     VertexConsumer vertex = buffer.getBuffer(layers[layer]);
                     int[] finalColor = layer == 2 ? glowColor : color;
@@ -187,11 +203,11 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
         float u1 = U_ARM_SIDE_MAX;
         float v1 = Math.min(V_ARM_SIDE_MAX, v0 + (segmentFloat * V_ARM_SIDE_DIFF));
 
-        if (this.leg) { //TODO legs...
-            u0 = U_ARM_SIDE_MIN;
-            v0 = V_ARM_SIDE_MIN + (segmentFloat * V_ARM_SIDE_DIFF);
-            u1 = U_ARM_SIDE_MAX;
-            v1 = Math.min(V_ARM_SIDE_MAX, v0 + (segmentFloat * V_ARM_SIDE_DIFF));
+        if (this.leg) {
+            u0 = U_LEG_SIDE_MIN;
+            v0 = V_LEG_SIDE_MIN + (segmentFloat * V_LEG_SIDE_DIFF);
+            u1 = U_LEG_SIDE_MAX;
+            v1 = Math.min(V_LEG_SIDE_MAX, v0 + (segmentFloat * V_LEG_SIDE_DIFF));
         }
 
         builder.vertex(matrix4f, x1, y1, z1).color(red, green, blue, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
@@ -212,11 +228,11 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
         float u1 = U_ARM_BACK_CAP_MAX;
         float v1 = Math.min(V_ARM_CAP_MAX, v0 + V_ARM_CAP_DIFF);
 
-        if (this.leg) {//TODO find legs
-            u0 = U_ARM_BACK_CAP_MIN;
-            v0 = V_ARM_CAP_MIN + V_ARM_CAP_DIFF;
-            u1 = U_ARM_BACK_CAP_MAX;
-            v1 = Math.min(V_ARM_CAP_MAX, v0 + V_ARM_CAP_DIFF);
+        if (this.leg) {
+            u0 = U_LEG_BACK_CAP_MIN;
+            v0 = V_LEG_CAP_MIN + V_LEG_CAP_DIFF;
+            u1 = U_LEG_BACK_CAP_MAX;
+            v1 = Math.min(V_LEG_CAP_MAX, v0 + V_LEG_CAP_DIFF);
         }
 
         builder.vertex(matrix4f, x0, y0, 0).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
@@ -229,11 +245,11 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
             v0 = V_ARM_CAP_MIN + V_ARM_CAP_DIFF;
             u1 = U_ARM_FRONT_CAP_MAX;
             v1 = Math.min(V_ARM_CAP_MAX, v0 + V_ARM_CAP_DIFF);
-        } else { //TODO also them legs
-            u0 = U_ARM_FRONT_CAP_MIN;
-            v0 = V_ARM_CAP_MIN + V_ARM_CAP_DIFF;
-            u1 = U_ARM_FRONT_CAP_MAX;
-            v1 = Math.min(V_ARM_CAP_MAX, v0 + V_ARM_CAP_DIFF);
+        } else {
+            u0 = U_LEG_FRONT_CAP_MIN;
+            v0 = V_LEG_CAP_MIN + V_LEG_CAP_DIFF;
+            u1 = U_LEG_FRONT_CAP_MAX;
+            v1 = Math.min(V_LEG_CAP_MAX, v0 + V_LEG_CAP_DIFF);
         }
         x0 = startX - (depth * size * lastMod);
         y0 = startY - (depth * size * lastMod);
