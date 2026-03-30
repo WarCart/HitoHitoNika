@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.player.Player;
 
 public class SmallMorphModel <T extends Player> extends PlayerModel<T> {
+    private boolean sneaking;
     public SmallMorphModel(ModelPart part, boolean isSlim) {
         super(part, isSlim);
     }
@@ -14,12 +15,17 @@ public class SmallMorphModel <T extends Player> extends PlayerModel<T> {
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        this.sneaking = entity.isSteppingCarefully();
     }
 
     @Override
     public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         matrixStack.pushPose();
-        matrixStack.translate(0, 0.6, 0);
+        if (sneaking) {
+            matrixStack.translate(0, 0.6, 0);
+        } else {
+            matrixStack.translate(0, 0.75, 0);
+        }
         head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
         hat.render(matrixStack, buffer, packedLight, packedOverlay);
         matrixStack.popPose();
