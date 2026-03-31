@@ -1,14 +1,14 @@
 {
-  "parent": "mineminenomi:devil_fruits/root",
+  "parent": "mineminenomi:adventure/root",
   "display": {
     "icon": {
       "item": "mineminenomi:gomu_gomu_no_mi"
     },
     "title": {
-      "text": "Wait, power!"
+      "translate": "text.hito_hito_no_mi_nika.wait_power"
     },
     "description": {
-      "text": "Stop Gear 4 from ending to hold it more"
+      "translate": "text.hito_hito_no_mi_nika.wait_power.desc"
     },
     "hidden": true,
     "frame": "challenge"

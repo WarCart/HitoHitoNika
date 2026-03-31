@@ -5,8 +5,7 @@
   "refmap": "hito_hito_no_mi_nika.refmap.json",
   "mixins": [
     "ModAbilitiesMixin",
-    "ModRegistryMixin",
-    "WyHelperMixin"
+    "ModRegistryMixin"
   ],
   "client": [],
   "server": [],

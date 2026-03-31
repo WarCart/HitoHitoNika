@@ -23,9 +23,8 @@ public class BajrangStampGunProjectile extends TrueGomuProjectile {
         super(NikaProjectiles.GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.setMaxLife(250);
         this.setDamage(250F);
-        this.setPhysical();
         this.setEntityCollisionSize(15);
-        this.setSize(size * 5);
+        this.setSize(size * 2);
         this.size = size;
         this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, size, 200));
     }

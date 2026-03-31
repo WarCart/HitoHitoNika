@@ -197,8 +197,8 @@ public class TrueGomuBazooka extends Ability {
 		NuProjectileEntity projectile1 = this.projectileComponent.getNewProjectile(player);
 		NuProjectileEntity projectile2 = this.projectileComponent.getNewProjectile(player);
 		Vec3 dirVec = player.getLookAngle().cross(new Vec3(0, 1, 0)).scale(this.spacingMod);
-		projectile1.moveTo(player.getX() + dirVec.x, player.getEyeY(), player.getZ() + dirVec.z, 0.0F, 0.0F);
-		projectile2.moveTo(player.getX() - dirVec.x, player.getEyeY(), player.getZ() - dirVec.z, 0.0F, 0.0F);
+		projectile1.moveTo(player.getX() + dirVec.x, player.getEyeY(), player.getZ() + dirVec.z, player.getYRot(), player.getXRot());
+		projectile2.moveTo(player.getX() - dirVec.x, player.getEyeY(), player.getZ() - dirVec.z, player.getYRot(), player.getXRot());
 		this.projectileComponent.shoot(projectile1, player, player.getXRot(), player.getYRot(), this.speed, 0.0F);
 		this.projectileComponent.shoot(projectile2, player, player.getXRot(), player.getYRot(), this.speed, 0.0F);
 		player.swing(InteractionHand.MAIN_HAND, true);

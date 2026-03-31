@@ -141,18 +141,22 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
             float x = offsetsX[segmentIndex];
 
             float sizeMod = getSizeMod(((float) segmentIndex / segments));
+            int trueAmount = layerAmount;
+            if (segmentIndex < 1.5 && trueAmount > 1) {
+                trueAmount = 1;
+            } else if (segmentIndex < 4.5 && trueAmount > 2) {
+                trueAmount = 2;
+            }
 
-            for (int layer = 0; layer < layerAmount; layer++) {
+            for (int layer = 0; layer < trueAmount; layer++) {
                 float depth = (MAX_DEPTH - layer * layer - 1) * size;
 
                 float endY = ((segmentIndex == segments - 1) ? y : offsetsY[segmentIndex + 1]);
                 float endX = ((segmentIndex == segments - 1) ? x : offsetsX[segmentIndex + 1]);
 
                 if (segmentIndex <= targetNumber) {
-                    float addon = layer * size * segmentIndex;
-                            //layer;
-                    float addon2 = layer * size * (segmentIndex - 1);
-                            //layer;
+                    float addon = layer * size / 1.5f * segmentIndex;
+                    float addon2 = layer * size / 1.5f * (segmentIndex - 1);
                     VertexConsumer vertex = buffer.getBuffer(layers[layer]);
                     int[] finalColor = layer == 2 ? glowColor : color;
                     this.drawSides(matrix4f, vertex, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, false, true, false, maxDistance, segmentLengths[segmentIndex], packedLight);
@@ -164,7 +168,7 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
             prevSizeMod = sizeMod;
         }
 
-        this.drawCaps(matrix4f, buffer.getBuffer(body), offsetsX[0], offsetsY[0], prevSizeMod, size, length, r, g, b, alpha, packedLight);
+        this.drawCaps(matrix4f, buffer, layers, layerAmount, offsetsX[0], offsetsY[0], prevSizeMod, size, length, r, g, b, alpha, packedLight, segments);
     }
 
     private float getSizeMod(float segmentFloat) {
@@ -172,7 +176,7 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
             case GIANT:
                 return (float) (3 * (1 / (1 + Math.exp(-5 * segmentFloat + 2))));
             case ELEPHANT:
-                return (float) (3 * (1 / (1 + Math.exp(-15 * segmentFloat + 11))) + 0.2);
+                return (float) (3 * (1 / (1 + Math.exp(-15 * segmentFloat + 9))) + 0.2);
             case FLAT:
             default:
                 return 1;
@@ -216,13 +220,7 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
         builder.vertex(matrix4f, x4, y4, z1).color(red, green, blue, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
     }
 
-    private void drawCaps(Matrix4f matrix4f, VertexConsumer builder, float startX, float startY, float lastMod, float size, float length, float r, float g, float b, float alpha, int light) {
-        int depth = MAX_DEPTH - 1;
-        float x0 = startX - (depth * size * FIRST_SIZE_MOD);
-        float y0 = startY - (depth * size * FIRST_SIZE_MOD);
-        float x1 = x0 + (depth * size * FIRST_SIZE_MOD) * 2.0f;
-        float y1 = y0 + (depth * size * FIRST_SIZE_MOD) * 2.0f;
-
+    private void drawCaps(Matrix4f matrix4f, MultiBufferSource source, RenderType[] layers, int layerAmount, float startX, float startY, float lastMod, float size, float length, float r, float g, float b, float alpha, int light, int maxSegments) {
         float u0 = U_ARM_BACK_CAP_MIN;
         float v0 = V_ARM_CAP_MIN + V_ARM_CAP_DIFF;
         float u1 = U_ARM_BACK_CAP_MAX;
@@ -235,6 +233,12 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
             v1 = Math.min(V_LEG_CAP_MAX, v0 + V_LEG_CAP_DIFF);
         }
 
+        float depth = MAX_DEPTH - 1;
+        float x0 = startX - (depth * size * FIRST_SIZE_MOD);
+        float y0 = startY - (depth * size * FIRST_SIZE_MOD);
+        float x1 = x0 + (depth * size * FIRST_SIZE_MOD) * 2.0f;
+        float y1 = y0 + (depth * size * FIRST_SIZE_MOD) * 2.0f;
+        VertexConsumer builder = source.getBuffer(layers[0]);
         builder.vertex(matrix4f, x0, y0, 0).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
         builder.vertex(matrix4f, x0, y1, 0).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
         builder.vertex(matrix4f, x1, y1, 0).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
@@ -251,15 +255,27 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
             u1 = U_LEG_FRONT_CAP_MAX;
             v1 = Math.min(V_LEG_CAP_MAX, v0 + V_LEG_CAP_DIFF);
         }
-        x0 = startX - (depth * size * lastMod);
-        y0 = startY - (depth * size * lastMod);
-        x1 = x0 + (depth * size * lastMod) * 2.0f;
-        y1 = y0 + (depth * size * lastMod) * 2.0f;
 
-        builder.vertex(matrix4f, x0, y0, length).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x0, y1, length).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x1, y1, length).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x1, y0, length).color(r, g, b, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+        for (int i = 0; i < layerAmount; i++) {
+            depth = (MAX_DEPTH - i * i - 1);
+            float addon = i * maxSegments;
+            x0 = startX - ((depth + addon) * size * lastMod);
+            y0 = startY - ((depth + addon) * size * lastMod);
+            x1 = x0 + ((depth + addon) * size * lastMod) * 2.0f;
+            y1 = y0 + ((depth + addon) * size * lastMod) * 2.0f;
+            builder = source.getBuffer(layers[i]);
+            float offset = (layerAmount - i - 1) / 100f;
+            if (i == 2) {
+                r = 0.886f;
+                g = 0.5f;
+                b = 0.1f;
+                alpha = 0.4f;
+            }
+            builder.vertex(matrix4f, x0, y0, length - offset).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+            builder.vertex(matrix4f, x0, y1, length - offset).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+            builder.vertex(matrix4f, x1, y1, length - offset).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+            builder.vertex(matrix4f, x1, y0, length - offset).color(r, g, b, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+        }
     }
 
     @Override

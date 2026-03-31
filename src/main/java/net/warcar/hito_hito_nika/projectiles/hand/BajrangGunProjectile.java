@@ -11,13 +11,12 @@ import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 
-
 public class BajrangGunProjectile extends TrueGomuProjectile {
 	protected final float size;
 
 	public BajrangGunProjectile(EntityType type, Level world) {
 		super(type, world);
-		size = 0;
+		size = 30;
 	}
 
 	public BajrangGunProjectile(Level world, LivingEntity player, Ability ability, float size) {
@@ -25,7 +24,7 @@ public class BajrangGunProjectile extends TrueGomuProjectile {
 		this.setMaxLife(250);
 		this.setDamage(250F);
 		this.setEntityCollisionSize(15);
-		this.setSize(size * 5);
+		this.setSize(size * 2);
 		this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, size, 200));
 		this.size = size;
 	}

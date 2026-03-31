@@ -1,0 +1,25 @@
+{
+  "parent": "hito_hito_no_mi_nika:wait_power",
+  "display": {
+    "icon": {
+      "item": "mineminenomi:gomu_gomu_no_mi",
+      "ability": "hito_hito_no_mi_nika:gear_fifth"
+    },
+    "title": {
+      "translate": "text.hito_hito_no_mi_nika.the_peak"
+    },
+    "description": {
+      "translate": "text.hito_hito_no_mi_nika.the_peak.desc"
+    },
+    "hidden": true,
+    "frame": "challenge"
+  },
+  "criteria": {
+    "gear_fifth": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    ["gear_fifth"]
+  ]
+}
