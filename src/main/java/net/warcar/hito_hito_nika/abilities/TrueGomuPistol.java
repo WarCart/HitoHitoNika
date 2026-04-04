@@ -198,8 +198,7 @@ public class TrueGomuPistol extends Ability {
 			}
 		}
 		if (projectile instanceof NuLightningEntity beam) {
-			//beam.setTravelSpeed(speed);
-			beam.setMaxLife(1000000000);
+			beam.setTravelSpeed(speed);
 		}
 		return projectile;
 	}

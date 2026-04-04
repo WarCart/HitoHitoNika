@@ -1,7 +1,9 @@
 package net.warcar.hito_hito_nika.morphs;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityDimensions;
@@ -14,8 +16,8 @@ import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import java.util.Map;
 
 public class GomuGigantMorph extends MorphInfo {
-    private static final EntityDimensions STANDING_SIZE = EntityDimensions.scalable(1.7F, 2.4F);
-    private static final EntityDimensions CROUCHING_SIZE = EntityDimensions.scalable(1.7F, 2.39F);
+    private static final EntityDimensions STANDING_SIZE = EntityDimensions.scalable(4.5F, 9.5F);
+    private static final EntityDimensions CROUCHING_SIZE = EntityDimensions.scalable(4.7F, 8.45F);
 
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTexture(LivingEntity entity) {
@@ -31,7 +33,12 @@ public class GomuGigantMorph extends MorphInfo {
     }
 
     public float getEyeHeight(LivingEntity entity) {
-        return 8.45f;
+        return entity.isSteppingCarefully() ? 7f : 8.25f;
+    }
+
+    @Override
+    public void preRenderCallback(LivingEntity entity, LivingEntityRenderer<?, ?> renderr, PoseStack matrixStack, float partialTickTime) {
+        matrixStack.scale(4.7f, 4.7f, 4.7f);
     }
 
     public Map<Pose, EntityDimensions> getSizes() {
