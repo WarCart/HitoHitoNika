@@ -2,7 +2,6 @@ package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -182,13 +181,7 @@ public class TrueGearFourthAbility extends Ability {
 				time = -1;
 			}
 			this.continuousComponent.startContinuity(player, time * 20);
-			try {
-				((ServerPlayer) player).getAdvancements().award(((ServerPlayer) player).server.getAdvancements()
-						.getAdvancement(ResourceLocation.parse("hito_hito_no_mi_nika:wait_power")), "use_gear_fourth");
-			}
-			catch (NullPointerException e) {
-				e.printStackTrace();
-			}
+			TrueGomuHelper.unlockAdvancement((ServerPlayer) player, "wait_power", "use_gear_fourth");
 			ModNetwork.sendTo(new SSyncAbilityDataPacket(player, AbilityCapability.get(player).get()), (Player) player);
 		} else this.afterContinuityStopEvent(player);
 	}

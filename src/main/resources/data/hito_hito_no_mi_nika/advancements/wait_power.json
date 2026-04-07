@@ -11,7 +11,7 @@
       "translate": "text.hito_hito_no_mi_nika.wait_power.desc"
     },
     "hidden": true,
-    "frame": "challenge"
+    "frame": "task"
   },
   "criteria": {
     "use_gear_fourth": {

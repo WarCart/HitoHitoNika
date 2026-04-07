@@ -11,8 +11,8 @@ import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 import java.util.Map;
 
 public class GearFourthBoundmanMorph extends MorphInfo {
-    private static final EntityDimensions STANDING_SIZE = EntityDimensions.scalable(2.8F, 4.0F);
-    private static final EntityDimensions CROUCHING_SIZE = EntityDimensions.scalable(2.8F, 3.9F);
+    private static final EntityDimensions STANDING_SIZE = EntityDimensions.scalable(2.8F, 3.5F);
+    private static final EntityDimensions CROUCHING_SIZE = EntityDimensions.scalable(2.8F, 3.2F);
 
 
     public String getForm() {
@@ -24,7 +24,10 @@ public class GearFourthBoundmanMorph extends MorphInfo {
     }
 
     public float getEyeHeight(LivingEntity entity) {
-        return 4.0f;
+        if (entity.isCrouching()) {
+            return 2.9F;
+        }
+        return 3.2f;
     }
 
     public float getShadowSize() {

@@ -1,10 +1,7 @@
 package net.warcar.hito_hito_nika.models;
 
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -17,6 +14,7 @@ public class SnakemanMorphModel<T extends Player> extends HumanoidModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, "snakeman"), "main");
 
+	public static final ResourceLocation OVERLAY = ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, "textures/models/gear_4_snakeman_overlay.png");
 	public SnakemanMorphModel(ModelPart root) {
 		super(root);
 	}

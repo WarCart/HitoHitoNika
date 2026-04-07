@@ -1,7 +1,6 @@
 package net.warcar.hito_hito_nika.projectiles;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -9,6 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
+import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
@@ -19,90 +20,51 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModEntityPredicates;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
 
 public abstract class PythonProjectile extends NuProjectileEntity {
-    protected static final EntityDataAccessor<Integer> NEXT_ID = SynchedEntityData.defineId(PythonProjectile.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Integer> PREV_ID = SynchedEntityData.defineId(PythonProjectile.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Boolean> IS_STATIC = SynchedEntityData.defineId(PythonProjectile.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Integer> LAYER = SynchedEntityData.defineId(PythonProjectile.class, EntityDataSerializers.INT);
     protected Ability master;
     protected float speed = 0f;
-    private boolean sneakyStatic;
+    protected int maxLifetime;
+    protected int lifetime;
+    protected boolean retracting = false;
+
+    private static final EntityDataAccessor<ArrayList<Vec3>> TURNS = SynchedEntityData.defineId(PythonProjectile.class, TrueGomuHelper.TURNS_SERIALIZER);
 
     public PythonProjectile(EntityType type, Level world) {
         super(type, world);
     }
 
-    public PythonProjectile(EntityType<? extends PythonProjectile> type, Level world, LivingEntity player, Ability ability, float speed, int layer) {
+    public PythonProjectile(EntityType<? extends PythonProjectile> type, Level world, LivingEntity player, Ability ability, float speed) {
         super(type, world, player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.addEntityHitEvent(100, this::onEntityImpactEvent);
         master = ability;
-        this.setLayer(layer);
         this.setUnavoidable();
         this.speed = speed;
         this.setPassThroughBlocks();
     }
 
-    private void setLayer(int layer) {
-        this.entityData.set(LAYER, layer);
-    }
-
     public void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(NEXT_ID, -1);
-        this.entityData.define(PREV_ID, -1);
-        this.entityData.define(IS_STATIC, false);
-        this.entityData.define(LAYER, 0);
+        this.entityData.define(TURNS, new ArrayList<>());
     }
 
     private void onEntityImpactEvent(EntityHitResult hitEntity) {
-        this.kill();
+        this.retracting = true;
     }
 
-    @Nullable
-    public Entity getPrev() {
-        return this.level().getEntity(this.entityData.get(PREV_ID));
+    public void setMaxLifetime(int maxLifetime) {
+        this.maxLifetime = maxLifetime;
+        this.lifetime = maxLifetime;
     }
-
-    @Nullable
-    public Entity getNext() {
-        return this.level().getEntity(this.entityData.get(NEXT_ID));
-    }
-
-    public void setPrev(Entity ent) {
-        this.entityData.set(PREV_ID, ent.getId());
-    }
-
-    public void setNext(Entity ent) {
-        this.entityData.set(NEXT_ID, ent.getId());
-    }
-
-    public abstract PythonProjectile getNew();
-
-    /*@Override
-    public void onModHit(RayTraceResult hit) {
-        if (this.isStatic()) {
-            return;
-        }
-        if (hit instanceof EntityRayTraceResult && ((EntityRayTraceResult) hit).getEntity() instanceof AbilityProjectileEntity) {
-            return;
-        }
-        boolean wasInfused = false;
-        IProjectileExtras extras = ProjectileExtrasCapability.get(this).get();
-        if (extras.isProjectileHaoshokuInfused()) {
-            wasInfused = true;
-            extras.setProjectileHaoshokuInfused(false);
-        }
-        super.onModHit(hit);
-        if (wasInfused) {
-            extras.setProjectileHaoshokuInfused(true);
-        }
-    }*/
 
     public void tick() {
+        if (this.getOwner() == null) {
+            this.remove(RemovalReason.DISCARDED);
+            return;
+        }
         if (!this.level().isClientSide() && this.master != null) {
             Optional<ContinuousComponent> component = this.master.getComponent(ModAbilityComponents.CONTINUOUS.get());
             if (component.isPresent() && !component.get().isContinuous()) {
@@ -110,74 +72,60 @@ public abstract class PythonProjectile extends NuProjectileEntity {
                 return;
             }
         }
-        if (this.getLife() <= 0 && !this.isStatic() && !this.level().isClientSide) {
-            if (this.getOwner() == null || this.getLayer() == 0) {
+        super.tick();
+        if (this.level().isClientSide()) {
+            return;
+        } else if (this.retracting) {
+            ArrayList<Vec3> turns = entityData.get(TURNS);
+            if (turns.isEmpty()) {
                 this.remove(RemovalReason.DISCARDED);
-                return;
-            }
-            Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getOwner().position(), this.level(), 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getOwner())).stream().min(Comparator.comparing(this::distanceTo));
-            if (!closest.isPresent() && this.getMaxLife() == 5) {
-                super.tick();
-                return;
-            } else if (!closest.isPresent()) {
-                this.setMaxLife(5);
-                super.tick();
                 return;
             } else {
-                PythonProjectile projectile = this.getNew();
-                this.setStatic(true);
-                this.setMaxLife(100000000);
-                this.setPassThroughBlocks();
-                LivingEntity entity = closest.get();
-                Vec3 vec = this.position().vectorTo(entity.position());
-                projectile.setDamage(this.getDamage());
-                projectile.shootFromRotation(this, 0, 0, 0, 0, 0);
-                projectile.setDeltaMovement(vec.normalize().scale(this.speed));
-                this.level().addFreshEntity(projectile);
-                this.setNext(projectile);
-                projectile.setPrev(this);
-                projectile.setPos(this.getX(), this.getY(), this.getZ());
-                this.setDeltaMovement(0, 0, 0);
-            }
-        }
-        if (this.isStatic()) {
-            if ((this.getNext() == null || !this.getNext().isAlive())) {
-                this.remove(RemovalReason.DISCARDED);
+                var newPos = turns.remove(turns.size() - 1);
+                this.entityData.set(TURNS, turns);
+                var pos = this.position();
+                this.setPos(newPos);
+                this.xOld = pos.x;
+                this.yOld = pos.y;
+                this.zOld = pos.z;
             }
             return;
         }
-        super.tick();
-        if (this.getNext() != null && this.getNext().isAlive()) {
-            Entity prev = this.getPrev();
-            if (prev == null) {
-                prev = this.getOwner();
-            }
-            Vec3 vec = prev.position().vectorTo(this.position());
-            double f = this.position().distanceTo(vec);
-            var xRot = (float)(Math.atan2(vec.y, f) * (double)(180F / (float)Math.PI));
-            var yRot = (float)(Math.atan2(vec.x, vec.z) * (double)(180F / (float)Math.PI));
-            this.setRot(yRot,  xRot);
+        this.lifetime--;
+        if (this.lifetime <= 0) {
+            Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getOwner().position(), this.level(), 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getOwner())).stream().min(Comparator.comparing(this::distanceTo));
+            closest.ifPresent(entity -> {
+                Vec3 vec = this.position().vectorTo(entity.position());
+                this.setDeltaMovement(vec.normalize().scale(this.speed));
+            });
+            this.lifetime =  this.maxLifetime;
+            ArrayList<Vec3> allTurns = this.getAllTurns();
+            HitoHitoNoMiNikaMod.LOGGER.info(allTurns);
+            this.getEntityData().set(TURNS, allTurns);
         }
     }
 
-    protected void setStatic(boolean b) {
-        this.sneakyStatic = b;
-        //this.entityData.set(IS_STATIC, b);
+    public ArrayList<Vec3> getAllTurns() {
+        ArrayList<Vec3> list = new ArrayList<>(this.getEntityData().get(TURNS));
+        list.add(this.position());
+        return list;
     }
 
-    protected boolean isStatic() {
-        return sneakyStatic;
-        //return this.entityData.get(IS_STATIC);
+    public ArrayList<Vec3> getAllTurns(float partialTicks) {
+        ArrayList<Vec3> list = new ArrayList<>(this.getEntityData().get(TURNS));
+        list.add(this.getPosition(partialTicks));
+        return list;
     }
 
-    protected int getLayer() {
-        return this.entityData.get(LAYER);
+    public int getSegments() {
+        return this.getAllTurns().size() - 1;
     }
 
     @Override
-    public void remove(RemovalReason reason) {
-        if (!this.isStatic() || this.getLayer() == 0 || this.getNext() == null) {
-            super.remove(reason);
-        }
+    public void shootFromRotation(Entity thrower, float pX, float pY, float pZ, float velocity, float inaccuracy) {
+        super.shootFromRotation(thrower, pX, pY, pZ, velocity, inaccuracy);
+        ArrayList<Vec3> s = new ArrayList<>();
+        s.add(this.position());
+        this.getEntityData().set(TURNS, s);
     }
 }

@@ -1,10 +1,12 @@
 package net.warcar.hito_hito_nika.helpers;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.RegistryObject;
@@ -29,6 +31,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +57,35 @@ public final class TrueGomuHelper {
 		@Override
 		public Vec3 copy(Vec3 vector) {
 			return new Vec3(vector.x, vector.y, vector.z);
+		}
+	};
+
+	public static final EntityDataSerializer<ArrayList<Vec3>> TURNS_SERIALIZER = new EntityDataSerializer<>() {
+		@Override
+		public void write(FriendlyByteBuf buffer, ArrayList<Vec3> list) {
+			buffer.writeInt(list.size());
+			for (Vec3 vec : list) {
+				buffer.writeDouble(vec.x);
+				buffer.writeDouble(vec.y);
+				buffer.writeDouble(vec.z);
+			}
+		}
+		@Override
+		public ArrayList<Vec3> read(FriendlyByteBuf buffer) {
+			int size = buffer.readInt();
+			ArrayList<Vec3> list = new ArrayList<>();
+			for (int i = 0; i < size; i++) {
+				double x = buffer.readDouble();
+				double y = buffer.readDouble();
+				double z = buffer.readDouble();
+				list.add(new Vec3(x, y, z));
+			}
+			return list;
+		}
+
+		@Override
+		public ArrayList<Vec3> copy(ArrayList<Vec3> list) {
+			return new ArrayList<>(list);
 		}
 	};
 
@@ -230,6 +262,7 @@ public final class TrueGomuHelper {
 	public static void init() {
 		getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
 		EntityDataSerializers.registerSerializer(VECTOR_SERIALIZER);
+		EntityDataSerializers.registerSerializer(TURNS_SERIALIZER);
 	}
 
 	public static NuProjectileEntity.IOnHitEntityEvent getBazookaOnEntityImpactEvent(NuProjectileEntity projectile, double power) {
@@ -301,5 +334,16 @@ public final class TrueGomuHelper {
 			explosion.setDamageEntities(true);
 			explosion.explode();
 		};
+	}
+
+	public static void unlockAdvancement(ServerPlayer player, String advancement, String... criteriaKey) {
+		try {
+			Advancement pAdvancement = player.server.getAdvancements().getAdvancement(ResourceLocation.parse("hito_hito_no_mi_nika:" + advancement));
+			for (String criterionKey : criteriaKey)
+				player.getAdvancements().award(pAdvancement, criterionKey);
+		}
+		catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -51,9 +51,12 @@ public class TrueMorphs {
             ModMorphs.Client.MORPH_RENDERERS.put(GIANT_FUSEN.get(), new GomuMorphRenderer<>(ctx, GIANT_FUSEN.get(), new GomuGiantFusenModel<>(ctx.bakeLayer(GomuGiantFusenModel.LAYER_LOCATION))));
             ModMorphs.Client.MORPH_RENDERERS.put(SMALL.get(), new GomuMorphRenderer<>(ctx, SMALL.get(), new SmallMorphModel<>(root, isSlim)));
 
-            ModMorphs.Client.MORPH_RENDERERS.put(SNAKEMAN.get(), new GomuMorphRenderer<>(ctx, SNAKEMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION))));
-            ModMorphs.Client.MORPH_RENDERERS.put(BOUNDMAN.get(), new GomuMorphRenderer<>(ctx, BOUNDMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION))));
-            ModMorphs.Client.MORPH_RENDERERS.put(TANKMAN.get(), new GomuMorphRenderer<>(ctx, TANKMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION))));
+            ModMorphs.Client.MORPH_RENDERERS.put(SNAKEMAN.get(), new GomuMorphRenderer<>(ctx, SNAKEMAN.get(), new SnakemanMorphModel<>(ctx.bakeLayer(SnakemanMorphModel.LAYER_LOCATION)))
+                    .addLayer(SnakemanMorphModel.OVERLAY));
+            ModMorphs.Client.MORPH_RENDERERS.put(BOUNDMAN.get(), new GomuMorphRenderer<>(ctx, BOUNDMAN.get(), new GearFourthBoundmanModel<>(ctx.bakeLayer(GearFourthBoundmanModel.LAYER_LOCATION)))
+                    .addLayer(GearFourthBoundmanModel.OVERLAY));
+            ModMorphs.Client.MORPH_RENDERERS.put(TANKMAN.get(), new GomuMorphRenderer<>(ctx, TANKMAN.get(), new GearFourthTankmanModel<>(ctx.bakeLayer(GearFourthTankmanModel.LAYER_LOCATION)))
+                    .addLayer(GearFourthTankmanModel.OVERLAY));
         }
     }
 }

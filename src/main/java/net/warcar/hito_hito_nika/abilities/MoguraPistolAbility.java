@@ -37,6 +37,7 @@ public class MoguraPistolAbility extends Ability {
         super(core);
         this.addComponents(this.projectileComponent, this.chargeComponent);
         this.addCanUseCheck(AbilityUseConditions::requiresOnGround);
+        this.addCanUseCheck((e,a) -> AbilityUseConditions.requiresActiveAbility(e,a, TrueGearFifthAbility.INSTANCE.get()));
         this.addUseEvent(this::useEvent);
     }
 

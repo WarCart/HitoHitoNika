@@ -13,13 +13,11 @@ public class JetCulverinProjectile extends PythonProjectile {
 	}
 
 	public JetCulverinProjectile(Level world, LivingEntity player, Ability ability, float speed, int layer) {
-		super(NikaProjectiles.GOMU_GOMU_NO_JET_CULVERIN.get(), world, player, ability, speed, layer);
-		this.setMaxLife(3);
+		super(NikaProjectiles.GOMU_GOMU_NO_JET_CULVERIN.get(), world, player, ability, speed);
+		this.setMaxLifetime(3);
+		this.setMaxLife(layer * 3);
 		this.setDamage(20f);
 		this.setEntityCollisionSize(2.5d);
 		this.setPassThroughEntities();
-	}
-	public PythonProjectile getNew() {
-		return new JetCulverinProjectile(this.level(), this.getOwner(), this.master, this.speed, this.getLayer() - 1);
 	}
 }

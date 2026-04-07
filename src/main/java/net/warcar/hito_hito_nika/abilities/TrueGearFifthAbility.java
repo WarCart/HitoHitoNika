@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -104,6 +105,9 @@ public class TrueGearFifthAbility extends Ability {
 		this.statsComponent.applyModifiers(player);
 		this.continuousComponent.startContinuity(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG5Length(), player, new HashMap<>()).getValue() * 20);
 		this.overlayComponent.showAll(player);
+		if (player instanceof ServerPlayer sp) {
+			TrueGomuHelper.unlockAdvancement(sp, "the_peak", "gear_fifth");
+		}
 	}
 
 	private void afterContinuityStop(LivingEntity player, IAbility abl) {

@@ -21,41 +21,41 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuVerticalLightningEntity;
 import xyz.pixelatedw.mineminenomi.init.ModRenderTypes;
 import xyz.pixelatedw.mineminenomi.init.ModResources;
 
-public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEntity>> extends NuLightningEntityRenderer {
+public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> extends NuLightningEntityRenderer {
     private final float FIRST_SIZE_MOD;
     private final boolean leg;
     private final Deformation deformation;
-    private static final int MAX_DEPTH = 8;
-    private static final float U_ARM_SIDE_MIN = 0.65f;
-    private static final float U_ARM_SIDE_MAX = 0.68f;
-    private static final float V_ARM_SIDE_MIN = 0.317f;
-    private static final float V_ARM_SIDE_MAX = 0.5f;
-    private static final float V_ARM_SIDE_DIFF = V_ARM_SIDE_MAX - V_ARM_SIDE_MIN;
+    public static final int MAX_DEPTH = 8;
+    public static final float U_ARM_SIDE_MIN = 0.65f;
+    public static final float U_ARM_SIDE_MAX = 0.68f;
+    public static final float V_ARM_SIDE_MIN = 0.317f;
+    public static final float V_ARM_SIDE_MAX = 0.5f;
+    public static final float V_ARM_SIDE_DIFF = V_ARM_SIDE_MAX - V_ARM_SIDE_MIN;
 
-    private static final float U_ARM_BACK_CAP_MIN = 0.687f;
-    private static final float U_ARM_BACK_CAP_MAX = 0.718f;
-    private static final float U_ARM_FRONT_CAP_MIN = 0.734f;
-    private static final float U_ARM_FRONT_CAP_MAX = 0.781f;
-    private static final float V_ARM_CAP_MIN = 0.25f;
-    private static final float V_ARM_CAP_MAX = 0.312f;
-    private static final float V_ARM_CAP_DIFF = V_ARM_CAP_MAX - V_ARM_CAP_MIN;
+    public static final float U_ARM_BACK_CAP_MIN = 0.687f;
+    public static final float U_ARM_BACK_CAP_MAX = 0.718f;
+    public static final float U_ARM_FRONT_CAP_MIN = 0.734f;
+    public static final float U_ARM_FRONT_CAP_MAX = 0.781f;
+    public static final float V_ARM_CAP_MIN = 0.25f;
+    public static final float V_ARM_CAP_MAX = 0.312f;
+    public static final float V_ARM_CAP_DIFF = V_ARM_CAP_MAX - V_ARM_CAP_MIN;
 
 
-    private static final float U_LEG_SIDE_MIN = 0;
-    private static final float U_LEG_SIDE_MAX = 0.0469f;
-    private static final float V_LEG_SIDE_MIN = 0.317f;
-    private static final float V_LEG_SIDE_MAX = 0.5f;
-    private static final float V_LEG_SIDE_DIFF = V_LEG_SIDE_MAX - V_LEG_SIDE_MIN;
+    public static final float U_LEG_SIDE_MIN = 0;
+    public static final float U_LEG_SIDE_MAX = 0.0469f;
+    public static final float V_LEG_SIDE_MIN = 0.317f;
+    public static final float V_LEG_SIDE_MAX = 0.5f;
+    public static final float V_LEG_SIDE_DIFF = V_LEG_SIDE_MAX - V_LEG_SIDE_MIN;
 
-    private static final float U_LEG_BACK_CAP_MIN = 0.0625f;
-    private static final float U_LEG_BACK_CAP_MAX = 0.109f;
-    private static final float U_LEG_FRONT_CAP_MIN = 0.125f;
-    private static final float U_LEG_FRONT_CAP_MAX = 0.781f;
-    private static final float V_LEG_CAP_MIN = 0.25f;
-    private static final float V_LEG_CAP_MAX = 0.172f;
-    private static final float V_LEG_CAP_DIFF = V_LEG_CAP_MAX - V_LEG_CAP_MIN;
+    public static final float U_LEG_BACK_CAP_MIN = 0.0625f;
+    public static final float U_LEG_BACK_CAP_MAX = 0.109f;
+    public static final float U_LEG_FRONT_CAP_MIN = 0.125f;
+    public static final float U_LEG_FRONT_CAP_MAX = 0.781f;
+    public static final float V_LEG_CAP_MIN = 0.25f;
+    public static final float V_LEG_CAP_MAX = 0.172f;
+    public static final float V_LEG_CAP_DIFF = V_LEG_CAP_MAX - V_LEG_CAP_MIN;
 
-    public GomuLightningProjectileRenderer(EntityRendererProvider.Context renderManager, boolean leg, Deformation deformation) {
+    public GomuProjectileRenderer(EntityRendererProvider.Context renderManager, boolean leg, Deformation deformation) {
         super(renderManager);
         this.leg = leg;
         this.deformation = deformation;
@@ -306,7 +306,7 @@ public class GomuLightningProjectileRenderer<M extends EntityModel<NuLightningEn
             } else {
                 model = this.model.apply(manager);
             }
-            GomuLightningProjectileRenderer<?> renderer = new GomuLightningProjectileRenderer<>(manager, this.leg, this.deformation);
+            GomuProjectileRenderer<?> renderer = new GomuProjectileRenderer<>(manager, this.leg, this.deformation);
             renderer.setUseArmSkin();
             return renderer;
         }
