@@ -81,12 +81,10 @@ public class GomuGomuNoKaminariAbility extends Ability {
                 double k = mop.getLocation().z;
                 double particleAmount = this.chargeComponent.getChargeTime();
 
-                for(int n = 0; (double)n < particleAmount; ++n) {
-                    double offsetX = WyHelper.randomDouble() * (double)n * 0.225;
-                    double offsetZ = WyHelper.randomDouble() * (double)n * 0.225;
-                    if (entity instanceof Player) {
-                        WyHelper.spawnParticleEffectForOwner(ModParticleEffects.EL_THOR_AIM.get(), (Player)entity, i + offsetX, j, k + offsetZ, null);
-                    }
+                double offsetX = WyHelper.randomDouble() * (double) particleAmount * 0.225;
+                double offsetZ = WyHelper.randomDouble() * (double) particleAmount * 0.225;
+                if (entity instanceof Player) {
+                    WyHelper.spawnParticleEffectForOwner(ModParticleEffects.EL_THOR_AIM.get(), (Player) entity, i + offsetX, j, k + offsetZ, null);
                 }
 
             }
@@ -105,6 +103,7 @@ public class GomuGomuNoKaminariAbility extends Ability {
             float travelLength = targetY + 16.0F * multi;
             Vec3 pos = new Vec3(mopPos.x, targetY, mopPos.z);
             ElThorProjectile lightning = new ElThorProjectile(entity.level(), entity, pos.x, pos.y, pos.z, targetY, travelLength, 1, this);
+            lightning.setColor(51, 127, 255, 102);
             entity.level().addFreshEntity(lightning);
             entity.level().playSound(null, new BlockPos((int) mopPos.x, (int) mopPos.y, (int) mopPos.z), ModSounds.EL_THOR_SFX.get(), SoundSource.PLAYERS, 20.0F, 1.0F);
             this.animationComponent.stop(entity);
