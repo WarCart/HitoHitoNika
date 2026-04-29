@@ -35,7 +35,6 @@
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_gun": "Gomu Gomu no Elephant Gun",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_stamp": "Gomu Gomu no Elephant Stamp",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_stamp_gatling": "Gomu Gomu no Elephant Stamp Gatling",
-	"ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen.description.0": "Al inhalar mucho aire, el usuario infla su pecho para ser invulnerable a las bolas de cañon",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_gatling": "Gomu Gomu no Gatling",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_axe": "Gomu Gomu no Giant Axe",
@@ -147,14 +146,14 @@
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_yari": "Gomu Gomu no Yari",
 	"ability.hito_hito_no_mi_nika.gomu_trample": "Gomu Trample",
 	"ability.hito_hito_no_mi_nika.gomu_transformations": "Transformaciones de Gomu Gomu",
-	"ability.hito_hito_no_mi_nika.text.mineminenomi.too_heavy": "Eres demasiado pesado para utilizar esta habilidad",
-	"ability.mineminenomi.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
-	"ability.mineminenomi.gomu_gomu_no_ufo.description.0": "Lanza al usuario hacia adelante golpeando a todos en su camino.",
+	"ability.hito_hito_no_mi_nika.text.hito_hito_no_mi_nika.too_heavy": "Eres demasiado pesado para utilizar esta habilidad",
+	"ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
+	"ability.hito_hito_no_mi_nika.gomu_gomu_no_ufo.description.0": "Lanza al usuario hacia adelante golpeando a todos en su camino.",
 
 	"crew.name.strawhats": "Sombreros de Paja",
 
 	"entity.hito_hito_no_mi_nika.luffy": "Luffy",
 
-	"text.mineminenomi.requires_infusion": "Tienes que activar Infusion de Hao para utilizar este movimiento",
-	"text.mineminenomi.too_weak": "Eres demasiado debil para utilizar esta habilidad"
+	"text.hito_hito_no_mi_nika.requires_infusion": "Tienes que activar Infusion de Hao para utilizar este movimiento",
+	"text.hito_hito_no_mi_nika.too_weak": "Eres demasiado debil para utilizar esta habilidad"
 }

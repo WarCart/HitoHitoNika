@@ -36,7 +36,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class TrueGomuHelper {
-	public static final Component TOO_HEAVY = getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
+	public static final Component TOO_HEAVY = getName("You are to heavy to use this ability",
+			"text." + HitoHitoNoMiNikaMod.MOD_ID + ".too_heavy");
 	private static final Object[] EMPTY_ARGS = new Object[0];
 	public static final EntityDataSerializer<Vec3> VECTOR_SERIALIZER = new EntityDataSerializer<Vec3>() {
 		@Override
@@ -90,9 +91,8 @@ public final class TrueGomuHelper {
 	};
 
 	public static <A extends Ability> boolean canActivateGear(IAbilityData props, A gear) {
-		if (gear instanceof TrueGearFourthAbility) {
-			TrueGearFourthAbility fourthGear = (TrueGearFourthAbility) gear;
-			if (fourthGear.isBoundman()) {
+		if (gear instanceof TrueGearFourthAbility fourthGear) {
+            if (fourthGear.isBoundman()) {
 				return !hasGearThirdActive(props) && !hasGearSecondActive(props) && !hasFusenActive(props);
 			} else if (fourthGear.isSnakeman()) {
 				return !hasGearThirdActive(props) && !hasGearSecondActive(props) && !hasGearFifthActive(props) && !hasFusenActive(props);
@@ -105,9 +105,9 @@ public final class TrueGomuHelper {
 		}
 		AbilityCore<?> core = gear.getCore();
 		return !(
-				(core.equals(TrueGearSecondAbility.INSTANCE) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
-						|| (core.equals(TrueGearThirdAbility.INSTANCE) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
-						|| (core.equals(TrueGearFifthAbility.INSTANCE) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
+				(core.equals(TrueGearSecondAbility.INSTANCE.get()) && (hasGearFourthActive(props) || hasGearFifthActive(props)))
+						|| (core.equals(TrueGearThirdAbility.INSTANCE.get()) && hasGearFourthActive(props) && !CommonConfig.INSTANCE.isNonCanon())
+						|| (core.equals(TrueGearFifthAbility.INSTANCE.get()) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
 	}
 
 	public static boolean hasFusenActive(IAbilityData props) {

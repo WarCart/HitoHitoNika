@@ -35,7 +35,6 @@
   "ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_gun": "Gum Gum Elephant Gun",
   "ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_stamp": "Gum Gum Elephant Stamp",
   "ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_stamp_gatling": "Gum Gum Elephant Stamp Gatling",
-  "ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen": "Gum Gum Balloon",
   "ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen.description.0": "En aspirant énormément d’air, l’utilisateur gonfle son torse pour obtenir une invulnérabilité face au boulet de canon.",
   "ability.hito_hito_no_mi_nika.gomu_gomu_no_gatling": "Gum Gum Gatling",
   "ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_axe": "Gum Gum Giant Axe",
@@ -147,11 +146,11 @@
   "ability.hito_hito_no_mi_nika.gomu_gomu_no_yari": "Gum Gum Yari",
   "ability.hito_hito_no_mi_nika.gomu_trample": "Gum Gum Tremblement",
   "ability.hito_hito_no_mi_nika.gomu_transformations": "Gum Gum Transformation",
-  "ability.hito_hito_no_mi_nika.text.mineminenomi.too_heavy": "Tu es trop lourd pour utiliser cette technique",
-  "ability.mineminenomi.gomu_gomu_no_fusen": "Gomu Gomu no Balloon",
-  "ability.mineminenomi.gomu_gomu_no_ufo.description.0": "Envoie l’utilisateur en avant frappant tous le monde sur son chemin",
+  "ability.hito_hito_no_mi_nika.text.hito_hito_no_mi_nika.too_heavy": "Tu es trop lourd pour utiliser cette technique",
+  "ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen": "Gomu Gomu no Balloon",
+  "ability.hito_hito_no_mi_nika.gomu_gomu_no_ufo.description.0": "Envoie l’utilisateur en avant frappant tous le monde sur son chemin",
   "crew.name.strawhats": "Chapeau de Paille",
   "entity.hito_hito_no_mi_nika.luffy": "Luffy",
-  "text.mineminenomi.requires_infusion": "Tu dois activer l’infusion d’Haki des Rois pour utiliser cette technique",
-  "text.mineminenomi.too_weak": "Tu es trop faible pour cette technique"
+  "text.hito_hito_no_mi_nika.requires_infusion": "Tu dois activer l’infusion d’Haki des Rois pour utiliser cette technique",
+  "text.hito_hito_no_mi_nika.too_weak": "Tu es trop faible pour cette technique"
 }

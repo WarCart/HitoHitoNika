@@ -133,8 +133,6 @@ public class TrueGearFourthAbility extends Ability {
 			time = -1;
 		} if (!TrueGomuHelper.canActivateGear(props, this)) {
 			player.sendSystemMessage(ModI18nAbilities.MESSAGE_GEAR_ACTIVE);
-		} else if (TrueGomuHelper.hasGearFifthActive(props) && this.isSnakeman()) {
-			player.sendSystemMessage(ModI18nAbilities.MESSAGE_GEAR_ACTIVE);
 		} else {
 			if (this.continuousComponent.isContinuous()) {
 				this.continuousComponent.stopContinuity(player);
@@ -188,16 +186,16 @@ public class TrueGearFourthAbility extends Ability {
 
 	protected void beforeContinuityStopEvent(LivingEntity player, IAbility ability) {
 		if (player.level().isClientSide()) {
-			return;
+			//return;
+		}
+		if (this.isBoundman() && player instanceof Player) {
+			((Player) player).getAbilities().mayfly = ((Player) player).isCreative() || player.isSpectator();
 		}
 		if (player instanceof Player) {
 			((Player) player).getAbilities().flying = false;
 			((Player) player).onUpdateAbilities();
 		}
 		IAbilityData props = AbilityCapability.get(player).get();
-		if (this.isBoundman() && player instanceof Player) {
-			((Player) player).getAbilities().mayfly = ((Player) player).isCreative() || player.isSpectator();
-		}
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 		if (morphs != null)
 			morphs.updateModes(player);

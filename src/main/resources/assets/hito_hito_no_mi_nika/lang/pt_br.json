@@ -35,7 +35,6 @@
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_gun": "Gomu Gomu no Elephant Gun",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_stamp": "Gomu Gomu no Elephant Stamp",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_elephant_stamp_gatling": "Gomu Gomu no Elephant Stamp Gatling",
-	"ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen.description.0": "O usuário enche o peito de ar e infla até virar um balão, ficando invulnerável a balas de canhão.",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_gatling": "Gomu Gomu no Gatling",
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_giant_axe": "Gomu Gomu no Giant Axe",
@@ -147,14 +146,14 @@
 	"ability.hito_hito_no_mi_nika.gomu_gomu_no_yari": "Gomu Gomu no Yari",
 	"ability.hito_hito_no_mi_nika.gomu_trample": "Gomu Trample",
 	"ability.hito_hito_no_mi_nika.gomu_transformations": "Transformações Gomu",
-	"ability.hito_hito_no_mi_nika.text.mineminenomi.too_heavy": "Você está pesado demais para usar esse golpe.",
-	"ability.mineminenomi.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
-	"ability.mineminenomi.gomu_gomu_no_ufo.description.0": "Lança o usuário girando para frente, atingindo todos no caminho.",
+	"ability.hito_hito_no_mi_nika.text.hito_hito_no_mi_nika.too_heavy": "Você está pesado demais para usar esse golpe.",
+	"ability.hito_hito_no_mi_nika.gomu_gomu_no_fusen": "Gomu Gomu no Fusen",
+	"ability.hito_hito_no_mi_nika.gomu_gomu_no_ufo.description.0": "Lança o usuário girando para frente, atingindo todos no caminho.",
 
 	"crew.name.strawhats": "Chapéus de Palha",
 
 	"entity.hito_hito_no_mi_nika.luffy": "Luffy",
 
-	"text.mineminenomi.requires_infusion": "Você precisa infundir Haki do Conquistador (Hao Infusion) para usar esse golpe.",
-	"text.mineminenomi.too_weak": "Você é muito fraco para usar essa habilidade."
+	"text.hito_hito_no_mi_nika.requires_infusion": "Você precisa infundir Haki do Conquistador (Hao Infusion) para usar esse golpe.",
+	"text.hito_hito_no_mi_nika.too_weak": "Você é muito fraco para usar essa habilidade."
 }
