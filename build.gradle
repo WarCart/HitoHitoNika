@@ -21,7 +21,6 @@ archivesBaseName = 'hito_hito_nika'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
     // Channel:   Version:
@@ -36,7 +35,7 @@ minecraft {
     // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: 'official', version: '1.16.5'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
+
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
@@ -143,8 +142,9 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:7090619")
-    runtimeOnly fg.deobf("xyz.pixelatedw.ziusudra:ziusudra:1.16.5-1.0.0.2")
-    //runtimeOnly fg.deobf("blank:cartaddon:0.7.5")
+    //runtimeOnly fg.deobf("xyz.pixelatedw.ziusudra:ziusudra:1.16.5-1.0.0.2")
+    implementation fg.deobf("blank:cartaddon:0.7.51")
+    runtimeOnly fg.deobf("curse.maven:curios-309927:4419403")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
