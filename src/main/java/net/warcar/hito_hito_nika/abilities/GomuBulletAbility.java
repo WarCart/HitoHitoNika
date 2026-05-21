@@ -11,6 +11,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.RegistryObject;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
@@ -121,7 +122,8 @@ public class GomuBulletAbility extends Ability {
 
 	private void start(LivingEntity entity, IAbility ability) {
 		if (TrueGomuHelper.hasGearFifthActive(AbilityCapability.get(entity).orElse(null)) && !HakiHelper.hasInfusionActive(entity)) {
-			entity.sendSystemMessage(Component.translatable("text.mineminenomi.requires_infusion"));
+			entity.sendSystemMessage(Component.translatable("text." + HitoHitoNoMiNikaMod.MOD_ID
+					+ ".requires_infusion"));
 			return;
 		}
 		if (this.chargeTime == 0) {

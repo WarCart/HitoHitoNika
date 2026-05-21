@@ -38,8 +38,8 @@ public class HitoHitoNoMiNikaMod
         ModChallenges.register(bus);
         GomuEntities.register(bus);
         GomuEffects.register(bus);
-        langMap.put("text.mineminenomi.too_weak", "You are to weak to use this ability");
-        langMap.put("text.mineminenomi.requires_infusion", "You need to activate Hao Infusion to use this move");
+        langMap.put("text.hito_hito_no_mi_nika.too_weak", "You are to weak to use this ability");
+        langMap.put("text.hito_hito_no_mi_nika.requires_infusion", "You need to activate Hao Infusion to use this move");
         langMap.put("text.hito_hito_no_mi_nika.the_peak", "The peak");
         langMap.put("text.hito_hito_no_mi_nika.wait_power", "Wait, power!");
         langMap.put("text.hito_hito_no_mi_nika.the_peak.desc", "I can do everything I wanted to do!! I think I can fight a bit longer... My heartbeat sounds so funny!! This is the pinnacle of what I can do!! This is... Gear 5!!!");
