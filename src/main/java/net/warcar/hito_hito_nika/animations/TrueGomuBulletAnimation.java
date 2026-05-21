@@ -4,8 +4,11 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import xyz.pixelatedw.mineminenomi.api.animations.AnimationId;
 
+@OnlyIn(Dist.CLIENT)
 public class TrueGomuBulletAnimation extends TimedAnimation<LivingEntity, HumanoidModel<LivingEntity>> {
     public TrueGomuBulletAnimation(AnimationId<TrueGomuBulletAnimation> animId) {
         super(animId);

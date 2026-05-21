@@ -8,8 +8,11 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 
+@OnlyIn(Dist.CLIENT)
 public class SnakemanMorphModel<T extends Player> extends HumanoidModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(HitoHitoNoMiNikaMod.MOD_ID, "snakeman"), "main");

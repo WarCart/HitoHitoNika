@@ -4,6 +4,8 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
@@ -70,6 +72,7 @@ public class NikaProjectiles {
 
 	public static final RegistryObject<EntityType<KingBajrangGunProjectile>> GOMU_GOMU_NO_KING_BAJRANG_GUN = WyHelper.isAprilFirst() ? createType("Gomu Gomu no King Bajrang Gun", KingBajrangGunProjectile::new,  0.5F, 0.5F) : null;
 
+	@OnlyIn(Dist.CLIENT)
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event, EntityRendererProvider.Context ctx) {
 		event.registerEntityRenderer(GOMU_GOMU_NO_ROCKET.get(), new GomuProjectileRenderer.Factory(false));
 		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_GUN.get(), new GomuProjectileRenderer.Factory(false));

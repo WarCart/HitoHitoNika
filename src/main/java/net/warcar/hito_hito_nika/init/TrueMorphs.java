@@ -5,6 +5,8 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.registries.RegistryObject;
 import net.warcar.hito_hito_nika.models.*;
@@ -34,6 +36,7 @@ public class TrueMorphs {
     public static void init() {
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(GomuFusenModel.LAYER_LOCATION, GomuFusenModel::createBodyLayer);
         event.registerLayerDefinition(GomuGiantFusenModel.LAYER_LOCATION, GomuGiantFusenModel::createBodyLayer);
@@ -41,6 +44,7 @@ public class TrueMorphs {
         event.registerLayerDefinition(SnakemanMorphModel.LAYER_LOCATION,  SnakemanMorphModel::createBodyLayer);
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void addLayers(EntityRenderersEvent.AddLayers event, EntityRendererProvider.Context ctx) {
         for (String skin : event.getSkins()) {
             boolean isSlim = skin.equals("slim");

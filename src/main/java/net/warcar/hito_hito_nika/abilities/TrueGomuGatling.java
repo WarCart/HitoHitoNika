@@ -78,7 +78,7 @@ public class TrueGomuGatling extends Ability {
 	private double leap = 3;
 	private float speed = 3;
 	private float projDamageReduction = 0.8F;
-	private int projectileSpace = 2;
+	private double projectileSpace = 2;
 	private boolean basic = false;
 
 	public TrueGomuGatling(AbilityCore<TrueGomuGatling> core) {

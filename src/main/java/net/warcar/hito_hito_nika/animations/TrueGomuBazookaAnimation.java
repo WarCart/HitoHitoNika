@@ -2,8 +2,11 @@ package net.warcar.hito_hito_nika.animations;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import xyz.pixelatedw.mineminenomi.api.animations.AnimationId;
 
+@OnlyIn(Dist.CLIENT)
 public class TrueGomuBazookaAnimation extends TimedAnimation<LivingEntity, HumanoidModel<LivingEntity>> {
     public TrueGomuBazookaAnimation(AnimationId<TrueGomuBazookaAnimation> animId) {
         super(animId);

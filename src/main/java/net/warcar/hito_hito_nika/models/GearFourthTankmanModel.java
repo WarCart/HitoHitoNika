@@ -120,7 +120,7 @@ public class GearFourthTankmanModel<T extends LivingEntity> extends HumanoidMorp
 	}
 
 	@Override
-	public void renderFirstPersonArm(PoseStack matrixStack, VertexConsumer vertex, int packedLight, int overlay, float red, float green, float blue, float alpha, HumanoidArm side, boolean isLeg) {
+	public boolean renderFirstPersonArm(PoseStack matrixStack, VertexConsumer vertex, int packedLight, int overlay, float red, float green, float blue, float alpha, HumanoidArm side, boolean isLeg) {
 		/*if (!isLeg) {
 			if (side == HumanoidArm.RIGHT) {
 				matrixStack.translate(0.2, 0.3, 0);
@@ -143,6 +143,7 @@ public class GearFourthTankmanModel<T extends LivingEntity> extends HumanoidMorp
 			matrixStack.mulPose(Axis.YP.rotationDegrees(60));
 			this.leftLeg.render(matrixStack, vertex, packedLight, overlay, red, green, blue, alpha);
 		}*/
+		return false;
 	}
 
 	@Override

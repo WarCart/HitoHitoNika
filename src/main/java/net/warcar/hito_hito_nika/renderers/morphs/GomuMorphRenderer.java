@@ -14,6 +14,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.warcar.hito_hito_nika.renderers.layers.TrueGomuSmokeLayer;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityOverlay;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
@@ -23,6 +25,7 @@ import xyz.pixelatedw.mineminenomi.renderers.morphs.MorphRenderer;
 
 import java.util.Optional;
 
+@OnlyIn(Dist.CLIENT)
 public class GomuMorphRenderer<T extends LivingEntity, M extends HumanoidModel<T>> extends MorphRenderer<T, M> {
     public GomuMorphRenderer(EntityRendererProvider.Context ctx, MorphInfo info, M model) {
         super(ctx, info, model);
