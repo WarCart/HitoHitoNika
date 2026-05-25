@@ -185,9 +185,6 @@ public class TrueGearFourthAbility extends Ability {
 	}
 
 	protected void beforeContinuityStopEvent(LivingEntity player, IAbility ability) {
-		if (player.level().isClientSide()) {
-			//return;
-		}
 		if (this.isBoundman() && player instanceof Player) {
 			((Player) player).getAbilities().mayfly = ((Player) player).isCreative() || player.isSpectator();
 		}
@@ -196,14 +193,16 @@ public class TrueGearFourthAbility extends Ability {
 			((Player) player).onUpdateAbilities();
 		}
 		IAbilityData props = AbilityCapability.get(player).get();
+		if (this.targetedTime > 0 && this.continuousComponent.getContinueTime() >= this.continuousComponent.getThresholdTime() && !this.continuousComponent.isInfinite() && !this.isBonusTime && props.hasUnlockedAbility(HaoshokuHakiInfusionAbility.INSTANCE.get()) && this.isBoundman()) {
+			this.onTargetedTime = true;
+			if (!player.level().isClientSide()) {
+				ModNetwork.sendToAllTrackingAndSelf(new SUpdateEquippedAbilityPacket(player, this), player);
+			}
+			return;
+		}
 		GomuMorphsAbility morphs = props.getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 		if (morphs != null)
 			morphs.updateModes(player);
-		if (this.targetedTime > 0 && this.continuousComponent.getContinueTime() >= this.continuousComponent.getThresholdTime() && !this.continuousComponent.isInfinite() && !this.isBonusTime && props.hasUnlockedAbility(HaoshokuHakiInfusionAbility.INSTANCE.get()) && this.isBoundman()) {
-			this.onTargetedTime = true;
-			ModNetwork.sendToAllTrackingAndSelf(new SUpdateEquippedAbilityPacket(player, this), player);
-			return;
-		}
 		this.afterContinuityStopEvent(player);
 	}
 

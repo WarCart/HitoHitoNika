@@ -7,7 +7,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-version = '0.13.0'
+version = '0.13.1'
 group = 'net.warcar.hito_hito_nika' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 base {
     archivesName = mod_id
@@ -93,7 +93,7 @@ dependencies {
 
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:8059146")
+    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:8127583")
     runtimeOnly fg.deobf("curse.maven:mine-mine-no-mi-haki-bar-650542:7824637")
     //implementation fg.deobf("blank:mine-mine-no-mi-${minecraft_version}:${mineminenomi_version}")
     //runtimeOnly fg.deobf("blank:cartaddon:0.7.5")
