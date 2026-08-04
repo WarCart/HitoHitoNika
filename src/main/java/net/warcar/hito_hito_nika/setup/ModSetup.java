@@ -5,6 +5,7 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -13,11 +14,17 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.init.GomuAnimations;
+import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import net.warcar.hito_hito_nika.renderers.layers.TrueGomuSmokeLayer;
+import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -63,5 +70,29 @@ public class ModSetup {
         EntityRendererProvider.Context ctx = new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getBlockRenderer(), mc.gameRenderer.itemInHandRenderer, mc.getResourceManager(), mc.getEntityModels(), mc.font);
 
         TrueMorphs.addLayers(event, ctx);
+    }
+
+    @SubscribeEvent
+    public static void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            if (ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath(ModMain.PROJECT_ID, "gomu_gomu_no_mi")) instanceof AkumaNoMiItem gomu) {
+                AkumaNoMiItem nika = TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.get();
+                if (gomu != nika) {
+                    Class<AkumaNoMiItem> fruits = AkumaNoMiItem.class;
+                    try {
+                        Field abilities = fruits.getField("abilities");
+                        abilities.setAccessible(true);
+                        abilities.set(gomu, abilities.get(nika));
+                        abilities.setAccessible(false);
+                    } catch (NoSuchFieldException e) {
+                        HitoHitoNoMiNikaMod.LOGGER.info("Well i'm stupid apparently, and devil fruits have no abilities");
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        HitoHitoNoMiNikaMod.LOGGER.info("Well i'm stupid apparently, and even tho i MADE it accessible it's not accessible anyway");
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
     }
 }

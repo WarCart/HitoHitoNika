@@ -12,19 +12,19 @@ import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 
-public class TrueElephantGunProjectile extends TrueGomuProjectile {
-    public TrueElephantGunProjectile(EntityType type, Level world) {
+public class GiantPistolProjectile extends TrueGomuProjectile {
+    public GiantPistolProjectile(EntityType type, Level world) {
         super(type, world);
     }
 
-    public TrueElephantGunProjectile(Level world, LivingEntity player, Ability ability) {
+    public GiantPistolProjectile(Level world, LivingEntity player, Ability ability) {
         super(NikaProjectiles.GOMU_GOMU_NO_ELEPHANT_GUN.get(), player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
         this.setMaxLife(12);
         this.setDamage(40f);
         this.setEntityCollisionSize(2.5d);
-        this.setSize(15.5f);
+        this.setSize(8.6686613909f);
         this.setEntityCollisionSize(5.0, 3.0, 5.0);
         this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, 2, 80));
-        this.setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT);
+        this.setDeformation(GomuProjectileRenderer.Deformation.GIANT);
     }
 }

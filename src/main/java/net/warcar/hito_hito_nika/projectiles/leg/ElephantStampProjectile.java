@@ -6,6 +6,7 @@ import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import net.warcar.hito_hito_nika.projectiles.TrueGomuProjectile;
+import net.warcar.hito_hito_nika.renderers.projectiles.GomuProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
@@ -23,5 +24,7 @@ public class ElephantStampProjectile extends TrueGomuProjectile {
         this.setSize(15.5f);
         this.setEntityCollisionSize(5.0, 3.0, 5.0);
         this.addBlockHitEvent(300, TrueGomuHelper.onBlockImpactEvent(this, 2, 80));
+        this.setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT);
+        this.setLeg();
     }
 }

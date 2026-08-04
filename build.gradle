@@ -93,8 +93,8 @@ dependencies {
 
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:8127583")
-    runtimeOnly fg.deobf("curse.maven:mine-mine-no-mi-haki-bar-650542:7824637")
+    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:8324322")
+    //runtimeOnly fg.deobf("curse.maven:mine-mine-no-mi-haki-bar-650542:7824637")
     //implementation fg.deobf("blank:mine-mine-no-mi-${minecraft_version}:${mineminenomi_version}")
     //runtimeOnly fg.deobf("blank:cartaddon:0.7.5")
 }

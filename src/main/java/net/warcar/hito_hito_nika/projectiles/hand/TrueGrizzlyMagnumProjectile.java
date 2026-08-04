@@ -6,6 +6,7 @@ import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import net.warcar.hito_hito_nika.projectiles.TrueGomuProjectile;
+import net.warcar.hito_hito_nika.renderers.projectiles.GomuProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
@@ -24,5 +25,6 @@ public class TrueGrizzlyMagnumProjectile extends TrueGomuProjectile {
         this.setEntityCollisionSize(2.5D);
         this.setSize(15.5f);
         this.addEntityHitEvent(100, TrueGomuHelper.getBazookaOnEntityImpactEvent(this, 5));
+        this.setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT);
     }
 }

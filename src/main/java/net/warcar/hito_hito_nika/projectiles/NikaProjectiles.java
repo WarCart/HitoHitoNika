@@ -74,29 +74,30 @@ public class NikaProjectiles {
 
 	@OnlyIn(Dist.CLIENT)
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event, EntityRendererProvider.Context ctx) {
-		event.registerEntityRenderer(GOMU_GOMU_NO_ROCKET.get(), new GomuProjectileRenderer.Factory(false));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_GUN.get(), new GomuProjectileRenderer.Factory(false));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_GUN.get(), new GomuProjectileRenderer.Factory(false));
-		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_GUN.get(), new GomuProjectileRenderer.Factory(false).setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT));
-		event.registerEntityRenderer(GOMU_GOMU_NO_PISTOL.get(), new GomuProjectileRenderer.Factory(false));
-		event.registerEntityRenderer(GOMU_GOMU_NO_BAZOOKA.get(), new GomuProjectileRenderer.Factory(false));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_GUN.get(), new GomuProjectileRenderer.Factory(false));
-		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_BAZOOKA.get(), new GomuProjectileRenderer.Factory(false));
-		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), new GomuProjectileRenderer.Factory(false));
-		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_GUN.get(), new GomuProjectileRenderer.Factory(false).setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT));
-		event.registerEntityRenderer(GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), new GomuProjectileRenderer.Factory(false).setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT));
+		GomuProjectileRenderer.Factory factory = new GomuProjectileRenderer.Factory();
+		event.registerEntityRenderer(GOMU_GOMU_NO_ROCKET.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_GUN.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_GUN.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_GUN.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_PISTOL.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_BAZOOKA.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_GUN.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_BAZOOKA.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_LEO_REX_BAZOOKA.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_GUN.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_GRIZZLY_MAGNUM.get(), factory);
 		//TODO giant variations
 
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_STAMP.get(), new GomuProjectileRenderer.Factory(true));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_STAMP.get(), new GomuProjectileRenderer.Factory(true));
-		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), new GomuProjectileRenderer.Factory(true).setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT));
-		event.registerEntityRenderer(GOMU_GOMU_NO_STAMP.get(), new GomuProjectileRenderer.Factory(true));
-		event.registerEntityRenderer(GOMU_GOMU_NO_YARI.get(), new GomuProjectileRenderer.Factory(true));
-		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_STAMP.get(), new GomuProjectileRenderer.Factory(true));
-		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_SCHNEIDER.get(), new GomuProjectileRenderer.Factory(true));
-		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), new GomuProjectileRenderer.Factory(true));
-		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_STAMP.get(), new GomuProjectileRenderer.Factory(true).setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT));
-		event.registerEntityRenderer(GOMU_GOMU_NO_GIGANT_YARI.get(), new GomuProjectileRenderer.Factory(true).setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT));
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_KONG_STAMP.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_KING_3_KONG_STAMP.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_BAJRANG_STAMP_GUN.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_STAMP.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_YARI.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_KONG_STAMP.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_SCHNEIDER.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_RHINO_REX_SCHNEIDER.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_ELEPHANT_STAMP.get(), factory);
+		event.registerEntityRenderer(GOMU_GOMU_NO_GIGANT_YARI.get(), factory);
 		//TODO giant variants
 
 		event.registerEntityRenderer(GOMU_GOMU_NO_JET_CULVERIN.get(), new PythonProjectileRenderer.Factory<>(false).setScale(4.5D, 4.5D, 4.5));

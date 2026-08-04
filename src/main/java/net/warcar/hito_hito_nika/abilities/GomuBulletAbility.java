@@ -187,7 +187,7 @@ public class GomuBulletAbility extends Ability {
 				projectile = new ThorElephantStampProjectile(entity.level(), entity, this);
 				speed = 2F;
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				projectile = new ElephantStampProjectile(entity.level(), entity, this);
+				projectile = new GiantStampProjectile(entity.level(), entity, this);
 				projectile.setDamage(projectile.getDamage() * 1.5f);
 				speed = 2F;
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && HakiHelper.hasHardeningActive(entity)) {
@@ -232,7 +232,7 @@ public class GomuBulletAbility extends Ability {
 				projectile = new ThorElephantGunProjectile(entity.level(), entity, this);
 				speed = 2F;
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				projectile = new TrueElephantGunProjectile(entity.level(), entity, this);
+				projectile = new GiantPistolProjectile(entity.level(), entity, this);
 				projectile.setDamage(projectile.getDamage() * 1.5f);
 				speed = 2F;
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && HakiHelper.hasHardeningActive(entity)) {
@@ -347,12 +347,12 @@ public class GomuBulletAbility extends Ability {
 				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Pistol"));
 			}
 		} else {
-			/*if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
+			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				this.setMaxChargeTime(25D);
 				this.cooldown = 120;
 				this.setDisplayName(KING_BAJRANG_STAMP);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("King Bajrang Gun"));
-			} else */if (TrueGomuHelper.hasGearFifthActive(props)) {
+			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
 				this.setMaxChargeTime(15D);
 				this.cooldown = 40;
 				this.setDisplayName(BAJRANG_STAMP);

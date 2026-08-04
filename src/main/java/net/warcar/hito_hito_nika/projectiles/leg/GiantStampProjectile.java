@@ -12,20 +12,19 @@ import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 
-public class GigantYariProjectile extends TrueGomuProjectile {
-    public GigantYariProjectile(EntityType type, Level world) {
+public class GiantStampProjectile extends TrueGomuProjectile {
+    public GiantStampProjectile(EntityType type, Level world) {
         super(type, world);
     }
 
-    public GigantYariProjectile(Level world, LivingEntity player, Ability ability) {
-        super(NikaProjectiles.GOMU_GOMU_NO_GIGANT_YARI.get(), player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
-        this.setDamage(75f);
-        this.setMaxLife(10);
-        this.setSize(15.5f);
-        this.setPassThroughBlocks();
-        this.setEntityCollisionSize(2.5D);
-        this.addEntityHitEvent(100, TrueGomuHelper.getBazookaOnEntityImpactEvent(this, 5));
-        this.setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT);
+    public GiantStampProjectile(Level world, LivingEntity player, Ability ability) {
+        super(NikaProjectiles.GOMU_GOMU_NO_ELEPHANT_STAMP.get(), player, ability, SourceElement.RUBBER, SourceHakiNature.HARDENING, SourceType.FIST, SourceType.PHYSICAL);
+        this.setMaxLife(12);
+        this.setDamage(40f);
+        this.setSize(8.6686613909f);
+        this.setEntityCollisionSize(5.0, 3.0, 5.0);
+        this.addBlockHitEvent(300, TrueGomuHelper.onBlockImpactEvent(this, 2, 80));
+        this.setDeformation(GomuProjectileRenderer.Deformation.GIANT);
         this.setLeg();
     }
 }

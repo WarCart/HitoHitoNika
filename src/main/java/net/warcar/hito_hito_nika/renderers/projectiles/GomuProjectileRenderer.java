@@ -1,5 +1,6 @@
 package net.warcar.hito_hito_nika.renderers.projectiles;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.warcar.hito_hito_nika.entities.LuffyBoss;
+import net.warcar.hito_hito_nika.projectiles.TrueGomuProjectile;
 import org.joml.Matrix4f;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HakiHelper;
 import xyz.pixelatedw.mineminenomi.api.entities.NuLightningEntity;
@@ -21,10 +23,11 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuVerticalLightningEntity;
 import xyz.pixelatedw.mineminenomi.init.ModRenderTypes;
 import xyz.pixelatedw.mineminenomi.init.ModResources;
 
+import java.util.Map;
+
 public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> extends NuLightningEntityRenderer {
-    private final float FIRST_SIZE_MOD;
-    private final boolean leg;
-    private final Deformation deformation;
+    private static final Map<Deformation, Float> FIRST_SIZE_MOD = ImmutableMap.<Deformation, Float>builder().put(Deformation.FLAT, 1f)
+            .put(Deformation.ELEPHANT, (float) (3 / (1 + Math.exp(9)) + 0.2)).put(Deformation.GIANT, (float) (3 / (1 + Math.exp(2)))).build();
     public static final int MAX_DEPTH = 8;
     public static final float U_ARM_SIDE_MIN = 0.65f;
     public static final float U_ARM_SIDE_MAX = 0.68f;
@@ -55,17 +58,18 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
     public static final float V_LEG_CAP_MAX = 0.172f;
     public static final float V_LEG_CAP_DIFF = V_LEG_CAP_MAX - V_LEG_CAP_MIN;
 
-    public GomuProjectileRenderer(EntityRendererProvider.Context renderManager, boolean leg, Deformation deformation) {
+    public GomuProjectileRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager);
-        this.leg = leg;
-        this.deformation = deformation;
-        FIRST_SIZE_MOD = getSizeMod(0);
     }
 
     public void render(NuLightningEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         if (entity.tickCount < 1 || entity.getSegments() < 0) {
             return;
         }
+        if (!(entity instanceof TrueGomuProjectile)) {
+            return;
+        }
+        TrueGomuProjectile gomu = (TrueGomuProjectile) entity;
         int layerAmount = HakiHelper.hasAdvancedBusoActive(entity.getOwner()) ? 3 :
                 (HakiHelper.hasHardeningActive(entity.getOwner(), false, true) ? 2 : 1);
 
@@ -124,23 +128,25 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
         matrixStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));
         matrixStack.mulPose(Axis.ZP.rotationDegrees((float) (entity.tickCount * Math.PI * rotation)));
         if (entity instanceof NuVerticalLightningEntity verticalBeam) {
-            matrixStack.translate(0, 0, -verticalBeam.getOriginPoint().getY());
+            matrixStack.translate(0, 0, -verticalBeam.getY());
         }
 
         float r = entity.getRed() / 255.0f;
         float g = entity.getGreen() / 255.0f;
         float b = entity.getBlue() / 255.0f;
 
-        float prevSizeMod = FIRST_SIZE_MOD;
+        Deformation deformation = gomu.getDeformation();
+        float prevSizeMod = FIRST_SIZE_MOD.get(deformation);
 
         int[] color = {entity.getRed(), entity.getGreen(), entity.getBlue(), 1};
         int[] glowColor = {225, 127, 25, 102};
+        boolean leg = gomu.isLeg();
 
         for (int segmentIndex = 0; segmentIndex < segments; ++segmentIndex) {
             float y = offsetsY[segmentIndex];
             float x = offsetsX[segmentIndex];
 
-            float sizeMod = getSizeMod(((float) segmentIndex / segments));
+            float sizeMod = getSizeMod(deformation, ((float) segmentIndex / segments));
             int trueAmount = layerAmount;
             if (segmentIndex < 1.5 && trueAmount > 1) {
                 trueAmount = 1;
@@ -159,20 +165,20 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
                     float addon2 = layer * size / 1.5f * (segmentIndex - 1);
                     VertexConsumer vertex = buffer.getBuffer(layers[layer]);
                     int[] finalColor = layer == 2 ? glowColor : color;
-                    this.drawSides(matrix4f, vertex, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, false, true, false, maxDistance, segmentLengths[segmentIndex], packedLight);
-                    this.drawSides(matrix4f, vertex, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, true, false, true, true, maxDistance, segmentLengths[segmentIndex], packedLight);
-                    this.drawSides(matrix4f, vertex, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, true, true, false, true, maxDistance, segmentLengths[segmentIndex], packedLight);
-                    this.drawSides(matrix4f, vertex, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, true, false, false, maxDistance, segmentLengths[segmentIndex], packedLight);
+                    this.drawSides(matrix4f, vertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, false, true, false, maxDistance, segmentLengths[segmentIndex], packedLight);
+                    this.drawSides(matrix4f, vertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, true, false, true, true, maxDistance, segmentLengths[segmentIndex], packedLight);
+                    this.drawSides(matrix4f, vertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, true, true, false, true, maxDistance, segmentLengths[segmentIndex], packedLight);
+                    this.drawSides(matrix4f, vertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, true, false, false, maxDistance, segmentLengths[segmentIndex], packedLight);
                 }
             }
             prevSizeMod = sizeMod;
         }
 
-        this.drawCaps(matrix4f, buffer, layers, layerAmount, offsetsX[0], offsetsY[0], prevSizeMod, size, length, r, g, b, alpha, packedLight, segments);
+        this.drawCaps(deformation, matrix4f, buffer, leg, layers, layerAmount, offsetsX[0], offsetsY[0], prevSizeMod, size, length, r, g, b, alpha, packedLight, segments);
     }
 
-    private float getSizeMod(float segmentFloat) {
-        switch (this.deformation) {
+    private static float getSizeMod(Deformation deformation, float segmentFloat) {
+        switch (deformation) {
             case GIANT:
                 return (float) (3 * (1 / (1 + Math.exp(-5 * segmentFloat + 2))));
             case ELEPHANT:
@@ -183,7 +189,7 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
         }
     }
 
-    private void drawSides(Matrix4f matrix4f, VertexConsumer builder, float startY, float startX, int segmentIndex, int maxSegments, float endY, float endX, int r, int g, int b, float alpha, float firstOffset, float secondOffset, boolean negativeOffset, boolean bl2, boolean bl3, boolean bl4, float segmentLength, float segmentLengthAdded, int light) {
+    private void drawSides(Matrix4f matrix4f, VertexConsumer builder, boolean leg, float startY, float startX, int segmentIndex, int maxSegments, float endY, float endX, int r, int g, int b, float alpha, float firstOffset, float secondOffset, boolean negativeOffset, boolean bl2, boolean bl3, boolean bl4, float segmentLength, float segmentLengthAdded, int light) {
         float red = r / 255.0f;
         float green = g / 255.0f;
         float blue = b / 255.0f;
@@ -207,7 +213,7 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
         float u1 = U_ARM_SIDE_MAX;
         float v1 = Math.min(V_ARM_SIDE_MAX, v0 + (segmentFloat * V_ARM_SIDE_DIFF));
 
-        if (this.leg) {
+        if (leg) {
             u0 = U_LEG_SIDE_MIN;
             v0 = V_LEG_SIDE_MIN + (segmentFloat * V_LEG_SIDE_DIFF);
             u1 = U_LEG_SIDE_MAX;
@@ -220,13 +226,13 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
         builder.vertex(matrix4f, x4, y4, z1).color(red, green, blue, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
     }
 
-    private void drawCaps(Matrix4f matrix4f, MultiBufferSource source, RenderType[] layers, int layerAmount, float startX, float startY, float lastMod, float size, float length, float r, float g, float b, float alpha, int light, int maxSegments) {
+    private void drawCaps(Deformation deformation, Matrix4f matrix4f, MultiBufferSource source, boolean leg, RenderType[] layers, int layerAmount, float startX, float startY, float lastMod, float size, float length, float r, float g, float b, float alpha, int light, int maxSegments) {
         float u0 = U_ARM_BACK_CAP_MIN;
         float v0 = V_ARM_CAP_MIN + V_ARM_CAP_DIFF;
         float u1 = U_ARM_BACK_CAP_MAX;
         float v1 = Math.min(V_ARM_CAP_MAX, v0 + V_ARM_CAP_DIFF);
 
-        if (this.leg) {
+        if (leg) {
             u0 = U_LEG_BACK_CAP_MIN;
             v0 = V_LEG_CAP_MIN + V_LEG_CAP_DIFF;
             u1 = U_LEG_BACK_CAP_MAX;
@@ -234,17 +240,17 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
         }
 
         float depth = MAX_DEPTH - 1;
-        float x0 = startX - (depth * size * FIRST_SIZE_MOD);
-        float y0 = startY - (depth * size * FIRST_SIZE_MOD);
-        float x1 = x0 + (depth * size * FIRST_SIZE_MOD) * 2.0f;
-        float y1 = y0 + (depth * size * FIRST_SIZE_MOD) * 2.0f;
+        float x0 = startX - (depth * size * FIRST_SIZE_MOD.get(deformation));
+        float y0 = startY - (depth * size * FIRST_SIZE_MOD.get(deformation));
+        float x1 = x0 + (depth * size * FIRST_SIZE_MOD.get(deformation)) * 2.0f;
+        float y1 = y0 + (depth * size * FIRST_SIZE_MOD.get(deformation)) * 2.0f;
         VertexConsumer builder = source.getBuffer(layers[0]);
         builder.vertex(matrix4f, x0, y0, 0).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
         builder.vertex(matrix4f, x0, y1, 0).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
         builder.vertex(matrix4f, x1, y1, 0).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
         builder.vertex(matrix4f, x1, y0, 0).color(r, g, b, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
 
-        if (!this.leg) {
+        if (!leg) {
             u0 = U_ARM_FRONT_CAP_MIN;
             v0 = V_ARM_CAP_MIN + V_ARM_CAP_DIFF;
             u1 = U_ARM_FRONT_CAP_MAX;
@@ -259,10 +265,10 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
         for (int i = 0; i < layerAmount; i++) {
             depth = (MAX_DEPTH - i * i - 1);
             float addon = i * maxSegments;
-            x0 = startX - ((depth + addon) * size * lastMod);
-            y0 = startY - ((depth + addon) * size * lastMod);
-            x1 = x0 + ((depth + addon) * size * lastMod) * 2.0f;
-            y1 = y0 + ((depth + addon) * size * lastMod) * 2.0f;
+            x0 = startX - ((depth + addon) * size * lastMod) / 2.0f;
+            y0 = startY - ((depth + addon) * size * lastMod) / 2.0f;
+            x1 = x0 + ((depth + addon) * size * lastMod);
+            y1 = y0 + ((depth + addon) * size * lastMod);
             builder = source.getBuffer(layers[i]);
             float offset = (layerAmount - i - 1) / 100f;
             if (i == 2) {
@@ -287,15 +293,7 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
     }
 
     public static class Factory extends NuProjectileRenderer.Factory<NuLightningEntity> {
-        private final boolean leg;
-        private Deformation deformation = Deformation.FLAT;
-
-        public Factory(boolean leg) {
-            this.leg = leg;
-        }
-
         public Factory setDeformation(Deformation deformation) {
-            this.deformation = deformation;
             return this;
         }
         
@@ -306,7 +304,7 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
             } else {
                 model = this.model.apply(manager);
             }
-            GomuProjectileRenderer<?> renderer = new GomuProjectileRenderer<>(manager, this.leg, this.deformation);
+            GomuProjectileRenderer<?> renderer = new GomuProjectileRenderer<>(manager);
             renderer.setUseArmSkin();
             return renderer;
         }

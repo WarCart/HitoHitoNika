@@ -131,7 +131,7 @@ public class TrueGomuGatling extends Ability {
 				projectileSpace = 6;
 				projDamageReduction = 0.4F;
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				projectile = new ElephantStampProjectile(entity.level(), entity, this);
+				projectile = new GiantStampProjectile(entity.level(), entity, this);
 				speed = 2.4F;
 				projectileSpace = 9;
 				projDamageReduction = 0.6F;
@@ -189,7 +189,7 @@ public class TrueGomuGatling extends Ability {
 				projectileSpace = 2;
 				projDamageReduction = 0.4F;
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
-				projectile = new TrueElephantGunProjectile(entity.level(), entity, this);
+				projectile = new GiantStampProjectile(entity.level(), entity, this);
 				speed = 2.4F;
 				projectileSpace = 3;
 				projDamageReduction = 0.6F;

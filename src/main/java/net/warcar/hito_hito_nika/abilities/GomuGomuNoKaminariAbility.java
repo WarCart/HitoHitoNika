@@ -102,7 +102,7 @@ public class GomuGomuNoKaminariAbility extends Ability {
             int targetY = hitResult.getType().equals(HitResult.Type.BLOCK) ? (int) hitResult.getLocation().y : AbilityHelper.CLOUD_HEIGHT;
             float travelLength = targetY + 16.0F * multi;
             Vec3 pos = new Vec3(mopPos.x, targetY, mopPos.z);
-            ElThorProjectile lightning = new ElThorProjectile(entity.level(), entity, pos.x, pos.y, pos.z, targetY, travelLength, 1, this);
+            ElThorProjectile lightning = new ElThorProjectile(entity.level(), entity, pos.x, pos.y, pos.z, travelLength, 1, this);
             lightning.setColor(51, 127, 255, 102);
             entity.level().addFreshEntity(lightning);
             entity.level().playSound(null, new BlockPos((int) mopPos.x, (int) mopPos.y, (int) mopPos.z), ModSounds.EL_THOR_SFX.get(), SoundSource.PLAYERS, 20.0F, 1.0F);

@@ -146,8 +146,11 @@ public class TrueGomuPistol extends Ability {
 				projectile = new ElephantStampProjectile(player.level(), player, this);
 				projectile.setDamage(projectile.getDamage() * 2);
 				speed = 2F;
-			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
+			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(player)) {
 				projectile = new ElephantStampProjectile(player.level(), player, this);
+				speed = 1.8F;
+			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
+				projectile = new GiantStampProjectile(player.level(), player, this);
 				speed = 1.8F;
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				projectile = new JetStampProjectile(player.level(), player, this);
@@ -187,8 +190,11 @@ public class TrueGomuPistol extends Ability {
 				projectile = new TrueElephantGunProjectile(player.level(), player, this);
 				projectile.setDamage(projectile.getDamage() * 2);
 				speed = 2F;
-			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
+			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(player)) {
 				projectile = new TrueElephantGunProjectile(player.level(), player, this);
+				speed = 1.8F;
+			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
+				projectile = new GiantPistolProjectile(player.level(), player, this);
 				speed = 1.8F;
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				projectile = new TrueJetPistolProjectile(player.level(), player, this);

@@ -6,6 +6,7 @@ import net.minecraft.world.level.Level;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import net.warcar.hito_hito_nika.projectiles.TrueGomuProjectile;
+import net.warcar.hito_hito_nika.renderers.projectiles.GomuProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
@@ -27,6 +28,7 @@ public class BajrangGunProjectile extends TrueGomuProjectile {
 		this.setSize(size * 2);
 		this.addBlockHitEvent(100, TrueGomuHelper.onBlockImpactEvent(this, size, 200));
 		this.size = size;
+		this.setDeformation(GomuProjectileRenderer.Deformation.ELEPHANT);
 	}
 
 	public BajrangGunProjectile(Level world, LivingEntity player, Ability ability) {
