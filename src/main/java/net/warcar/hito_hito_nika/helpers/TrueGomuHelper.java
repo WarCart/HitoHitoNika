@@ -1,6 +1,7 @@
 package net.warcar.hito_hito_nika.helpers;
 
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -9,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
 import net.warcar.hito_hito_nika.config.CommonConfig;
@@ -26,8 +27,7 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuLightningEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityUseConditions;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 
@@ -90,7 +90,7 @@ public final class TrueGomuHelper {
 		}
 	};
 
-	public static <A extends Ability> boolean canActivateGear(IAbilityData props, A gear) {
+	public static <A extends Ability> boolean canActivateGear(AbilityData props, A gear) {
 		if (gear instanceof TrueGearFourthAbility fourthGear) {
             if (fourthGear.isBoundman()) {
 				return !hasGearThirdActive(props) && !hasGearSecondActive(props) && !hasFusenActive(props);
@@ -110,66 +110,66 @@ public final class TrueGomuHelper {
 						|| (core.equals(TrueGearFifthAbility.INSTANCE.get()) && (hasGearThirdActive(props) || hasGearSecondActive(props) || hasGearFourthActive(props))));
 	}
 
-	public static boolean hasFusenActive(IAbilityData props) {
+	public static boolean hasFusenActive(AbilityData props) {
 		Ability ability = props.getEquippedAbility(GomuFusenAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
-	public static boolean hasGearSecondActive(IAbilityData props) {
+	public static boolean hasGearSecondActive(AbilityData props) {
 		Ability ability = props.getEquippedAbility(TrueGearSecondAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
-	public static boolean hasGearThirdActive(IAbilityData props) {
+	public static boolean hasGearThirdActive(AbilityData props) {
 		Ability ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
-	public static boolean hasGigantActive(IAbilityData props) {
+	public static boolean hasGigantActive(AbilityData props) {
 		TrueGearThirdAbility ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isGiant();
 	}
 
-	public static boolean isSmall(IAbilityData props) {
+	public static boolean isSmall(AbilityData props) {
 		TrueGearThirdAbility ability = props.getEquippedAbility(TrueGearThirdAbility.INSTANCE.get());
 		return ability != null && ability.getSmallFormCooldown() > 1;
 	}
 
-	public static boolean hasGearFourthBoundmanActive(IAbilityData props) {
+	public static boolean hasGearFourthBoundmanActive(AbilityData props) {
 		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isBoundman();
 	}
 
-	public static boolean hasGearFourthActive(IAbilityData props) {
+	public static boolean hasGearFourthActive(AbilityData props) {
 		Ability ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
-	public static boolean hasGearFourthSnakemanActive(IAbilityData props) {
+	public static boolean hasGearFourthSnakemanActive(AbilityData props) {
 		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isSnakeman();
 	}
 
-	public static boolean hasGearFourthTankmanActive(IAbilityData props) {
+	public static boolean hasGearFourthTankmanActive(AbilityData props) {
 		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isTankman();
 	}
 
-	public static boolean hasPartialGearFourthActive(IAbilityData props) {
+	public static boolean hasPartialGearFourthActive(AbilityData props) {
 		TrueGearFourthAbility ability = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous() && ability.isPartial();
 	}
 
-	public static boolean hasGearFifthActive(IAbilityData props) {
+	public static boolean hasGearFifthActive(AbilityData props) {
 		Ability ability = props.getEquippedAbility(TrueGearFifthAbility.INSTANCE.get());
 		return ability != null && ability.isContinuous();
 	}
 
-	public static boolean hasHakiEmissionActive(IAbilityData props) {
+	public static boolean hasHakiEmissionActive(AbilityData props) {
 		return hasAbilityActive(props, BusoshokuHakiEmissionAbility.INSTANCE) || hasAbilityActive(props, BusoshokuHakiInternalDestructionAbility.INSTANCE);
 	}
 
-	public static <A extends Ability> boolean hasAbilityActive(IAbilityData props, RegistryObject<AbilityCore<A>> ability) {
+	public static <A extends Ability> boolean hasAbilityActive(AbilityData props, DeferredHolder<AbilityCore<?>, AbilityCore<A>> ability) {
 		if (ability == null) {
 			return false;
 		}
@@ -200,7 +200,7 @@ public final class TrueGomuHelper {
 	}
 
 	public static void stopGatling(LivingEntity entity) {
-		TrueGomuGatling abl = AbilityCapability.getEquippedAbility(entity, TrueGomuGatling.INSTANCE.get());
+		TrueGomuGatling abl = AbilityData.getEquippedAbility(entity, TrueGomuGatling.INSTANCE.get());
 		if (abl != null && abl.isContinuous()) {
 			abl.getComponent(ModAbilityComponents.CONTINUOUS.get()).ifPresent(comp -> comp.stopContinuity(entity));
 		}
@@ -338,9 +338,9 @@ public final class TrueGomuHelper {
 
 	public static void unlockAdvancement(ServerPlayer player, String advancement, String... criteriaKey) {
 		try {
-			Advancement pAdvancement = player.server.getAdvancements().getAdvancement(ResourceLocation.parse("hito_hito_no_mi_nika:" + advancement));
+			AdvancementHolder holder = player.server.getAdvancements().get(ResourceLocation.parse("hito_hito_no_mi_nika:" + advancement));
 			for (String criterionKey : criteriaKey)
-				player.getAdvancements().award(pAdvancement, criterionKey);
+				player.getAdvancements().award(holder, criterionKey);
 		}
 		catch (NullPointerException e) {
 			e.printStackTrace();

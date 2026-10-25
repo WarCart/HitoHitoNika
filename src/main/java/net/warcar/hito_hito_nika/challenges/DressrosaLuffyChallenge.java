@@ -12,10 +12,6 @@ import xyz.pixelatedw.mineminenomi.challenges.arenas.JungleClearingSimpleArena;
 import xyz.pixelatedw.mineminenomi.init.ModArmors;
 import xyz.pixelatedw.mineminenomi.items.armors.Mod3DArmorItem;
 
-import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
-
 public class DressrosaLuffyChallenge extends Challenge {
     public static final ChallengeCore INSTANCE = new ChallengeCore.Builder<>("luffy_hard", "Luffy (Hard)",
             "Defeat Luffy (Dressrosa)", NPCGroups.STRAWHATS.getName(), DressrosaLuffyChallenge::new).setDifficultyStars(5)

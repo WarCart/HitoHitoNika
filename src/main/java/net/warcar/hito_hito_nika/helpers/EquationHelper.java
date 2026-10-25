@@ -2,8 +2,8 @@ package net.warcar.hito_hito_nika.helpers;
 
 import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.enums.HakiType;
-import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.EntityStatsData;
+import xyz.pixelatedw.mineminenomi.data.entity.HakiData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class EquationHelper {
     static {
         operators = new HashMap<>();
         //User based
-        operators.put("doriki", (user, numbers) -> EntityStatsCapability.get(user).get().getDoriki());
+        operators.put("doriki", (user, numbers) -> EntityStatsData.get(user).get().getDoriki());
         operators.put("totalHakiXp", (user, numbers) -> hakixp(user, HakiType.HAOSHOKU));
         operators.put("busoHakiXp", (user, numbers) -> hakixp(user, HakiType.BUSOSHOKU));
         operators.put("kenHakiXp", (user, numbers) -> hakixp(user, HakiType.KENBUNSHOKU));
@@ -60,12 +60,12 @@ public class EquationHelper {
     private static double hakixp(LivingEntity user, HakiType hakiType) {
         switch (hakiType) {
             case HAOSHOKU:
-                return HakiCapability.get(user).get().getTotalHakiExp();
+                return HakiData.get(user).get().getTotalHakiExp();
             case BUSOSHOKU:
-                return HakiCapability.get(user).get().getBusoshokuHakiExp();
+                return HakiData.get(user).get().getBusoshokuHakiExp();
             case KENBUNSHOKU:
             default:
-                return HakiCapability.get(user).get().getKenbunshokuHakiExp();
+                return HakiData.get(user).get().getKenbunshokuHakiExp();
         }
     }
 

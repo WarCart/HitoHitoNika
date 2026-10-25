@@ -3,13 +3,13 @@ package net.warcar.hito_hito_nika.effects;
 
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import net.warcar.hito_hito_nika.abilities.TrueGearFifthAbility;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
 import xyz.pixelatedw.mineminenomi.effects.BaseEffect;
 import xyz.pixelatedw.mineminenomi.init.ModNetwork;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
@@ -34,17 +34,17 @@ public class GomuReviveEffect extends BaseEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap manager, int amp) {
-        super.removeAttributeModifiers(entity, manager, amp);
+    public void onStartEffect(LivingEntity entity, MobEffectInstance instance) {
+        super.onStartEffect(entity, instance);
         if (!entity.level().isClientSide) {
             if (entity instanceof Player) {
-                IAbilityData props = AbilityCapability.get(entity).get();
+                AbilityData props = AbilityData.get(entity).get();
                 if (!props.hasEquippedAbility(TrueGearFifthAbility.INSTANCE.get())) {
                     TrueGearFifthAbility ability = TrueGearFifthAbility.INSTANCE.get().createAbility();
                     for (int i = 0; i < 2 * 8; i++) {
                         if (props.getEquippedAbility(i) == null) {
                             props.setEquippedAbility(i, ability);
-                            ModNetwork.sendToAllTrackingAndSelf(new SSyncAbilityDataPacket(entity, AbilityCapability.get(entity)), entity);
+                            ModNetwork.sendToAllTrackingAndSelf(new SSyncAbilityDataPacket(entity), entity);
                             ModNetwork.sendToAllTrackingAndSelf(new SUpdateEquippedAbilityPacket(entity, ability), entity);
                         }
                     }
