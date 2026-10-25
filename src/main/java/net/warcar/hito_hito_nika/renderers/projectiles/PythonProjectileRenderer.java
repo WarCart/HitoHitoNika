@@ -131,10 +131,10 @@ public class PythonProjectileRenderer<E extends PythonProjectile> extends NuProj
             v1 = Math.min(V_LEG_SIDE_MAX, v0 + (segmentFloat * V_LEG_SIDE_DIFF));
         }
 
-        builder.vertex(matrix4f, x1, y1, z1).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x2, y2, z2).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x3, y3, z2).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x4, y4, z1).color(r, g, b, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+        builder.addVertex(matrix4f, x1, y1, z1).setColor(r, g, b, alpha).setUv(u0, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x2, y2, z2).setColor(r, g, b, alpha).setUv(u0, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x3, y3, z2).setColor(r, g, b, alpha).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x4, y4, z1).setColor(r, g, b, alpha).setUv(u1, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
     }
 
     private void drawCaps(Matrix4f matrix4f, MultiBufferSource source, RenderType[] layers, int layerAmount, float startX, float startY, float size, float length, float r, float g, float b, float alpha, int light, int maxSegments) {
@@ -156,10 +156,10 @@ public class PythonProjectileRenderer<E extends PythonProjectile> extends NuProj
         float x1 = x0 + (depth * size) * 2.0f;
         float y1 = y0 + (depth * size) * 2.0f;
         VertexConsumer builder = source.getBuffer(layers[0]);
-        builder.vertex(matrix4f, x0, y0, 0).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x0, y1, 0).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x1, y1, 0).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x1, y0, 0).color(r, g, b, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+        builder.addVertex(matrix4f, x0, y0, 0).setColor(r, g, b, alpha).setUv(u0, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x0, y1, 0).setColor(r, g, b, alpha).setUv(u0, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x1, y1, 0).setColor(r, g, b, alpha).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x1, y0, 0).setColor(r, g, b, alpha).setUv(u1, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
 
         if (!this.leg) {
             u0 = U_ARM_FRONT_CAP_MIN;
@@ -188,10 +188,10 @@ public class PythonProjectileRenderer<E extends PythonProjectile> extends NuProj
                 b = 0.1f;
                 alpha = 0.4f;
             }
-            builder.vertex(matrix4f, x0, y0, length - offset).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-            builder.vertex(matrix4f, x0, y1, length - offset).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-            builder.vertex(matrix4f, x1, y1, length - offset).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-            builder.vertex(matrix4f, x1, y0, length - offset).color(r, g, b, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+            builder.addVertex(matrix4f, x0, y0, length - offset).setColor(r, g, b, alpha).setUv(u0, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+            builder.addVertex(matrix4f, x0, y1, length - offset).setColor(r, g, b, alpha).setUv(u0, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+            builder.addVertex(matrix4f, x1, y1, length - offset).setColor(r, g, b, alpha).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+            builder.addVertex(matrix4f, x1, y0, length - offset).setColor(r, g, b, alpha).setUv(u1, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
         }
     }
 
@@ -205,10 +205,10 @@ public class PythonProjectileRenderer<E extends PythonProjectile> extends NuProj
             return luffy.getCurrentTexture();
         }
         if (entity.getOwner() != null && entity.getOwner() instanceof AbstractClientPlayer player) {
-            return player.getSkinTextureLocation();
+            return player.getSkin().texture();
         }
         else {
-            return DefaultPlayerSkin.getDefaultSkin(entity.getUUID());
+            return DefaultPlayerSkin.get(entity.getUUID()).texture();
         }
     }
 

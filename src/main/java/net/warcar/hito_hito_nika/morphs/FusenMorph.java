@@ -6,11 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
-import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +24,7 @@ public class FusenMorph extends MorphInfo {
 
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTexture(LivingEntity entity) {
-        return entity instanceof AbstractClientPlayer player ? player.getSkinTextureLocation() : null;
+        return entity instanceof AbstractClientPlayer player ? player.getSkin().texture() : null;
     }
 
     public float getEyeHeight(LivingEntity entity) {

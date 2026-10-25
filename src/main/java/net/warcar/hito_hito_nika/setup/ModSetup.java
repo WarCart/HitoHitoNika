@@ -5,29 +5,30 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import net.warcar.hito_hito_nika.renderers.layers.TrueGomuSmokeLayer;
-import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.MineMineNoMi;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ModSetup {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -41,8 +42,8 @@ public class ModSetup {
             }
         }
 
-        for (String skin : event.getSkins()) {
-            boolean isSlim = skin.equals("slim");
+        for (PlayerSkin.Model skin : event.getSkins()) {
+            boolean isSlim = skin.equals(PlayerSkin.Model.SLIM);
             LivingEntityRenderer<Player, PlayerModel<Player>> renderer = event.getSkin(skin);
             renderer.addLayer(new TrueGomuSmokeLayer<>(ctx, renderer));
         }
@@ -75,7 +76,7 @@ public class ModSetup {
     @SubscribeEvent
     public static void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            if (ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath(ModMain.PROJECT_ID, "gomu_gomu_no_mi")) instanceof AkumaNoMiItem gomu) {
+            if (BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(MineMineNoMi.PROJECT_ID, "gomu_gomu_no_mi")) instanceof AkumaNoMiItem gomu) {
                 AkumaNoMiItem nika = TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA.get();
                 if (gomu != nika) {
                     Class<AkumaNoMiItem> fruits = AkumaNoMiItem.class;

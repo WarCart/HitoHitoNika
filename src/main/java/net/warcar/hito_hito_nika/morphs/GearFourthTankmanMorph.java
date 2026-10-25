@@ -7,8 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
 
 import java.util.Map;
@@ -19,7 +19,7 @@ public class GearFourthTankmanMorph extends MorphInfo {
 
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTexture(LivingEntity entity) {
-        return entity instanceof AbstractClientPlayer ? ((AbstractClientPlayer) entity).getSkinTextureLocation() : null;
+        return entity instanceof AbstractClientPlayer ? ((AbstractClientPlayer) entity).getSkin().texture() : null;
     }
 
     @Override

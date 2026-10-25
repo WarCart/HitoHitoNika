@@ -138,7 +138,7 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
         Deformation deformation = gomu.getDeformation();
         float prevSizeMod = FIRST_SIZE_MOD.get(deformation);
 
-        int[] color = {entity.getRed(), entity.getGreen(), entity.getBlue(), 1};
+        int[] setColor = {entity.getRed(), entity.getGreen(), entity.getBlue(), 1};
         int[] glowColor = {225, 127, 25, 102};
         boolean leg = gomu.isLeg();
 
@@ -163,12 +163,12 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
                 if (segmentIndex <= targetNumber) {
                     float addon = layer * size / 1.5f * segmentIndex;
                     float addon2 = layer * size / 1.5f * (segmentIndex - 1);
-                    VertexConsumer vertex = buffer.getBuffer(layers[layer]);
-                    int[] finalColor = layer == 2 ? glowColor : color;
-                    this.drawSides(matrix4f, vertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, false, true, false, maxDistance, segmentLengths[segmentIndex], packedLight);
-                    this.drawSides(matrix4f, vertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, true, false, true, true, maxDistance, segmentLengths[segmentIndex], packedLight);
-                    this.drawSides(matrix4f, vertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, true, true, false, true, maxDistance, segmentLengths[segmentIndex], packedLight);
-                    this.drawSides(matrix4f, vertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, true, false, false, maxDistance, segmentLengths[segmentIndex], packedLight);
+                    VertexConsumer addVertex = buffer.getBuffer(layers[layer]);
+                    int[] finalColor = layer == 2 ? glowColor : setColor;
+                    this.drawSides(matrix4f, addVertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, false, true, false, maxDistance, segmentLengths[segmentIndex], packedLight);
+                    this.drawSides(matrix4f, addVertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, true, false, true, true, maxDistance, segmentLengths[segmentIndex], packedLight);
+                    this.drawSides(matrix4f, addVertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, true, true, false, true, maxDistance, segmentLengths[segmentIndex], packedLight);
+                    this.drawSides(matrix4f, addVertex, leg, y, x, segmentIndex, segments, endY, endX, finalColor[0], finalColor[1], finalColor[2], finalColor[3], (depth + addon) * sizeMod, (depth + addon2) * prevSizeMod, false, true, false, false, maxDistance, segmentLengths[segmentIndex], packedLight);
                 }
             }
             prevSizeMod = sizeMod;
@@ -220,10 +220,10 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
             v1 = Math.min(V_LEG_SIDE_MAX, v0 + (segmentFloat * V_LEG_SIDE_DIFF));
         }
 
-        builder.vertex(matrix4f, x1, y1, z1).color(red, green, blue, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x2, y2, z2).color(red, green, blue, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x3, y3, z2).color(red, green, blue, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x4, y4, z1).color(red, green, blue, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+        builder.addVertex(matrix4f, x1, y1, z1).setColor(red, green, blue, alpha).setUv(u0, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x2, y2, z2).setColor(red, green, blue, alpha).setUv(u0, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x3, y3, z2).setColor(red, green, blue, alpha).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x4, y4, z1).setColor(red, green, blue, alpha).setUv(u1, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
     }
 
     private void drawCaps(Deformation deformation, Matrix4f matrix4f, MultiBufferSource source, boolean leg, RenderType[] layers, int layerAmount, float startX, float startY, float lastMod, float size, float length, float r, float g, float b, float alpha, int light, int maxSegments) {
@@ -245,10 +245,10 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
         float x1 = x0 + (depth * size * FIRST_SIZE_MOD.get(deformation)) * 2.0f;
         float y1 = y0 + (depth * size * FIRST_SIZE_MOD.get(deformation)) * 2.0f;
         VertexConsumer builder = source.getBuffer(layers[0]);
-        builder.vertex(matrix4f, x0, y0, 0).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x0, y1, 0).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x1, y1, 0).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-        builder.vertex(matrix4f, x1, y0, 0).color(r, g, b, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+        builder.addVertex(matrix4f, x0, y0, 0).setColor(r, g, b, alpha).setUv(u0, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x0, y1, 0).setColor(r, g, b, alpha).setUv(u0, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x1, y1, 0).setColor(r, g, b, alpha).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+        builder.addVertex(matrix4f, x1, y0, 0).setColor(r, g, b, alpha).setUv(u1, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
 
         if (!leg) {
             u0 = U_ARM_FRONT_CAP_MIN;
@@ -277,10 +277,10 @@ public class GomuProjectileRenderer<M extends EntityModel<NuLightningEntity>> ex
                 b = 0.1f;
                 alpha = 0.4f;
             }
-            builder.vertex(matrix4f, x0, y0, length - offset).color(r, g, b, alpha).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-            builder.vertex(matrix4f, x0, y1, length - offset).color(r, g, b, alpha).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-            builder.vertex(matrix4f, x1, y1, length - offset).color(r, g, b, alpha).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
-            builder.vertex(matrix4f, x1, y0, length - offset).color(r, g, b, alpha).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).endVertex();
+            builder.addVertex(matrix4f, x0, y0, length - offset).setColor(r, g, b, alpha).setUv(u0, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+            builder.addVertex(matrix4f, x0, y1, length - offset).setColor(r, g, b, alpha).setUv(u0, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+            builder.addVertex(matrix4f, x1, y1, length - offset).setColor(r, g, b, alpha).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+            builder.addVertex(matrix4f, x1, y0, length - offset).setColor(r, g, b, alpha).setUv(u1, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
         }
     }
 
