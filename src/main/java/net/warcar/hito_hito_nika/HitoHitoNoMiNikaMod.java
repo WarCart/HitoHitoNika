@@ -1,14 +1,14 @@
 package net.warcar.hito_hito_nika;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.*;
@@ -25,13 +25,12 @@ public class HitoHitoNoMiNikaMod
     public static final Logger LOGGER = LogManager.getLogger();
     private static final Map<String, String> langMap = new HashMap<>();
 
-    public HitoHitoNoMiNikaMod(FMLJavaModLoadingContext ctx) {
-        IEventBus bus = ctx.getModEventBus();
+    public HitoHitoNoMiNikaMod(IEventBus bus, ModContainer modContainer) {
         bus.addListener(this::setup);
         bus.addListener(this::enqueueIMC);
         bus.addListener(this::processIMC);
         bus.addListener(this::doClientStuff);
-        ctx.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         TrueMorphs.init();
         TrueGomuHelper.init();
         TrueGomuGomuNoMi.register(bus);
@@ -44,7 +43,7 @@ public class HitoHitoNoMiNikaMod
         langMap.put("text.hito_hito_no_mi_nika.wait_power", "Wait, power!");
         langMap.put("text.hito_hito_no_mi_nika.the_peak.desc", "I can do everything I wanted to do!! I think I can fight a bit longer... My heartbeat sounds so funny!! This is the pinnacle of what I can do!! This is... Gear 5!!!");
         langMap.put("text.hito_hito_no_mi_nika.wait_power.desc", "Stop Gear 4 from ending to fight even longer");
-        MinecraftForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(this);
     }
 
     private void setup(final FMLCommonSetupEvent event) {}

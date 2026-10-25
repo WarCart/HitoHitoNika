@@ -1,31 +1,32 @@
 package net.warcar.hito_hito_nika.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.config.IConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
-@Mod.EventBusSubscriber(modid = "hito_hito_no_mi_nika", bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = "hito_hito_no_mi_nika", bus = EventBusSubscriber.Bus.MOD)
 public class CommonConfig {
     public static final CommonConfig INSTANCE;
-    public static final ForgeConfigSpec SPEC;
-    private final ForgeConfigSpec.BooleanValue blackLegAbilities;
-    private final ForgeConfigSpec.BooleanValue nonCanonAbilities;
-    private final ForgeConfigSpec.ConfigValue<String> g2Length;
-    private final ForgeConfigSpec.ConfigValue<String> g2Cooldown;
-    private final ForgeConfigSpec.ConfigValue<String> g3Length;
-    private final ForgeConfigSpec.ConfigValue<String> g3Cooldown;
-    private final ForgeConfigSpec.ConfigValue<String> g4Length;
-    private final ForgeConfigSpec.ConfigValue<String> g4Cooldown;
-    private final ForgeConfigSpec.ConfigValue<String> g4PostBonusCooldown;
-    private final ForgeConfigSpec.ConfigValue<String> g4EffectsLength;
-    private final ForgeConfigSpec.ConfigValue<String> g5Length;
-    private final ForgeConfigSpec.ConfigValue<String> g5Cooldown;
-    private final ForgeConfigSpec.ConfigValue<String> fusenLength;
-    private final ForgeConfigSpec.ConfigValue<String> fusenCooldown;
-    private final ForgeConfigSpec.ConfigValue<String> gatlingLength;
-    private final ForgeConfigSpec.ConfigValue<String> gatlingCooldown;
+    public static final IConfigSpec SPEC;
+    private final ModConfigSpec.BooleanValue blackLegAbilities;
+    private final ModConfigSpec.BooleanValue nonCanonAbilities;
+    private final ModConfigSpec.ConfigValue<String> g2Length;
+    private final ModConfigSpec.ConfigValue<String> g2Cooldown;
+    private final ModConfigSpec.ConfigValue<String> g3Length;
+    private final ModConfigSpec.ConfigValue<String> g3Cooldown;
+    private final ModConfigSpec.ConfigValue<String> g4Length;
+    private final ModConfigSpec.ConfigValue<String> g4Cooldown;
+    private final ModConfigSpec.ConfigValue<String> g4PostBonusCooldown;
+    private final ModConfigSpec.ConfigValue<String> g4EffectsLength;
+    private final ModConfigSpec.ConfigValue<String> g5Length;
+    private final ModConfigSpec.ConfigValue<String> g5Cooldown;
+    private final ModConfigSpec.ConfigValue<String> fusenLength;
+    private final ModConfigSpec.ConfigValue<String> fusenCooldown;
+    private final ModConfigSpec.ConfigValue<String> gatlingLength;
+    private final ModConfigSpec.ConfigValue<String> gatlingCooldown;
 
-    public CommonConfig(ForgeConfigSpec.Builder builder) {
+    public CommonConfig(ModConfigSpec.Builder builder) {
         builder.push("Abilities");
         this.blackLegAbilities = builder.comment("Uses leg abilities if you are Black leg user\nDefault: true").define("Black Leg Abilities", true);
         this.nonCanonAbilities = builder.comment("Abilities from video games, films, ect.\nDefault: false").define("Non-Canon Abilities", false);
@@ -125,7 +126,7 @@ public class CommonConfig {
     }
 
     static {
-        Pair<CommonConfig, ForgeConfigSpec> pair = (new ForgeConfigSpec.Builder()).configure(CommonConfig::new);
+        Pair<CommonConfig, ModConfigSpec> pair = (new ModConfigSpec.Builder()).configure(CommonConfig::new);
         SPEC = pair.getRight();
         INSTANCE = pair.getLeft();
     }
