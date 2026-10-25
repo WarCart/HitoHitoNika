@@ -129,9 +129,9 @@ public class LuffyBoss extends OPBossEntity {
         if (this.getChallengeInfo().isDifficultyUltimate() && !this.isLastPhase()) {
             devilFruitData.setAwakenedFruit(true);
             this.setHealth(5);
-            this.addEffect(new MobEffectInstance(GomuEffects.GOMU_REVIVE.get(), 600, 1, true, false));
+            this.addEffect(new MobEffectInstance(GomuEffects.GOMU_REVIVE.getDelegate(), 600, 1, true, false));
             this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 12, true, true));
-            this.addEffect(new MobEffectInstance(ModEffects.UNCONSCIOUS.get(), 600, 1, true, true));
+            this.addEffect(new MobEffectInstance(ModEffects.UNCONSCIOUS.getDelegate(), 600, 1, true, true));
             this.startLastPhase();
         } else {
             super.die(p_70645_1_);
@@ -167,9 +167,9 @@ public class LuffyBoss extends OPBossEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(POST_TS, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(POST_TS, false);
     }
 
     public boolean isLastPhase() {

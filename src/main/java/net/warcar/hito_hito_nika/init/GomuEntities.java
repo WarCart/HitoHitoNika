@@ -25,7 +25,7 @@ import xyz.pixelatedw.mineminenomi.renderers.entities.mobs.OPHumanoidRenderer;
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class GomuEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, HitoHitoNoMiNikaMod.MOD_ID);
-    public static final DeferredHolder<EntityType<?>, EntityType<LuffyBoss>> LUFFY = register("Luffy", ModRegistry.createEntityType(LuffyBoss::new, ModMobs.PIRATES));
+    public static final DeferredHolder<EntityType<?>, EntityType<LuffyBoss>> LUFFY = register("Luffy", ModRegistry.createEntityType(LuffyBoss::new, ModMobs.PIRATES.getValue()));
 
     public static void register(IEventBus eventBus) {
         ENTITIES.register(eventBus);
