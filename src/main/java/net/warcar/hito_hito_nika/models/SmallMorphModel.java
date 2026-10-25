@@ -19,32 +19,32 @@ public class SmallMorphModel <T extends Player> extends PlayerModel<T> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         matrixStack.pushPose();
         if (sneaking) {
             matrixStack.translate(0, 0.6, 0);
         } else {
             matrixStack.translate(0, 0.75, 0);
         }
-        head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        head.render(matrixStack, buffer, packedLight, packedOverlay, color);
         hat.render(matrixStack, buffer, packedLight, packedOverlay);
         matrixStack.popPose();
         matrixStack.pushPose();
         matrixStack.scale(0.7f, 0.5f, 0.7f);
         matrixStack.translate(0, 1.5, 0);
-        body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        body.render(matrixStack, buffer, packedLight, packedOverlay, color);
         jacket.render(matrixStack, buffer, packedLight, packedOverlay);
 
-        leftArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        leftArm.render(matrixStack, buffer, packedLight, packedOverlay, color);
         leftSleeve.render(matrixStack, buffer, packedLight, packedOverlay);
 
-        rightArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        rightArm.render(matrixStack, buffer, packedLight, packedOverlay, color);
         rightSleeve.render(matrixStack, buffer, packedLight, packedOverlay);
 
-        leftLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        leftLeg.render(matrixStack, buffer, packedLight, packedOverlay, color);
         leftPants.render(matrixStack, buffer, packedLight, packedOverlay);
 
-        rightLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        rightLeg.render(matrixStack, buffer, packedLight, packedOverlay, color);
         rightPants.render(matrixStack, buffer, packedLight, packedOverlay);
         matrixStack.popPose();
     }

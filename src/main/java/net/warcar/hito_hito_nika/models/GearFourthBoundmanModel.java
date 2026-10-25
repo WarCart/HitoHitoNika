@@ -12,14 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.MineMineNoMi;
 import xyz.pixelatedw.mineminenomi.api.helpers.RendererHelper;
 import xyz.pixelatedw.mineminenomi.api.morph.HumanoidMorphModel;
 
 public class GearFourthBoundmanModel<T extends LivingEntity> extends HumanoidMorphModel<T> {
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModMain.PROJECT_ID, "gear_fourth"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MineMineNoMi.PROJECT_ID, "gear_fourth"), "main");
 
-	public static final ResourceLocation OVERLAY = ResourceLocation.fromNamespaceAndPath(ModMain.PROJECT_ID, "textures/models/morphs/g4_overlay.png");
+	public static final ResourceLocation OVERLAY = ResourceLocation.fromNamespaceAndPath(MineMineNoMi.PROJECT_ID, "textures/models/morphs/g4_overlay.png");
 	private boolean gomuAnimations = true;
 	private boolean isFlying = false;
 
@@ -34,7 +34,7 @@ public class GearFourthBoundmanModel<T extends LivingEntity> extends HumanoidMor
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
 		float scale = 1.5f;
 		matrixStack.pushPose();
 		matrixStack.scale(scale, scale, scale);
@@ -43,14 +43,14 @@ public class GearFourthBoundmanModel<T extends LivingEntity> extends HumanoidMor
 		}
 		matrixStack.translate(0, -0.8, 0);
 
-		this.head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.head.render(matrixStack, buffer, packedLight, packedOverlay, color);
 		if (this.gomuAnimations) {
 			this.hat.copyFrom(this.head);
-			this.hat.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			this.hat.render(matrixStack, buffer, packedLight, packedOverlay, color);
 		}
 
 		matrixStack.pushPose();
-		this.body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.body.render(matrixStack, buffer, packedLight, packedOverlay, color);
 		matrixStack.popPose();
 
 		if (this.gomuAnimations) {
@@ -64,16 +64,16 @@ public class GearFourthBoundmanModel<T extends LivingEntity> extends HumanoidMor
 			matrixStack.translate(0.25, -0.07, 0);
 		}
 
-		this.rightArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.rightArm.render(matrixStack, buffer, packedLight, packedOverlay, color);
 		matrixStack.popPose();
 
 		matrixStack.pushPose();
 		matrixStack.scale(1.75F, 1.75F, 1.75F);
-		this.leftArm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.leftArm.render(matrixStack, buffer, packedLight, packedOverlay, color);
 		matrixStack.popPose();
 
-		this.rightLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.leftLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.rightLeg.render(matrixStack, buffer, packedLight, packedOverlay, color);
+		this.leftLeg.render(matrixStack, buffer, packedLight, packedOverlay, color);
 		matrixStack.popPose();
 	}
 
@@ -154,13 +154,13 @@ public class GearFourthBoundmanModel<T extends LivingEntity> extends HumanoidMor
 			matrixStack.translate(0.0, -1.2, 0.3);
 			matrixStack.scale(1.5f, 1.5f, 1.5f);
 			matrixStack.mulPose(Axis.YP.rotationDegrees(-60));
-			this.rightLeg.render(matrixStack, vertex, packedLight, overlay, red, green, blue, alpha);
+			this.rightLeg.render(matrixStack, vertex, packedLight, overlay, color);
 		}
 		else {
 			matrixStack.translate(0.0, -1.2, 0.3);
 			matrixStack.scale(1.5f, 1.5f, 1.5f);
 			matrixStack.mulPose(Axis.YP.rotationDegrees(60));
-			this.leftLeg.render(matrixStack, vertex, packedLight, overlay, red, green, blue, alpha);
+			this.leftLeg.render(matrixStack, vertex, packedLight, overlay, color);
 		}*/
 		return false;
 	}
