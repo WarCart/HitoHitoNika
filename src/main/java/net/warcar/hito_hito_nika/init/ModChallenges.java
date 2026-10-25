@@ -1,7 +1,7 @@
 package net.warcar.hito_hito_nika.init;
 
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.challenges.DressrosaLuffyChallenge;
 import net.warcar.hito_hito_nika.challenges.OnigashimaLuffyChallenge;

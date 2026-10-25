@@ -1,6 +1,5 @@
 package net.warcar.hito_hito_nika.init;
 
-import net.minecraft.network.chat.Component;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.crew.Crew;
