@@ -2,18 +2,18 @@ package net.warcar.hito_hito_nika.init;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.entities.LuffyBoss;
 import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
@@ -22,18 +22,16 @@ import xyz.pixelatedw.mineminenomi.init.ModMobs;
 import xyz.pixelatedw.mineminenomi.init.ModRegistry;
 import xyz.pixelatedw.mineminenomi.renderers.entities.mobs.OPHumanoidRenderer;
 
-import java.util.function.Supplier;
-
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class GomuEntities {
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, HitoHitoNoMiNikaMod.MOD_ID);
-    public static final RegistryObject<EntityType<LuffyBoss>> LUFFY = register("Luffy", ModRegistry.createEntityType(LuffyBoss::new, ModMobs.PIRATES));
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, HitoHitoNoMiNikaMod.MOD_ID);
+    public static final DeferredHolder<EntityType<?>, EntityType<LuffyBoss>> LUFFY = register("Luffy", ModRegistry.createEntityType(LuffyBoss::new, ModMobs.PIRATES));
 
     public static void register(IEventBus eventBus) {
         ENTITIES.register(eventBus);
     }
 
-    public static <E extends Entity> RegistryObject<EntityType<E>> register(String name, EntityType.Builder<E> entityType) {
+    public static <E extends Entity> DeferredHolder<EntityType<?>, EntityType<E>> register(String name, EntityType.Builder<E> entityType) {
         String registryName = WyHelper.getResourceName(name);
         HitoHitoNoMiNikaMod.getLangMap().put(String.format("entity.%s.%s", HitoHitoNoMiNikaMod.MOD_ID, registryName), name);
         return ENTITIES.register(registryName, () -> entityType.build(HitoHitoNoMiNikaMod.MOD_ID + ":" + registryName));
