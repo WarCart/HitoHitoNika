@@ -20,7 +20,7 @@ public class StarStampCannonProjectile extends KongStampProjectile {
 
     private void onEntityImpact(EntityHitResult hitResult) {
         if (hitResult.getEntity() instanceof LivingEntity entity) {
-            entity.addEffect(new MobEffectInstance(ModEffects.DIZZY.get(), 60, 1));
+            entity.addEffect(new MobEffectInstance(ModEffects.DIZZY.getDelegate(), 60, 1));
         }
     }
 }

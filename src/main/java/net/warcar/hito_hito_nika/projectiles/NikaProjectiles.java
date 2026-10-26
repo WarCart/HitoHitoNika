@@ -9,6 +9,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.models.KingBajrangGunModel;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
@@ -20,7 +21,7 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.init.ModRegistry;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID)
 public class NikaProjectiles {
 	public static final DeferredHolder<EntityType<?>, EntityType<TrueGomuRocketProjectile>> GOMU_GOMU_NO_ROCKET = createType("Gomu Gomu no True Rocket", TrueGomuRocketProjectile::new, .5f, .5F);
 

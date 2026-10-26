@@ -28,7 +28,7 @@ import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-@EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID)
 public class ModSetup {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
