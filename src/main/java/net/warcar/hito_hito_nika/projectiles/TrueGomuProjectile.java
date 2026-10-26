@@ -59,9 +59,9 @@ public class TrueGomuProjectile extends NuHorizontalLightningEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DEFORMATION, 0);
-        this.entityData.define(LEG, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DEFORMATION, 0);
+        builder.define(LEG, false);
     }
 }

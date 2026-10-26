@@ -6,11 +6,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
-import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
-import xyz.pixelatedw.mineminenomi.api.WyHelper;
+import net.warcar.hito_hito_nika.init.ModEntityDataSerializers;
 import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
@@ -31,7 +31,7 @@ public abstract class PythonProjectile extends NuProjectileEntity {
     protected int lifetime;
     protected boolean retracting = false;
 
-    private static final EntityDataAccessor<ArrayList<Vec3>> TURNS = SynchedEntityData.defineId(PythonProjectile.class, TrueGomuHelper.TURNS_SERIALIZER);
+    private static final EntityDataAccessor<ArrayList<Vec3>> TURNS = SynchedEntityData.defineId(PythonProjectile.class, ModEntityDataSerializers.TURNS_SERIALIZER.get());
 
     public PythonProjectile(EntityType type, Level world) {
         super(type, world);
@@ -46,9 +46,9 @@ public abstract class PythonProjectile extends NuProjectileEntity {
         this.setPassThroughBlocks();
     }
 
-    public void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TURNS, new ArrayList<>());
+    public void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TURNS, new ArrayList<>());
     }
 
     private void onEntityImpactEvent(EntityHitResult hitEntity) {
@@ -93,7 +93,7 @@ public abstract class PythonProjectile extends NuProjectileEntity {
         }
         this.lifetime--;
         if (this.lifetime <= 0) {
-            Optional<LivingEntity> closest = WyHelper.getNearbyLiving(this.getOwner().position(), this.level(), 1000, 1000, 1000, ModEntityPredicates.getEnemyFactions(this.getOwner())).stream().min(Comparator.comparing(this::distanceTo));
+            Optional<LivingEntity> closest = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getOwner().position(), this.getOwner().position()).inflate(100), ModEntityPredicates.getEnemyFactions(this.getOwner())).stream().min(Comparator.comparing(this::distanceTo));
             closest.ifPresent(entity -> {
                 Vec3 vec = this.position().vectorTo(entity.position());
                 this.setDeltaMovement(vec.normalize().scale(this.speed));

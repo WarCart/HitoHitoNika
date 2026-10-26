@@ -3,24 +3,25 @@ package net.warcar.hito_hito_nika.abilities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.projectiles.hand.TrueGomuRocketProjectile;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import xyz.pixelatedw.mineminenomi.ModMain;
-import xyz.pixelatedw.mineminenomi.api.WyHelper;
-import xyz.pixelatedw.mineminenomi.api.abilities.*;
+import xyz.pixelatedw.mineminenomi.MineMineNoMi;
+import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.DealDamageComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.HitTrackerComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
-import xyz.pixelatedw.mineminenomi.init.ModSounds;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModEntityPredicates;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class TrueGomuRocket extends Ability {
 
 	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_rocket", ImmutablePair.of("Stretches towards a block, then launches the user on an arch depending on where they fist landed.", null),
 			ImmutablePair.of("Slamming into enemies will deal damage", null));
-	public static final RegistryObject<AbilityCore<TrueGomuRocket>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_rocket", "Gomu Gomu no Rocket", AbilityCategory.DEVIL_FRUITS, TrueGomuRocket::new)
+	public static final DeferredHolder<AbilityCore<?>, AbilityCore<TrueGomuRocket>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_rocket", "Gomu Gomu no Rocket", AbilityCategory.DEVIL_FRUITS, TrueGomuRocket::new)
 			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.PHYSICAL)
 			.addAdvancedDescriptionLine(DealDamageComponent.getTooltip(2, 100)));
 	public static final Component JET_GIANT_SHELL = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Shell");
@@ -46,7 +47,7 @@ public class TrueGomuRocket extends Ability {
 
 	public TrueGomuRocket(AbilityCore<TrueGomuRocket> core) {
 		super(core);
-		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Rocket"));
+		this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Rocket"));
 		this.continuousComponent = new ContinuousComponent(this);
 		this.addTickEvent(this::updateModes);
 		this.addUseEvent(this::onStartContinuityEvent);
@@ -67,7 +68,7 @@ public class TrueGomuRocket extends Ability {
 			this.continuousComponent.stopContinuity(player);
 			return;
 		}
-		IAbilityData props = AbilityCapability.get(player).get();
+		AbilityData props = AbilityData.get(player).get();
 		if (TrueGomuHelper.hasGigantActive(props) || (TrueGomuHelper.hasGearFourthActive(props) && !TrueGomuHelper.hasPartialGearFourthActive(props))) {
 			player.sendSystemMessage(TrueGomuHelper.TOO_HEAVY);
 			return;
@@ -78,13 +79,13 @@ public class TrueGomuRocket extends Ability {
 	}
 
 	private void duringContinuityEvent(LivingEntity player, IAbility abl) {
-		IAbilityData props = AbilityCapability.get(player).get();
+		AbilityData props = AbilityData.get(player).get();
 		if (this.readyToFly && !player.onGround()) {
 			this.readyToFly = false;
 			this.isFlying = true;
 		}
 		if (this.isFlying) {
-			List<LivingEntity> targets = WyHelper.getNearbyLiving(player.position(), player.level(), player.getBbWidth() * 4, player.getBbHeight() * 4, player.getBbWidth() * 4, ModEntityPredicates.getEnemyFactions(player));
+			List<LivingEntity> targets = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(4), ModEntityPredicates.getEnemyFactions(player));
 			targets.removeIf(target -> target == player);
 			float damage = 1;
 			if (TrueGomuHelper.hasGearSecondActive(props))
@@ -117,7 +118,7 @@ public class TrueGomuRocket extends Ability {
 		this.readyToFly = false;
 		this.cooldownComponent.startCooldown(entity, this.cooldown);
 		this.trackerComponent.clearHits();
-		AbilityCapability.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get()).updateModes(entity);
+		AbilityData.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get()).updateModes(entity);
 	}
 
 	public void setFlying() {
@@ -125,8 +126,8 @@ public class TrueGomuRocket extends Ability {
 	}
 
 	protected void updateModes(LivingEntity entity, IAbility abl) {
-		IAbilityData props = AbilityCapability.get(entity).get();
-		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Rocket"));
+		AbilityData props = AbilityData.get(entity).get();
+		this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Rocket"));
 		if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 			this.setMaxCooldownNew(0D);
 		} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {

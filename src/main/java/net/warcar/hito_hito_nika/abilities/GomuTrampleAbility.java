@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
@@ -23,7 +23,7 @@ import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityTooltipsHelper;
 import xyz.pixelatedw.mineminenomi.api.protection.DefaultProtectionRules;
 import xyz.pixelatedw.mineminenomi.api.util.Result;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 import xyz.pixelatedw.mineminenomi.init.ModTags;
 import xyz.pixelatedw.mineminenomi.particles.effects.BreakingBlocksParticleEffect;
@@ -33,8 +33,8 @@ import java.util.List;
 
 public class GomuTrampleAbility extends PassiveAbility {
     private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText(HitoHitoNoMiNikaMod.MOD_ID, "gomu_trample", ImmutablePair.of("Running speed increases with acceleration trampling any nearby entity.", null));
-    public static final RegistryObject<AbilityCore<GomuTrampleAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_trample", "Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new)
-            .addDescriptionLine(DESCRIPTION).addDescriptionLine(AbilityDescriptionLine.NEW_LINE, AbilityTooltipsHelper.getRequiredMorphTooltip(TrueMorphs.GIANT))
+    public static final DeferredHolder<AbilityCore<?>, AbilityCore<GomuTrampleAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_trample", "Gomu Trample", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuTrampleAbility::new)
+            .addDescriptionLine(DESCRIPTION).addDescriptionLine(AbilityDescriptionLine.NEW_LINE, AbilityTooltipsHelper.getRequiredMorphTooltip(TrueMorphs.GIANT::get))
             .addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, RangeComponent.getTooltip(5.0F, RangeType.AOE), DealDamageComponent.getTooltip(8.0F))
             .setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST).setUnlockCheck(TrueGearFifthAbility::canUnlock));
     private final RangeComponent rangeComponent = new RangeComponent(this);
@@ -104,7 +104,7 @@ public class GomuTrampleAbility extends PassiveAbility {
     }
 
     private Result canUse(LivingEntity entity, IAbility iAbility) {
-        if (TrueGomuHelper.hasGigantActive(AbilityCapability.get(entity).get())) {
+        if (TrueGomuHelper.hasGigantActive(AbilityData.get(entity).get())) {
             return Result.success();
         }
         return Result.fail(null);

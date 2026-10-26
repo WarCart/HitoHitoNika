@@ -8,10 +8,10 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.*;
+import net.warcar.hito_hito_nika.projectiles.NikaProjectiles;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,21 +34,27 @@ public class HitoHitoNoMiNikaMod
         TrueMorphs.init();
         TrueGomuHelper.init();
         TrueGomuGomuNoMi.register(bus);
+        ModEntityDataSerializers.register(bus);
         ModChallenges.register(bus);
         GomuEntities.register(bus);
+        NikaProjectiles.init();
         GomuEffects.register(bus);
+        NPCGroups.init();
         langMap.put("text.hito_hito_no_mi_nika.too_weak", "You are to weak to use this ability");
         langMap.put("text.hito_hito_no_mi_nika.requires_infusion", "You need to activate Hao Infusion to use this move");
         langMap.put("text.hito_hito_no_mi_nika.the_peak", "The peak");
         langMap.put("text.hito_hito_no_mi_nika.wait_power", "Wait, power!");
         langMap.put("text.hito_hito_no_mi_nika.the_peak.desc", "I can do everything I wanted to do!! I think I can fight a bit longer... My heartbeat sounds so funny!! This is the pinnacle of what I can do!! This is... Gear 5!!!");
         langMap.put("text.hito_hito_no_mi_nika.wait_power.desc", "Stop Gear 4 from ending to fight even longer");
-        NeoForge.EVENT_BUS.register(this);
     }
 
     private void setup(final FMLCommonSetupEvent event) {}
 
-    private void doClientStuff(final FMLClientSetupEvent event) {}
+    private void doClientStuff(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            GomuAnimations.init();
+        });
+    }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {}
 

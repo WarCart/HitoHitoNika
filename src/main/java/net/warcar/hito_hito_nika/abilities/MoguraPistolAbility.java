@@ -6,14 +6,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.projectiles.GomuGomuNoMoguraPistolProjectile;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.abilities.*;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.CooldownComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityUseConditions;
@@ -24,7 +26,7 @@ public class MoguraPistolAbility extends Ability {
     private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_mogura_pistol", ImmutablePair.of("User pushes their hand through blocks to attack enemy from below.", null));
     private static final int COOLDOWN = 400;
     private static final int CHARGE_TIME = 10;
-    public static final RegistryObject<AbilityCore<MoguraPistolAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_mogura_pistol", "Gomu Gomu no Mogura Pistol", AbilityCategory.DEVIL_FRUITS, MoguraPistolAbility::new)
+    public static final DeferredHolder<AbilityCore<?>, AbilityCore<MoguraPistolAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_mogura_pistol", "Gomu Gomu no Mogura Pistol", AbilityCategory.DEVIL_FRUITS, MoguraPistolAbility::new)
             .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME))
             .addAdvancedDescriptionLine(ProjectileComponent.getProjectileTooltips()).setSourceHakiNature(SourceHakiNature.HARDENING)
             .setSourceType(SourceType.FIST).setUnlockCheck(TrueGearFifthAbility::canUnlock)
@@ -58,7 +60,7 @@ public class MoguraPistolAbility extends Ability {
             WyHelper.spawnParticleEffect(ModParticleEffects.SAND_BLADE_IDLE.get(), entity, this.targetPos.x, this.targetPos.y, this.targetPos.z);
         }
 
-        entity.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), 2, 1, false, false));
+        entity.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED, 2, 1, false, false));
     }
 
     private void endChargeEvent(LivingEntity entity, IAbility ability) {

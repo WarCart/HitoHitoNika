@@ -9,7 +9,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -37,7 +37,7 @@ public class GomuGomuNoKaminariAbility extends Ability {
     private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_kaminari", ImmutablePair.of("User grabs a lightning from the sky and throws it at enemy", null), ImmutablePair.of("Requires Gear 5 and Thunderstorm", null));
     private static final int CHARGE_TIME = 80;
     private static final int COOLDOWN = 360;
-    public static final RegistryObject<AbilityCore<GomuGomuNoKaminariAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_kaminari", "Gomu Gomu no Kaminari", AbilityCategory.DEVIL_FRUITS, GomuGomuNoKaminariAbility::new)
+    public static final DeferredHolder<AbilityCore<?>, AbilityCore<GomuGomuNoKaminariAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_kaminari", "Gomu Gomu no Kaminari", AbilityCategory.DEVIL_FRUITS, GomuGomuNoKaminariAbility::new)
             .addDescriptionLine(DESCRIPTION).addAdvancedDescriptionLine(AbilityDescriptionLine.NEW_LINE, CooldownComponent.getTooltip(COOLDOWN), ChargeComponent.getTooltip(CHARGE_TIME))
             .setSourceElement(SourceElement.LIGHTNING).setSourceHakiNature(SourceHakiNature.SPECIAL).setUnlockCheck(TrueGearFifthAbility::canUnlock)
             );

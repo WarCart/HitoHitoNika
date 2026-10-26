@@ -2,7 +2,7 @@ package net.warcar.hito_hito_nika.abilities;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
@@ -12,8 +12,7 @@ import xyz.pixelatedw.mineminenomi.api.abilities.AbilityType;
 import xyz.pixelatedw.mineminenomi.api.abilities.PassiveAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.MorphComponent;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModNetwork;
 import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateAbilityNBTPacket;
@@ -21,7 +20,7 @@ import xyz.pixelatedw.mineminenomi.packets.server.ability.SUpdateAbilityNBTPacke
 import javax.annotation.Nullable;
 
 public class GomuMorphsAbility extends PassiveAbility {
-	public static final RegistryObject<AbilityCore<GomuMorphsAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_transformations", "Gomu Transformations", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuMorphsAbility::new)
+	public static final DeferredHolder<AbilityCore<?>, AbilityCore<GomuMorphsAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_transformations", "Gomu Transformations", AbilityCategory.DEVIL_FRUITS, AbilityType.PASSIVE, GomuMorphsAbility::new)
 			.setHidden());
 
 	private int needsUpdate = 0;
@@ -58,7 +57,7 @@ public class GomuMorphsAbility extends PassiveAbility {
 
 	@Nullable
 	public MorphInfo getTransformation(LivingEntity target) {
-		IAbilityData props = AbilityCapability.get(target).get();
+		AbilityData props = AbilityData.get(target).get();
 		if (TrueGomuHelper.hasGearFourthActive(props)) {
 			TrueGearFourthAbility g4 = props.getEquippedAbility(TrueGearFourthAbility.INSTANCE.get());
 			if (g4.isSnakeman()) {

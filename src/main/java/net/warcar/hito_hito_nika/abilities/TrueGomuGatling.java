@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
@@ -14,18 +14,23 @@ import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.MineMineNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HakiHelper;
-import xyz.pixelatedw.mineminenomi.api.abilities.*;
-import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
+import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimationComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.PoolComponent;
+import xyz.pixelatedw.mineminenomi.api.abilities.components.ProjectileComponent;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuLightningEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
+import xyz.pixelatedw.mineminenomi.data.entity.EntityStatsData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
 import xyz.pixelatedw.mineminenomi.init.ModAnimations;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
@@ -34,7 +39,7 @@ import java.util.Map;
 
 public class TrueGomuGatling extends Ability {
 	private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_gatling", new Pair[]{ImmutablePair.of("Rapidly punches enemies in front of the user.", (Object)null)});
-	public static final RegistryObject<AbilityCore<TrueGomuGatling>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_gatling", "Gomu Gomu no Gatling", AbilityCategory.DEVIL_FRUITS, TrueGomuGatling::new)
+	public static final DeferredHolder<AbilityCore<?>, AbilityCore<TrueGomuGatling>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_gatling", "Gomu Gomu no Gatling", AbilityCategory.DEVIL_FRUITS, TrueGomuGatling::new)
 			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST));
 	public static final Component ROC_GATLING = TrueGomuHelper.getName("Gomu Gomu no Roc Gatling");
 	public static final Component JET_ELEPHANT_GATLING = TrueGomuHelper.getName("Gomu Gomu no Jet Elephant Gatling");
@@ -83,7 +88,7 @@ public class TrueGomuGatling extends Ability {
 
 	public TrueGomuGatling(AbilityCore<TrueGomuGatling> core) {
 		super(core);
-		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+		this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 		this.addTickEvent(this::updateModes);
 		this.addUseEvent(this::onStartContinuityEvent);
 		this.continuousComponent = new ContinuousComponent(this);
@@ -95,9 +100,9 @@ public class TrueGomuGatling extends Ability {
 	}
 
 	private NuProjectileEntity createProjectile(LivingEntity entity) {
-		IAbilityData props = AbilityCapability.get(entity).get();
+		AbilityData props = AbilityData.get(entity).get();
 		NuProjectileEntity projectile;
-		if (EntityStatsCapability.get(entity).get().isBlackLeg()) {
+		if (EntityStatsData.get(entity).get().isBlackLeg()) {
 			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				projectile = new BajrangStampGunProjectile(entity.level(), entity, this, 15f);
 				projectileSpace = 10;
@@ -227,7 +232,7 @@ public class TrueGomuGatling extends Ability {
 			this.continuousComponent.stopContinuity(player);
 			return;
 		}
-		IAbilityData props = AbilityCapability.get(player).get();
+		AbilityData props = AbilityData.get(player).get();
 		double dif;
 		this.basic = false;
 		if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
@@ -284,11 +289,11 @@ public class TrueGomuGatling extends Ability {
 	}
 
 	private void duringContinuityEvent(LivingEntity player, IAbility abl) {
-		if (TrueGomuHelper.hasGearThirdActive(AbilityCapability.get(player).get())) {
+		if (TrueGomuHelper.hasGearThirdActive(AbilityData.get(player).get())) {
 			AbilityHelper.slowEntityFall(player);
 		}
 		if (!this.basic)
-			player.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), 5, 1, false, false));
+			player.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED, 5, 1, false, false));
 		if (leap >= 1) {
 			if (this.continuousComponent.getContinueTime() % (int) leap == 0)
 				this.projectileComponent.shootWithSpread(player, this.speed, 0, this.projectileSpace);
@@ -300,22 +305,22 @@ public class TrueGomuGatling extends Ability {
 	}
 
 	protected void updateModes(LivingEntity entity, IAbility abl) {
-		IAbilityData props = AbilityCapability.get(entity).get();
-		if (!EntityStatsCapability.get(entity).get().isBlackLeg()) {
+		AbilityData props = AbilityData.get(entity).get();
+		if (!EntityStatsData.get(entity).get().isBlackLeg()) {
 			if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasHakiEmissionActive(props) && HakiHelper.hasInfusionActive(entity)) {
 				this.setDisplayName(ROC_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setDisplayName(JET_ELEPHANT_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setDisplayName(JET_GIANT_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setDisplayName(GIANT_DAWN_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
+				TrueGearFourthAbility g4 = AbilityData.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					if (HakiHelper.hasInfusionActive(entity)) {
 						this.setDisplayName(HYDRA);
@@ -335,31 +340,31 @@ public class TrueGomuGatling extends Ability {
 				}
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
 				this.setDisplayName(DAWN_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				this.setDisplayName(BAJRANG_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
 			} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setDisplayName(JET_STORM);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setDisplayName(JET_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayName(ELEPHANT_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setDisplayName(GIANT_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayName(HAWK_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			} else if (TrueGomuHelper.hasFusenActive(props)) {
 				this.setDisplayName(STORM);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else {
 				this.setDisplayName(GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			}
 			if (this.getIcon(entity).equals(ResourceLocation.parse("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
@@ -370,15 +375,15 @@ public class TrueGomuGatling extends Ability {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setDisplayName(JET_ELEPHANT_STAMP_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setDisplayName(JET_GIANT_STAMP_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setDisplayName(GIANT_DAWN_STAMP_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
+				TrueGearFourthAbility g4 = AbilityData.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					if (HakiHelper.hasInfusionActive(entity)) {
 						this.setDisplayName(STAMP_HYDRA);
@@ -398,19 +403,19 @@ public class TrueGomuGatling extends Ability {
 				}
 			} else if (TrueGomuHelper.hasFusenActive(props) && TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setDisplayName(JET_STORM);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setDisplayName(JET_STAMP_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayName(ELEPHANT_STAMP_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setDisplayName(GIANT_STAMP_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
 				this.setDisplayName(DAWN_STAMP_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				this.setDisplayName(BAJRANG_STAMP_GATLING);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("King Kong Gatling"));
@@ -419,10 +424,10 @@ public class TrueGomuGatling extends Ability {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
 			} else if (TrueGomuHelper.hasFusenActive(props)) {
 				this.setDisplayName(STORM);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			} else {
 				this.setDisplayName(STAMP_GATLING);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Gatling"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Gatling"));
 			}
 			if (this.getIcon(entity).equals(ResourceLocation.parse("mineminenomi:textures/abilities/gomu_gomu_no_gatling.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Gatling"));
@@ -431,7 +436,7 @@ public class TrueGomuGatling extends Ability {
 	}
 
 	private void onContinuityStopEvent(LivingEntity player, IAbility abl) {
-		IAbilityData props = AbilityCapability.get(player).get();
+		AbilityData props = AbilityData.get(player).get();
 		double dif;
 		if (TrueGomuHelper.hasGearThirdActive(props) && TrueGomuHelper.hasGearFifthActive(props)) {
 			dif = 5;

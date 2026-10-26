@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.warcar.hito_hito_nika.abilities.MoguraPistolAbility;
-import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
-import org.joml.Vector3d;
+import net.warcar.hito_hito_nika.init.ModEntityDataSerializers;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
@@ -20,7 +19,7 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
 
 public class GomuGomuNoMoguraPistolProjectile extends NuProjectileEntity {
-    private static final EntityDataAccessor<Vec3> TARGET_POS = SynchedEntityData.defineId(GomuGomuNoMoguraPistolProjectile.class, TrueGomuHelper.VECTOR_SERIALIZER);
+    private static final EntityDataAccessor<Vec3> TARGET_POS = SynchedEntityData.defineId(GomuGomuNoMoguraPistolProjectile.class, ModEntityDataSerializers.VECTOR_SERIALIZER.get());
 
     public GomuGomuNoMoguraPistolProjectile(EntityType type, Level Level) {
         super(type, Level);
@@ -38,9 +37,9 @@ public class GomuGomuNoMoguraPistolProjectile extends NuProjectileEntity {
     }
 
     @Override
-    public void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TARGET_POS, Vec3.ZERO);
+    public void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TARGET_POS, Vec3.ZERO);
     }
 
     public BlockState getOutBlock() {
@@ -57,6 +56,6 @@ public class GomuGomuNoMoguraPistolProjectile extends NuProjectileEntity {
     }
 
     private void onImpact(EntityHitResult target) {
-        ((LivingEntity) target.getEntity()).addEffect(new MobEffectInstance(ModEffects.DIZZY.get(), 1, 1));
+        ((LivingEntity) target.getEntity()).addEffect(new MobEffectInstance(ModEffects.DIZZY, 1, 1));
     }
 }

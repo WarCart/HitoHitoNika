@@ -33,7 +33,6 @@ import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuEffects;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HakiHelper;
-import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.damagesources.BaseDamageSource;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
@@ -59,7 +58,7 @@ import java.util.List;
 public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void onEntityHurt(LivingDamageEvent.Pre event) {
-		if (event.getEntity().hasEffect(GomuEffects.GOMU_REVIVE.getDelegate())) {
+		if (event.getEntity().hasEffect(GomuEffects.GOMU_REVIVE)) {
 			event.getContainer().setNewDamage(0);
 			return;
 		}
@@ -168,11 +167,11 @@ public class TrueGomuPassiveEffects {
 	@SubscribeEvent
 	public static void beforeEntityRender(RenderLivingEvent.Pre<LivingEntity, ?> event) {
 		LivingEntity entity = event.getEntity();
-		if (entity.hasEffect(GomuEffects.SQUISHED.getDelegate())) {
+		if (entity.hasEffect(GomuEffects.SQUISHED)) {
 			entity.getPersistentData().putBoolean("GomuSquished", true);
 			PoseStack stack = event.getPoseStack();
 			stack.pushPose();
-			MobEffectInstance squishedEffect = entity.getEffect(GomuEffects.SQUISHED.getDelegate());
+			MobEffectInstance squishedEffect = entity.getEffect(GomuEffects.SQUISHED);
 			float angle = (float) (squishedEffect.getAmplifier() * Math.PI / 256);
 			stack.mulPose(Axis.YP.rotation(angle));
 			stack.scale(1, 1, 0.01f);

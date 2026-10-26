@@ -6,10 +6,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.models.KingBajrangGunModel;
 import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
@@ -21,7 +19,6 @@ import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileRenderer;
 import xyz.pixelatedw.mineminenomi.init.ModRegistry;
 
-@EventBusSubscriber(modid = HitoHitoNoMiNikaMod.MOD_ID)
 public class NikaProjectiles {
 	public static final DeferredHolder<EntityType<?>, EntityType<TrueGomuRocketProjectile>> GOMU_GOMU_NO_ROCKET = createType("Gomu Gomu no True Rocket", TrueGomuRocketProjectile::new, .5f, .5F);
 
@@ -72,6 +69,8 @@ public class NikaProjectiles {
 	public static final DeferredHolder<EntityType<?>, EntityType<GomuGomuNoMoguraPistolProjectile>> GOMU_GOMU_NO_MOLE_PISTOL = createType("Gomu Gomu no Mole Pistol", GomuGomuNoMoguraPistolProjectile::new,  1.25f, 2.25f);
 
 	public static final DeferredHolder<EntityType<?>, EntityType<KingBajrangGunProjectile>> GOMU_GOMU_NO_KING_BAJRANG_GUN = WyHelper.isAprilFirst() ? createType("Gomu Gomu no King Bajrang Gun", KingBajrangGunProjectile::new,  0.5F, 0.5F) : null;
+
+	public static void init() {}
 
 	@OnlyIn(Dist.CLIENT)
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event, EntityRendererProvider.Context ctx) {

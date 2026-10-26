@@ -1,4 +1,4 @@
-# This is an example mods.toml file. It contains the data relating to the loading mods.
+# This is an example neoforge.mods.toml file. It contains the data relating to the loading mods.
 # There are several mandatory fields (#mandatory), and many more that are optional (#optional).
 # The overall format is standard TOML format, v0.5.0.
 # Note that there are a couple of TOML lists in this file.
@@ -6,7 +6,7 @@
 # The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[36,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[1,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
 license="All rights reserved"
@@ -19,7 +19,7 @@ modId="hito_hito_no_mi_nika" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 # ${file.jarVersion} will substitute the value of the Implementation-Version as read from the mod's JAR file metadata
 # see the associated build.gradle script for how to populate this completely automatically during a build
-version="0.13.1" #mandatory
+version="0.13.2" #mandatory
  # A display name for the mod
 displayName="Hito Hito No Mi Model Nika" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
@@ -36,14 +36,18 @@ authors="Warcar" #optional
 description='''
 Addon to Mine Mine no Mi that fully reworks gomu
 Adds quite a lot of stuff'''
+
+[[mixins]]
+config="hito_hito_no_mi_nika.mixin.json"
+
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.hito_hito_no_mi_nika]] #optional
     # the modid of the dependency
-    modId="forge" #mandatory
+    modId="neoforge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[47,)" #mandatory
+    versionRange="[21.1.208,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -53,7 +57,7 @@ Adds quite a lot of stuff'''
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="[1.20.1, 1.21)"
+    versionRange="[1.21.1]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.hito_hito_no_mi_nika]]

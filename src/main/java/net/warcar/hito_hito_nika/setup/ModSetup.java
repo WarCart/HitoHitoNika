@@ -18,7 +18,6 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
-import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import net.warcar.hito_hito_nika.init.TrueMorphs;
 import net.warcar.hito_hito_nika.renderers.layers.TrueGomuSmokeLayer;
@@ -52,9 +51,6 @@ public class ModSetup {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void modClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            GomuAnimations.init();
-        });
     }
 
     @OnlyIn(Dist.CLIENT)

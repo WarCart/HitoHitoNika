@@ -1,16 +1,11 @@
 package net.warcar.hito_hito_nika.helpers;
 
-import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.HitoHitoNoMiNikaMod;
 import net.warcar.hito_hito_nika.abilities.*;
 import net.warcar.hito_hito_nika.config.CommonConfig;
@@ -31,64 +26,14 @@ import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModParticleEffects;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public final class TrueGomuHelper {
 	public static final Component TOO_HEAVY = getName("You are to heavy to use this ability",
 			"text." + HitoHitoNoMiNikaMod.MOD_ID + ".too_heavy");
 	private static final Object[] EMPTY_ARGS = new Object[0];
-	public static final EntityDataSerializer<Vec3> VECTOR_SERIALIZER = new EntityDataSerializer<Vec3>() {
-		@Override
-		public void write(FriendlyByteBuf buffer, Vec3 vector) {
-			buffer.writeDouble(vector.x);
-			buffer.writeDouble(vector.y);
-			buffer.writeDouble(vector.z);
-		}
-
-		@Override
-		public Vec3 read(FriendlyByteBuf buffer) {
-			double x = buffer.readDouble();
-			double y = buffer.readDouble();
-			double z = buffer.readDouble();
-			return new Vec3(x, y, z);
-		}
-
-		@Override
-		public Vec3 copy(Vec3 vector) {
-			return new Vec3(vector.x, vector.y, vector.z);
-		}
-	};
-
-	public static final EntityDataSerializer<ArrayList<Vec3>> TURNS_SERIALIZER = new EntityDataSerializer<>() {
-		@Override
-		public void write(FriendlyByteBuf buffer, ArrayList<Vec3> list) {
-			buffer.writeInt(list.size());
-			for (Vec3 vec : list) {
-				buffer.writeDouble(vec.x);
-				buffer.writeDouble(vec.y);
-				buffer.writeDouble(vec.z);
-			}
-		}
-		@Override
-		public ArrayList<Vec3> read(FriendlyByteBuf buffer) {
-			int size = buffer.readInt();
-			ArrayList<Vec3> list = new ArrayList<>();
-			for (int i = 0; i < size; i++) {
-				double x = buffer.readDouble();
-				double y = buffer.readDouble();
-				double z = buffer.readDouble();
-				list.add(new Vec3(x, y, z));
-			}
-			return list;
-		}
-
-		@Override
-		public ArrayList<Vec3> copy(ArrayList<Vec3> list) {
-			return new ArrayList<>(list);
-		}
-	};
 
 	public static <A extends Ability> boolean canActivateGear(AbilityData props, A gear) {
 		if (gear instanceof TrueGearFourthAbility fourthGear) {
@@ -169,7 +114,7 @@ public final class TrueGomuHelper {
 		return hasAbilityActive(props, BusoshokuHakiEmissionAbility.INSTANCE) || hasAbilityActive(props, BusoshokuHakiInternalDestructionAbility.INSTANCE);
 	}
 
-	public static <A extends Ability> boolean hasAbilityActive(AbilityData props, DeferredHolder<AbilityCore<?>, AbilityCore<A>> ability) {
+	public static <A extends Ability> boolean hasAbilityActive(AbilityData props, Supplier<AbilityCore<A>> ability) {
 		if (ability == null) {
 			return false;
 		}
@@ -261,8 +206,6 @@ public final class TrueGomuHelper {
 
 	public static void init() {
 		getName("You are to heavy to use this ability", "text.mineminenomi.too_heavy");
-		EntityDataSerializers.registerSerializer(VECTOR_SERIALIZER);
-		EntityDataSerializers.registerSerializer(TURNS_SERIALIZER);
 	}
 
 	public static NuProjectileEntity.IOnHitEntityEvent getBazookaOnEntityImpactEvent(NuProjectileEntity projectile, double power) {

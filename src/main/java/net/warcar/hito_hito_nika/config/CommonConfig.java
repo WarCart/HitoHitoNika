@@ -1,11 +1,9 @@
 package net.warcar.hito_hito_nika.config;
 
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
-@EventBusSubscriber(modid = "hito_hito_no_mi_nika")
 public class CommonConfig {
     public static final CommonConfig INSTANCE;
     public static final IConfigSpec SPEC;

@@ -19,4 +19,7 @@ public class NPCGroups {
         HitoHitoNoMiNikaMod.getLangMap().put(key, name);
         return key;
     }
+
+    public static void init() {
+    }
 }

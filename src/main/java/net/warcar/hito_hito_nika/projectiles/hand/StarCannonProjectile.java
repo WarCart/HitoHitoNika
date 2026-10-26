@@ -20,7 +20,7 @@ public class StarCannonProjectile extends TrueKongGunProjectile {
 
     private void onEntityImpact(EntityHitResult hitResult) {
         if (hitResult.getEntity() instanceof LivingEntity entity) {
-            entity.addEffect(new MobEffectInstance(ModEffects.DIZZY.getDelegate(), 60, 1));
+            entity.addEffect(new MobEffectInstance(ModEffects.DIZZY, 60, 1));
         }
     }
 }

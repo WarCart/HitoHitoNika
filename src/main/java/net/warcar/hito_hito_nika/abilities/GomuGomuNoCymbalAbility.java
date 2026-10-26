@@ -4,25 +4,27 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuEffects;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import xyz.pixelatedw.mineminenomi.api.abilities.*;
+import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.*;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceElement;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceHakiNature;
 import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.util.Result;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityPools;
 
 public class GomuGomuNoCymbalAbility extends Ability {
     private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gomu_gomu_no_cymbal", ImmutablePair.of("User grabs enemy, stretches their hands back and then forcefully slams them into opponent flattening them into thin disc", null),
             ImmutablePair.of("Requires Gear 5 and Giant form", null));
-    public static final RegistryObject<AbilityCore<GomuGomuNoCymbalAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_cymbal", "Gomu Gomu no Cymbal", AbilityCategory.DEVIL_FRUITS, GomuGomuNoCymbalAbility::new)
+    public static final DeferredHolder<AbilityCore<?>, AbilityCore<GomuGomuNoCymbalAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_cymbal", "Gomu Gomu no Cymbal", AbilityCategory.DEVIL_FRUITS, GomuGomuNoCymbalAbility::new)
             .setSourceType(SourceType.FIST).setSourceElement(SourceElement.RUBBER).addDescriptionLine(DESCRIPTION)
             .addAdvancedDescriptionLine(ChargeComponent.getTooltip(30), CooldownComponent.getTooltip(300), DealDamageComponent.getTooltip(15))
             .setSourceHakiNature(SourceHakiNature.HARDENING).setUnlockCheck(TrueGearFifthAbility::canUnlock));
@@ -61,7 +63,7 @@ public class GomuGomuNoCymbalAbility extends Ability {
 
     private static void applySquished(LivingEntity livingEntity, LivingEntity target) {
         double angle = (Math.atan2(livingEntity.getX() - target.getX(), livingEntity.getZ() - target.getZ()) / Math.PI + 1.5) % 1;
-        target.addEffect(new MobEffectInstance(GomuEffects.SQUISHED.get(), 100, (int) (angle * 256), false, false));
+        target.addEffect(new MobEffectInstance(GomuEffects.SQUISHED, 100, (int) (angle * 256), false, false));
     }
 
     private void endCharging(LivingEntity entity, IAbility ability) {
@@ -94,7 +96,7 @@ public class GomuGomuNoCymbalAbility extends Ability {
     }
 
     private Result canUse(LivingEntity entity, IAbility ability) {
-        IAbilityData props = AbilityCapability.get(entity).get();
+        AbilityData props = AbilityData.get(entity).get();
         if (TrueGomuHelper.hasGigantActive(props)) {
             return Result.success();
         }

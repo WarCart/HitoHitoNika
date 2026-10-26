@@ -5,30 +5,29 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.config.CommonConfig;
 import net.warcar.hito_hito_nika.helpers.EquationHelper;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.MineMineNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.haki.*;
-import xyz.pixelatedw.mineminenomi.api.abilities.*;
+import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AltModeComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChangeStatsComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ContinuousComponent;
-import xyz.pixelatedw.mineminenomi.api.helpers.AttributeHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
-import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.haki.IHakiData;
-import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
+import xyz.pixelatedw.mineminenomi.data.entity.DevilFruitData;
+import xyz.pixelatedw.mineminenomi.data.entity.EntityStatsData;
+import xyz.pixelatedw.mineminenomi.data.entity.HakiData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModAttributes;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
@@ -38,17 +37,17 @@ import java.util.HashMap;
 
 public class TrueGearThirdAbility extends Ability {
 	private static final Component[] DESCRIPTION = TrueGomuHelper.registerDescriptionText("gear_third", new Pair[]{ImmutablePair.of("By blowing air and inflating their body, the user's attacks get bigger and gain incredible strength.", (Object)null)});
-	public static final RegistryObject<AbilityCore<TrueGearThirdAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gear_third", "Gear Third", AbilityCategory.DEVIL_FRUITS, TrueGearThirdAbility::new)
+	public static final DeferredHolder<AbilityCore<?>, AbilityCore<TrueGearThirdAbility>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gear_third", "Gear Third", AbilityCategory.DEVIL_FRUITS, TrueGearThirdAbility::new)
 			.addDescriptionLine(DESCRIPTION).setUnlockCheck(TrueGearThirdAbility::canUnlock));
-	private static final AbilityAttributeModifier SPEED_MODIFIER;
-	private static final AbilityAttributeModifier JUMP_MODIFIER;
-	private static final AbilityAttributeModifier ARMOR_MODIFIER;
-	private static final AbilityAttributeModifier STRENGTH_MODIFIER;
-	private static final AbilityAttributeModifier REACH_MODIFIER;
-	private static final AbilityAttributeModifier STEP_HEIGHT;
-	private static final AbilityAttributeModifier KNOCKBACK_RESISTANCE;
-	private static final AbilityAttributeModifier FALL_RESISTANCE_MODIFIER;
-	private static final AbilityAttributeModifier TOUGHNESS_MODIFIER;
+	private static final AttributeModifier SPEED_MODIFIER;
+	private static final AttributeModifier JUMP_MODIFIER;
+	private static final AttributeModifier ARMOR_MODIFIER;
+	private static final AttributeModifier STRENGTH_MODIFIER;
+	private static final AttributeModifier REACH_MODIFIER;
+	private static final AttributeModifier STEP_HEIGHT;
+	private static final AttributeModifier KNOCKBACK_RESISTANCE;
+	private static final AttributeModifier FALL_RESISTANCE_MODIFIER;
+	private static final AttributeModifier TOUGHNESS_MODIFIER;
 	private final ContinuousComponent continuousComponent;
 	private final ChangeStatsComponent statsComponent;
 	private final AltModeComponent<Mode> modeComponent;
@@ -57,7 +56,7 @@ public class TrueGearThirdAbility extends Ability {
 
 	public TrueGearThirdAbility(AbilityCore<TrueGearThirdAbility> core) {
 		super(core);
-		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "gear_third"));
+		this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "gear_third"));
 		modeComponent = new AltModeComponent<>(this, Mode.class, Mode.NORMAL);
 		this.modeComponent.addChangeModeEvent(this::onModeChange);
 		this.continuousComponent = new ContinuousComponent(this, true);
@@ -72,11 +71,11 @@ public class TrueGearThirdAbility extends Ability {
 	}
 
 	private boolean onModeChange(LivingEntity entity, IAbility ability, Mode mode) {
-        return TrueGomuHelper.hasGearFifthActive(AbilityCapability.get(entity).get()) || mode != Mode.GIANT;
+        return TrueGomuHelper.hasGearFifthActive(AbilityData.get(entity).get()) || mode != Mode.GIANT;
     }
 
 	private void afterStart(LivingEntity entity, IAbility ability) {
-		GomuMorphsAbility morphs = AbilityCapability.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
+		GomuMorphsAbility morphs = AbilityData.get(entity).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get());
 		if (morphs != null) morphs.updateModes(entity);
 	}
 
@@ -85,7 +84,7 @@ public class TrueGearThirdAbility extends Ability {
 			this.continuousComponent.stopContinuity(player);
 			return;
 		}
-		IAbilityData props = AbilityCapability.get(player).get();
+		AbilityData props = AbilityData.get(player).get();
 		double time = EquationHelper.parseEquation(CommonConfig.INSTANCE.getG3Length(), player, new HashMap<>()).getValue();
 		if (!TrueGomuHelper.canActivateGear(props, this)) {
 			player.sendSystemMessage(ModI18nAbilities.MESSAGE_GEAR_ACTIVE);
@@ -96,9 +95,9 @@ public class TrueGearThirdAbility extends Ability {
 				this.statsComponent.addAttributeModifier(ModAttributes.JUMP_HEIGHT, JUMP_MODIFIER);
 				this.statsComponent.addAttributeModifier(Attributes.ARMOR, ARMOR_MODIFIER);
 				this.statsComponent.addAttributeModifier(ModAttributes.PUNCH_DAMAGE, STRENGTH_MODIFIER);
-				this.statsComponent.addAttributeModifier(ForgeMod.BLOCK_REACH, REACH_MODIFIER);
-				this.statsComponent.addAttributeModifier(ForgeMod.ENTITY_REACH, REACH_MODIFIER);
-				this.statsComponent.addAttributeModifier(ForgeMod.STEP_HEIGHT_ADDITION, STEP_HEIGHT);
+				this.statsComponent.addAttributeModifier(Attributes.BLOCK_INTERACTION_RANGE, REACH_MODIFIER);
+				this.statsComponent.addAttributeModifier(Attributes.ENTITY_INTERACTION_RANGE, REACH_MODIFIER);
+				this.statsComponent.addAttributeModifier(Attributes.STEP_HEIGHT, STEP_HEIGHT);
 				this.statsComponent.addAttributeModifier(Attributes.ATTACK_KNOCKBACK, KNOCKBACK_RESISTANCE);
 				this.statsComponent.addAttributeModifier(ModAttributes.FALL_RESISTANCE, FALL_RESISTANCE_MODIFIER);
 				this.statsComponent.addAttributeModifier(ModAttributes.TOUGHNESS, TOUGHNESS_MODIFIER);
@@ -118,8 +117,8 @@ public class TrueGearThirdAbility extends Ability {
 	}
 
 	protected void onTick(LivingEntity player, IAbility abl) {
-		IAbilityData props = AbilityCapability.get(player).get();
-		IHakiData haki = HakiCapability.get(player).get();
+		AbilityData props = AbilityData.get(player).get();
+		HakiData haki = HakiData.get(player).get();
 		if (TrueGomuHelper.hasAbilityActive(props, BusoshokuHakiHardeningAbility.INSTANCE)) {
 			haki.alterHakiOveruse(1);
 		}
@@ -141,16 +140,16 @@ public class TrueGearThirdAbility extends Ability {
 	}
 
 	protected void afterContinuityStopEvent(LivingEntity player, IAbility abl) {
-		IAbilityData props = AbilityCapability.get(player).get();
+		AbilityData props = AbilityData.get(player).get();
 		if (this.isGiant()) {
 			this.modeComponent.revertToDefault(player);
 			this.statsComponent.removeModifiers(player);
 			this.statsComponent.clearAttributeModifiers();
 		}
 		this.cooldownComponent.startCooldown(player, (float) EquationHelper.parseEquation(CommonConfig.INSTANCE.getG3Cooldown(), player, TrueGomuHelper.getBasicBonusData(this.continuousComponent.getContinueTime())).getValue());
-		if (this.secondGearWas && EntityStatsCapability.get(player).get().getDoriki() < 3500.0D) {
-			player.addEffect(new MobEffectInstance(ModEffects.UNCONSCIOUS.get(), 300, 1, true, true));
-		} else if (EntityStatsCapability.get(player).get().getDoriki() < 3000.0D) {
+		if (this.secondGearWas && EntityStatsData.get(player).get().getDoriki() < 3500.0D) {
+			player.addEffect(new MobEffectInstance(ModEffects.UNCONSCIOUS, 300, 1, true, true));
+		} else if (EntityStatsData.get(player).get().getDoriki() < 3000.0D) {
 			player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300, 1, true, true));
 			player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 1, true, true));
 			this.smallFormCooldown = 300;
@@ -171,8 +170,8 @@ public class TrueGearThirdAbility extends Ability {
 	}
 
 	protected static boolean canUnlock(LivingEntity user) {
-		IDevilFruit fruit = DevilFruitCapability.get(user).get();
-		return EntityStatsCapability.get(user).get().getDoriki() >= 2000d && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
+		DevilFruitData fruit = DevilFruitData.get(user).get();
+		return EntityStatsData.get(user).get().getDoriki() >= 2000d && fruit.hasDevilFruit(TrueGomuGomuNoMi.HITO_HITO_NO_MI_NIKA);
 	}
 
 	public boolean isGiant() {
@@ -180,15 +179,15 @@ public class TrueGearThirdAbility extends Ability {
 	}
 
 	static {
-        SPEED_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_MOVEMENT_SPEED_UUID, INSTANCE, "Mega Mega Speed Modifier", 1.0199999809265137D, Operation.MULTIPLY_BASE);
-		JUMP_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_JUMP_BOOST_UUID, INSTANCE, "Mega Mega Jump Modifier", 2.0D, Operation.ADDITION);
-		ARMOR_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_ARMOR_UUID, INSTANCE, "Mega Mega Armor Modifier", 5.0D, Operation.ADDITION);
-		STRENGTH_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_STRENGTH_UUID, INSTANCE, "Mega Mega Strength Modifier", 3.0D, Operation.ADDITION);
-		REACH_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_ATTACK_REACH_UUID, INSTANCE, "Mega Mega Reach Modifier", 5.0D, Operation.ADDITION);
-		STEP_HEIGHT = new AbilityAttributeModifier(AttributeHelper.MORPH_STEP_HEIGHT_UUID, INSTANCE, "Mega Mega Step Height Modifier", 1.5D, Operation.ADDITION);
-		KNOCKBACK_RESISTANCE = new AbilityAttributeModifier(AttributeHelper.MORPH_KNOCKBACK_RESISTANCE_UUID, INSTANCE, "Mega Mega Knockback Resistance Modifier", 1.0D, Operation.ADDITION);
-		FALL_RESISTANCE_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_FALL_RESISTANCE_UUID, INSTANCE, "Mega Mega Fall Resistance Modifier", 10.0D, Operation.ADDITION);
-		TOUGHNESS_MODIFIER = new AbilityAttributeModifier(AttributeHelper.MORPH_TOUGHNESS_UUID, INSTANCE, "Mega Mega Toughness Modifier", 4.0D, Operation.ADDITION);
+        SPEED_MODIFIER = new AttributeModifier(INSTANCE.getId(), 1.0199999809265137D, Operation.ADD_MULTIPLIED_BASE);
+		JUMP_MODIFIER = new AttributeModifier(INSTANCE.getId(), 2.0D, Operation.ADD_VALUE);
+		ARMOR_MODIFIER = new AttributeModifier(INSTANCE.getId(), 5.0D, Operation.ADD_VALUE);
+		STRENGTH_MODIFIER = new AttributeModifier(INSTANCE.getId(), 3.0D, Operation.ADD_VALUE);
+		REACH_MODIFIER = new AttributeModifier(INSTANCE.getId(), 5.0D, Operation.ADD_VALUE);
+		STEP_HEIGHT = new AttributeModifier(INSTANCE.getId(), 1.5D, Operation.ADD_VALUE);
+		KNOCKBACK_RESISTANCE = new AttributeModifier(INSTANCE.getId(), 1.0D, Operation.ADD_VALUE);
+		FALL_RESISTANCE_MODIFIER = new AttributeModifier(INSTANCE.getId(), 10.0D, Operation.ADD_VALUE);
+		TOUGHNESS_MODIFIER = new AttributeModifier(INSTANCE.getId(), 4.0D, Operation.ADD_VALUE);
 	}
 
 	@Override
@@ -207,7 +206,7 @@ public class TrueGearThirdAbility extends Ability {
 
 	public void smallTick(LivingEntity player, IAbility abl) {
 		if (this.smallFormCooldown == 1 || this.smallFormCooldown >= 299)
-			AbilityCapability.get(player).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get()).updateModes(player);
+			AbilityData.get(player).get().getPassiveAbility(GomuMorphsAbility.INSTANCE.get()).updateModes(player);
 		if (this.smallFormCooldown > 0) --this.smallFormCooldown;
 		else if (this.smallFormCooldown < 0) this.smallFormCooldown = 0;
 	}

@@ -7,7 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.warcar.hito_hito_nika.helpers.TrueGomuHelper;
 import net.warcar.hito_hito_nika.init.GomuAnimations;
 import net.warcar.hito_hito_nika.init.TrueGomuGomuNoMi;
@@ -15,9 +15,12 @@ import net.warcar.hito_hito_nika.projectiles.hand.*;
 import net.warcar.hito_hito_nika.projectiles.leg.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import xyz.pixelatedw.mineminenomi.ModMain;
+import xyz.pixelatedw.mineminenomi.MineMineNoMi;
 import xyz.pixelatedw.mineminenomi.abilities.haki.HakiHelper;
-import xyz.pixelatedw.mineminenomi.api.abilities.*;
+import xyz.pixelatedw.mineminenomi.api.abilities.Ability;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCategory;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimationComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.AnimeScreamComponent;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.ChargeComponent;
@@ -27,16 +30,15 @@ import xyz.pixelatedw.mineminenomi.api.damagesources.SourceType;
 import xyz.pixelatedw.mineminenomi.api.entities.NuLightningEntity;
 import xyz.pixelatedw.mineminenomi.api.entities.NuProjectileEntity;
 import xyz.pixelatedw.mineminenomi.api.helpers.AbilityHelper;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
-import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.AbilityData;
+import xyz.pixelatedw.mineminenomi.data.entity.EntityStatsData;
 import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 import xyz.pixelatedw.mineminenomi.init.ModEffects;
 import xyz.pixelatedw.mineminenomi.init.ModSounds;
 
 public class TrueGomuBazooka extends Ability {
 	private static final Component[] DESCRIPTION = AbilityHelper.registerDescriptionText("mineminenomi", "gomu_gomu_no_bazooka", new Pair[]{ImmutablePair.of("Hits the enemy with both hands to launch them away.", (Object)null)});
-	public static final RegistryObject<AbilityCore<TrueGomuBazooka>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_bazooka", "Gomu Gomu no Bazooka", AbilityCategory.DEVIL_FRUITS, TrueGomuBazooka::new)
+	public static final DeferredHolder<AbilityCore<?>, AbilityCore<TrueGomuBazooka>> INSTANCE = TrueGomuGomuNoMi.registerAbility(new AbilityCore.Builder<>("gomu_gomu_no_bazooka", "Gomu Gomu no Bazooka", AbilityCategory.DEVIL_FRUITS, TrueGomuBazooka::new)
 			.addDescriptionLine(DESCRIPTION).setSourceHakiNature(SourceHakiNature.HARDENING).setSourceType(SourceType.FIST));
 	public static final Component JET_GRIZZLY_MAGNUM = TrueGomuHelper.getName("Gomu Gomu no Jet Grizzly Magnum");
 	public static final Component JET_GIANT_BAZOOKA = TrueGomuHelper.getName("Gomu Gomu no Jet Giant Bazooka");
@@ -80,7 +82,7 @@ public class TrueGomuBazooka extends Ability {
 
 	public TrueGomuBazooka(AbilityCore<TrueGomuBazooka> core) {
 		super(core);
-		this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
+		this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka"));
 		this.addTickEvent(this::updateModes);
 		this.chargeComponent = (new ChargeComponent(this)).addEndEvent(this::onEndCharging);
 		this.projectileComponent = new ProjectileComponent(this, this::createProjectile);
@@ -93,16 +95,16 @@ public class TrueGomuBazooka extends Ability {
 
 	private void onUse(LivingEntity entity, IAbility abl) {
 		this.chargeComponent.startCharging(entity, this.chargeTime);
-		if (!TrueGomuHelper.hasGearFourthBoundmanActive(AbilityCapability.get(entity).get())) {
+		if (!TrueGomuHelper.hasGearFourthBoundmanActive(AbilityData.get(entity).get())) {
             this.animationComponent.start(entity, GomuAnimations.BAZOOKA, this.chargeTime);
         }
-		entity.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED.get(), this.chargeTime, 0));
+		entity.addEffect(new MobEffectInstance(ModEffects.MOVEMENT_BLOCKED, this.chargeTime, 0));
 	}
 
 	private NuProjectileEntity createProjectile(LivingEntity player) {
 		NuProjectileEntity projectile;
-		IAbilityData props = AbilityCapability.get(player).get();
-		if (EntityStatsCapability.get(player).get().isBlackLeg()) {
+		AbilityData props = AbilityData.get(player).get();
+		if (EntityStatsData.get(player).get().isBlackLeg()) {
 			if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				projectile = new BajrangStampGunProjectile(player.level(), player, this);
 				spacingMod = 25F;
@@ -216,30 +218,30 @@ public class TrueGomuBazooka extends Ability {
 	}
 
 	protected void updateModes(LivingEntity entity, IAbility abl) {
-		IAbilityData props = AbilityCapability.get(entity).get();
-		if (!EntityStatsCapability.get(entity).get().isBlackLeg()) {
+		AbilityData props = AbilityData.get(entity).get();
+		if (!EntityStatsData.get(entity).get().isBlackLeg()) {
 			if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(JET_GRIZZLY_MAGNUM);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka")) ;
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka")) ;
 			} else if (TrueGomuHelper.hasGearSecondActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(JET_GIANT_BAZOOKA);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props) && TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setMaxCooldown(20D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(GIANT_DAWN_BAZOOKA);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearSecondActive(props)) {
 				this.setMaxCooldown(7D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(JET_BAZOOKA);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
+				TrueGearFourthAbility g4 = AbilityData.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					this.setMaxCooldown(5D);
 					this.setMaxChargeTime(0D);
@@ -260,17 +262,17 @@ public class TrueGomuBazooka extends Ability {
 				this.setMaxCooldown(10);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(GRIZZLY_MAGNUM);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearThirdActive(props)) {
 				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(GIANT_BAZOOKA);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasGearFifthActive(props)) {
 				this.setMaxCooldown(15D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(DAWN_BAZOOKA);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			} else if (TrueGomuHelper.hasAbilityActive(props, GearSixthAbility.INSTANCE)) {
 				this.setMaxCooldown(20D);
 				this.setMaxChargeTime(2.0D);
@@ -285,7 +287,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setMaxCooldown(10D);
 				this.setMaxChargeTime(2.0D);
 				this.setDisplayName(BAZOOKA);
-				this.setDisplayIcon(TrueGomuHelper.getIcon(ModMain.PROJECT_ID, "Gomu Gomu no Bazooka"));
+				this.setDisplayIcon(TrueGomuHelper.getIcon(MineMineNoMi.PROJECT_ID, "Gomu Gomu no Bazooka"));
 			}
 			if (this.getIcon(entity).equals(ResourceLocation.parse("mineminenomi:textures/abilities/gomu_gomu_no_bazooka.png")) && HakiHelper.hasHardeningActive(entity, false, true)) {
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Haki Bazooka"));
@@ -307,7 +309,7 @@ public class TrueGomuBazooka extends Ability {
 				this.setDisplayName(JET_GIANT_YARI);
 				this.setDisplayIcon(TrueGomuHelper.getIcon("Yari"));
 			} else if (TrueGomuHelper.hasGearFourthActive(props)) {
-				TrueGearFourthAbility g4 = AbilityCapability.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
+				TrueGearFourthAbility g4 = AbilityData.getEquippedAbility(entity, TrueGearFourthAbility.INSTANCE.get());
 				if (g4.isSnakeman()) {
 					this.setMaxCooldown(5D);
 					this.setMaxChargeTime(0D);
